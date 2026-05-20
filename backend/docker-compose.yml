@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    container_name: project_postgres
+    environment:
+      POSTGRES_DB: project_db
+      POSTGRES_USER: project_user
+      POSTGRES_PASSWORD: project_password
+    ports:
+      - "7432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U project_user -d project_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sharius_backend
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://project_user:project_password@db:5432/project_db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./storage:/app/storage
+
+volumes:
+  postgres_data:
