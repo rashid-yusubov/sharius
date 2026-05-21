@@ -1,0 +1,139 @@
+.exchange {
+  width: 100%;
+}
+
+.exchange__panel {
+  position: relative;
+  min-height: 624px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-radius: var(--radius-panel);
+}
+
+.exchange__workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.exchange__textarea {
+  width: 100%;
+  min-height: 0;
+  margin-top: 0;
+  padding: 0 30px 30px;
+  color: var(--color-accent);
+  background: transparent;
+  border: 0;
+  outline: none;
+  resize: none;
+  font-size: 22px;
+  line-height: 1.5;
+  scrollbar-width: none;
+  overflow-wrap: break-word;
+  scroll-padding-top: 0;
+}
+
+.exchange__top-actions {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 30px;
+}
+
+.exchange__top-actions .icon-button--panel {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+
+.exchange__textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.exchange__textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 0.52;
+}
+
+.exchange__bottom-actions {
+  min-height: 116px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 30px;
+  margin-top: 0;
+}
+
+.exchange__attachments {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.exchange__file-input {
+  display: none;
+}
+
+.exchange__file-list {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.exchange__file-list::-webkit-scrollbar {
+  display: none;
+}
+
+.exchange__send-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+@media (max-width: 860px) {
+  .exchange__top-actions {
+    gap: 6px;
+    min-height: 52px;
+    padding: 0 18px;
+  }
+
+  .exchange__top-actions .icon-button--panel {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .exchange__panel {
+    min-height: 520px;
+  }
+
+  .exchange__textarea {
+    padding: 0 18px 24px;
+    font-size: 17px;
+  }
+
+  .exchange__bottom-actions {
+    min-height: 92px;
+    align-items: center;
+    padding: 0 18px;
+  }
+
+  .exchange__attachments {
+    flex: 1;
+    gap: 10px;
+  }
+
+  .exchange__file-list {
+    max-width: calc(100vw - 184px);
+  }
+}

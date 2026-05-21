@@ -1,0 +1,31 @@
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-accent);
+  background: var(--color-control);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  transition: background 160ms ease, transform 120ms ease;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle:hover {
+  background: var(--color-control-hover);
+}
+
+.theme-toggle:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}

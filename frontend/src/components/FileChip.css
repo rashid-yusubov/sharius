@@ -1,0 +1,118 @@
+.file-chip {
+  min-width: 0;
+  max-width: 320px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 10px;
+  color: var(--color-accent);
+  background: var(--color-control);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-control);
+}
+
+.file-chip__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: #ffffff;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #64748b, #27272a);
+}
+
+.file-chip__icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.file-chip--image .file-chip__icon {
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+}
+
+.file-chip--pdf .file-chip__icon {
+  background: linear-gradient(135deg, #ef4444, #991b1b);
+}
+
+.file-chip--video .file-chip__icon {
+  background: linear-gradient(135deg, #8b5cf6, #4c1d95);
+}
+
+.file-chip--audio .file-chip__icon {
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+}
+
+.file-chip--archive .file-chip__icon {
+  background: linear-gradient(135deg, #a16207, #422006);
+}
+
+.file-chip--code .file-chip__icon {
+  background: linear-gradient(135deg, #22c55e, #166534);
+}
+
+.file-chip--document .file-chip__icon {
+  background: linear-gradient(135deg, #38bdf8, #075985);
+}
+
+.file-chip--spreadsheet .file-chip__icon {
+  background: linear-gradient(135deg, #10b981, #065f46);
+}
+
+.file-chip__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.file-chip__name {
+  overflow: hidden;
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-chip__size {
+  color: var(--color-secondary-text);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.file-chip__remove {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--color-secondary-text);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.file-chip__remove:hover {
+  color: var(--color-accent);
+  background: var(--color-control-hover);
+}
+
+.file-chip__remove svg {
+  width: 16px;
+  height: 16px;
+}
+
+:root[data-theme="light"] .file-chip {
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .file-chip {
+    max-width: min(100%, 280px);
+  }
+}

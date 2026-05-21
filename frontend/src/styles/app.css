@@ -1,0 +1,23 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px;
+}
+
+.app-layout {
+  width: min(100%, 1120px);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 16px 12px;
+  }
+
+  .app-layout {
+    gap: 16px;
+  }
+}

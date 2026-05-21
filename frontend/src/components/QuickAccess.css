@@ -1,0 +1,75 @@
+.quick-access {
+  width: 100%;
+}
+
+.quick-access__field {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.quick-access__field:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05), var(--shadow-panel);
+}
+
+.quick-access__input {
+  width: 100%;
+  min-width: 0;
+  padding: 22px 30px;
+  color: var(--color-accent);
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 22px;
+}
+
+.quick-access__input::placeholder {
+  color: var(--color-muted);
+  opacity: 0.76;
+}
+
+.quick-access__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 24px;
+}
+
+.quick-access__actions .icon-button--compact {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}
+
+.quick-access__actions .icon-button svg,
+.quick-access__actions .icon-button .asset-icon {
+  width: 60%;
+  height: 60%;
+}
+
+@media (max-width: 640px) {
+  .quick-access__field {
+    min-height: 72px;
+  }
+
+  .quick-access__input {
+    padding: 18px 18px;
+    font-size: 17px;
+  }
+
+  .quick-access__actions {
+    gap: 4px;
+    padding-right: 12px;
+  }
+
+  .quick-access__actions .icon-button--compact {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+}

@@ -1,0 +1,274 @@
+:root {
+  color: #f4f4f5;
+  background: #0a0a0b;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --color-black: #0a0a0b;
+  --color-dark: #161618;
+  --color-panel: rgba(22, 22, 24, 0.76);
+  --color-soft-panel: rgba(22, 22, 24, 0.54);
+  --color-gray: #27272a;
+  --color-light-gray: #3f3f46;
+  --color-accent: #f4f4f5;
+  --color-muted: #71717a;
+  --color-secondary-text: #a1a1aa;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(10, 10, 11, 0.12);
+  --color-control: rgba(63, 63, 70, 0.28);
+  --color-control-hover: rgba(63, 63, 70, 0.5);
+  --color-focus: rgba(255, 255, 255, 0.22);
+  --color-focus-ring: rgba(255, 255, 255, 0.06);
+  --color-primary-button: #f4f4f5;
+  --color-primary-button-hover: #ffffff;
+  --color-primary-button-text: #0a0a0b;
+  --shadow-control: 0 10px 24px rgba(0, 0, 0, 0.22);
+  --background-base: #07080a;
+  --background-mesh:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0 8rem,
+      rgba(65, 199, 244, 0.34) 8.6rem 9.05rem,
+      rgba(16, 185, 129, 0.2) 9.05rem 9.55rem,
+      transparent 10.3rem 17rem
+    ),
+    repeating-linear-gradient(
+      62deg,
+      transparent 0 10rem,
+      rgba(245, 158, 11, 0.2) 10.6rem 11rem,
+      rgba(244, 244, 245, 0.12) 11rem 11.35rem,
+      transparent 12.2rem 20rem
+    ),
+    linear-gradient(115deg, rgba(65, 199, 244, 0.2), transparent 34%),
+    linear-gradient(245deg, rgba(245, 158, 11, 0.11), transparent 32%),
+    linear-gradient(25deg, rgba(16, 185, 129, 0.12), transparent 36%),
+    linear-gradient(165deg, rgba(244, 244, 245, 0.08), transparent 42%);
+  --background-vignette:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.07), transparent 32rem),
+    radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.45), transparent 42rem);
+  --radius-panel: 28px;
+  --radius-element: 12px;
+  --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme="light"] {
+  color: #18181b;
+  background: #edf1f4;
+  --color-black: #f7f8fa;
+  --color-dark: #ffffff;
+  --color-panel: rgba(255, 255, 255, 0.82);
+  --color-soft-panel: rgba(255, 255, 255, 0.62);
+  --color-gray: #e4e7eb;
+  --color-light-gray: #c4c9d1;
+  --color-accent: #18181b;
+  --color-muted: #71717a;
+  --color-secondary-text: #5f6671;
+  --color-border: rgba(24, 24, 27, 0.12);
+  --color-input: rgba(255, 255, 255, 0.74);
+  --color-control: rgba(228, 231, 235, 0.72);
+  --color-control-hover: rgba(212, 216, 224, 0.92);
+  --color-focus: rgba(37, 99, 235, 0.34);
+  --color-focus-ring: rgba(37, 99, 235, 0.12);
+  --color-primary-button: #18181b;
+  --color-primary-button-hover: #000000;
+  --color-primary-button-text: #ffffff;
+  --shadow-control: 0 6px 14px rgba(32, 38, 48, 0.06);
+  --background-base: #edf1f4;
+  --background-mesh:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0 8rem,
+      rgba(14, 165, 233, 0.26) 8.6rem 9.05rem,
+      rgba(16, 185, 129, 0.18) 9.05rem 9.55rem,
+      transparent 10.3rem 17rem
+    ),
+    repeating-linear-gradient(
+      62deg,
+      transparent 0 10rem,
+      rgba(245, 158, 11, 0.2) 10.6rem 11rem,
+      rgba(99, 102, 241, 0.12) 11rem 11.35rem,
+      transparent 12.2rem 20rem
+    ),
+    linear-gradient(115deg, rgba(65, 199, 244, 0.24), transparent 34%),
+    linear-gradient(245deg, rgba(245, 158, 11, 0.16), transparent 32%),
+    linear-gradient(25deg, rgba(16, 185, 129, 0.14), transparent 36%),
+    linear-gradient(165deg, rgba(148, 163, 184, 0.16), transparent 42%);
+  --background-vignette:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.82), transparent 30rem),
+    radial-gradient(circle at 50% 100%, rgba(148, 163, 184, 0.22), transparent 40rem);
+  --shadow-panel: 0 12px 30px rgba(32, 38, 48, 0.08);
+}
+
+:root[data-page="home"] {
+  --background-mesh:
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent 10%,
+      rgba(65, 199, 244, 0.42) 16%,
+      rgba(16, 185, 129, 0.24) 22%,
+      transparent 32%,
+      transparent 100%
+    ),
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(245, 158, 11, 0.26) 49%,
+      rgba(244, 244, 245, 0.14) 55%,
+      transparent 67%,
+      transparent 100%
+    ),
+    linear-gradient(
+      64deg,
+      transparent 0%,
+      transparent 18%,
+      rgba(14, 165, 233, 0.36) 27%,
+      rgba(16, 185, 129, 0.2) 34%,
+      transparent 48%,
+      transparent 100%
+    ),
+    linear-gradient(145deg, rgba(65, 199, 244, 0.16), transparent 42%),
+    linear-gradient(255deg, rgba(245, 158, 11, 0.1), transparent 38%),
+    linear-gradient(35deg, rgba(16, 185, 129, 0.1), transparent 42%);
+  --background-filter: saturate(1.45) blur(5px);
+  --background-opacity: 1;
+  --background-size: 190% 190%, 210% 210%, 180% 180%, 150% 150%, 160% 160%, 155% 155%;
+}
+
+:root[data-theme="light"][data-page="home"] {
+  --background-mesh:
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent 10%,
+      rgba(14, 165, 233, 0.3) 16%,
+      rgba(16, 185, 129, 0.18) 22%,
+      transparent 32%,
+      transparent 100%
+    ),
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(245, 158, 11, 0.2) 49%,
+      rgba(99, 102, 241, 0.12) 55%,
+      transparent 67%,
+      transparent 100%
+    ),
+    linear-gradient(
+      64deg,
+      transparent 0%,
+      transparent 18%,
+      rgba(14, 165, 233, 0.26) 27%,
+      rgba(16, 185, 129, 0.16) 34%,
+      transparent 48%,
+      transparent 100%
+    ),
+    linear-gradient(145deg, rgba(14, 165, 233, 0.14), transparent 42%),
+    linear-gradient(255deg, rgba(245, 158, 11, 0.09), transparent 38%),
+    linear-gradient(35deg, rgba(16, 185, 129, 0.09), transparent 42%);
+  --background-filter: saturate(1.28) blur(6px);
+  --background-opacity: 0.98;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--background-base);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+body::before,
+body::after {
+  position: fixed;
+  inset: -28vmax;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+}
+
+body::before {
+  background: var(--background-mesh);
+  background-size: var(--background-size, 120% 120%, 125% 125%, 140% 140%, 130% 130%, 150% 150%, 160% 160%);
+  filter: var(--background-filter, saturate(1.55));
+  opacity: var(--background-opacity, 1);
+  animation: gradient-drift 14s ease-in-out infinite alternate;
+}
+
+body::after {
+  z-index: 0;
+  background:
+    var(--background-vignette),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 7px);
+  animation: atmosphere-shift 24s ease-in-out infinite alternate;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes gradient-drift {
+  0% {
+    transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1);
+    background-position: 0% 20%, 100% 80%, 0% 20%, 85% 10%, 10% 80%, 80% 80%;
+  }
+
+  50% {
+    transform: translate3d(2%, 3%, 0) rotate(6deg) scale(1.07);
+    background-position: 52% 8%, 35% 45%, 45% 0%, 55% 45%, 35% 65%, 100% 35%;
+  }
+
+  100% {
+    transform: translate3d(4%, -1%, 0) rotate(-4deg) scale(1.05);
+    background-position: 100% 30%, 0% 20%, 100% 30%, 10% 70%, 70% 15%, 30% 100%;
+  }
+}
+
+@keyframes atmosphere-shift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.78;
+  }
+
+  100% {
+    transform: translate3d(-2%, 2%, 0) scale(1.04);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.glass-panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(12px);
+}
