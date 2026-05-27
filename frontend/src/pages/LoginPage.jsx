@@ -1,9 +1,35 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './AuthPage.css';
 
-function LoginPage() {
-  const handleSubmit = (event) => {
+function LoginPage({ onLogin }) {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ login: '', password: '' });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      await onLogin({
+        login: formData.login.trim(),
+        password: formData.password,
+      });
+      navigate('/');
+    } catch (submitError) {
+      setError(submitError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -19,21 +45,39 @@ function LoginPage() {
       <form className="auth-page__form" onSubmit={handleSubmit}>
         <div>
           <h1>Log In</h1>
-          <p>Enter your email and password to reopen your Sharius session and continue sharing.</p>
+          <p>Enter your login and password to reopen your Sharius session and continue sharing.</p>
         </div>
 
         <label className="auth-page__field">
-          Email
-          <input autoComplete="email" name="email" placeholder="you@example.com" type="email" />
+          Login
+          <input
+            autoComplete="username"
+            name="login"
+            onChange={handleChange}
+            placeholder="your_login"
+            required
+            type="text"
+            value={formData.login}
+          />
         </label>
 
         <label className="auth-page__field">
           Password
-          <input autoComplete="current-password" name="password" placeholder="Enter password" type="password" />
+          <input
+            autoComplete="current-password"
+            name="password"
+            onChange={handleChange}
+            placeholder="Enter password"
+            required
+            type="password"
+            value={formData.password}
+          />
         </label>
 
-        <button className="auth-page__submit" type="submit">
-          Log In
+        {error ? <p className="auth-page__error">{error}</p> : null}
+
+        <button className="auth-page__submit" disabled={isSubmitting} type="submit">
+          {isSubmitting ? 'Logging In...' : 'Log In'}
         </button>
 
         <p className="auth-page__switch">

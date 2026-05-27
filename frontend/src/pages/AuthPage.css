@@ -109,6 +109,22 @@
   transform: scale(0.98);
 }
 
+.auth-page__submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.auth-page__error {
+  margin: 0;
+  padding: 12px 14px;
+  color: #fca5a5;
+  background: rgba(127, 29, 29, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: var(--radius-element);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
 .auth-page__switch {
   color: var(--color-secondary-text);
   font-size: 14px;
