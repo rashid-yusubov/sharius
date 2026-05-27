@@ -87,6 +87,17 @@
   transform: scale(0.94);
 }
 
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+}
+
+.icon-button:disabled:hover {
+  background: inherit;
+  color: inherit;
+}
+
 @media (max-width: 640px) {
   .icon-button--compact {
     width: 34px;
