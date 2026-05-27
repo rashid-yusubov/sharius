@@ -1,5 +1,6 @@
 import {
   ArchiveFileIcon,
+  ArrowDownIcon,
   AudioFileIcon,
   CloseIcon,
   CodeFileIcon,
@@ -17,10 +18,10 @@ const archiveExtensions = ['zip', 'rar', '7z', 'tar', 'gz'];
 const spreadsheetExtensions = ['xls', 'xlsx', 'csv', 'ods'];
 const documentExtensions = ['doc', 'docx', 'txt', 'rtf', 'md'];
 
-const getExtension = (fileName) => fileName.split('.').pop()?.toLowerCase() || '';
+const getExtension = (fileName = '') => fileName.split('.').pop()?.toLowerCase() || '';
 
 const getFileKind = (file) => {
-  const extension = getExtension(file.name);
+  const extension = getExtension(file.name || file.original_name);
   const type = file.type || '';
 
   if (type.startsWith('image/')) return 'image';
@@ -54,9 +55,12 @@ const formatFileSize = (size) => {
   return `${value >= 10 || exponent === 0 ? value.toFixed(0) : value.toFixed(1)} ${units[exponent]}`;
 };
 
-function FileChip({ file, onRemove }) {
+function FileChip({ file, onDownload, onRemove }) {
+  const fileName = file.name || file.original_name || 'file';
+  const fileSize = file.size ?? file.size_bytes ?? 0;
   const kind = getFileKind(file);
   const FileKindIcon = iconByKind[kind];
+  const canDownload = Boolean(file.id && onDownload);
 
   return (
     <div className={`file-chip file-chip--${kind}`}>
@@ -64,10 +68,15 @@ function FileChip({ file, onRemove }) {
         <FileKindIcon />
       </span>
       <span className="file-chip__meta">
-        <span className="file-chip__name">{file.name}</span>
-        <span className="file-chip__size">{formatFileSize(file.size)}</span>
+        <span className="file-chip__name">{fileName}</span>
+        <span className="file-chip__size">{formatFileSize(fileSize)}</span>
       </span>
-      <button className="file-chip__remove" onClick={onRemove} type="button" aria-label={`Remove ${file.name}`}>
+      {canDownload ? (
+        <button className="file-chip__action" onClick={onDownload} type="button" aria-label={`Download ${fileName}`}>
+          <ArrowDownIcon />
+        </button>
+      ) : null}
+      <button className="file-chip__remove" onClick={onRemove} type="button" aria-label={`Remove ${fileName}`}>
         <CloseIcon />
       </button>
     </div>

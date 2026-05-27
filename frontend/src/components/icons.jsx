@@ -60,6 +60,15 @@ export function ArrowUpIcon() {
   );
 }
 
+export function ArrowDownIcon() {
+  return (
+    <svg {...iconProps}>
+      <path d="M12 5v14" />
+      <path d="m5 12 7 7 7-7" />
+    </svg>
+  );
+}
+
 export function SunIcon() {
   return (
     <svg {...iconProps}>

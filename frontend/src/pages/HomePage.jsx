@@ -6,7 +6,9 @@ function HomePage({
   attachedFiles,
   code,
   fileInputRef,
+  isSyncing,
   message,
+  onDownloadFile,
   onClear,
   onCodeChange,
   onCopy,
@@ -21,6 +23,7 @@ function HomePage({
   onSend,
   onUpdate,
   isQrOpen,
+  sessionStatusText,
 }) {
   return (
     <>
@@ -36,7 +39,9 @@ function HomePage({
       <ExchangePanel
         attachedFiles={attachedFiles}
         fileInputRef={fileInputRef}
+        isBusy={isSyncing}
         message={message}
+        onDownloadFile={onDownloadFile}
         onClear={onClear}
         onCopy={onCopy}
         onFileChange={onFileChange}
@@ -46,6 +51,8 @@ function HomePage({
         onRemoveFile={onRemoveFile}
         onSend={onSend}
         onUpdate={onUpdate}
+        sessionCode={code}
+        statusText={sessionStatusText}
       />
     </>
   );

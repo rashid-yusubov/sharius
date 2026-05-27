@@ -190,6 +190,7 @@ body {
   transition: background 180ms ease, color 180ms ease;
 }
 
+/*
 body::before,
 body::after {
   position: fixed;
@@ -214,12 +215,14 @@ body::after {
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 7px);
   animation: atmosphere-shift 24s ease-in-out infinite alternate;
 }
+*/
 
 #root {
   position: relative;
   z-index: 1;
 }
 
+/*
 @keyframes gradient-drift {
   0% {
     transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1);
@@ -255,6 +258,7 @@ body::after {
     animation: none;
   }
 }
+*/
 
 button,
 input,

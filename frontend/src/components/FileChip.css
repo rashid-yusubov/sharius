@@ -97,11 +97,27 @@
   transition: background 160ms ease, color 160ms ease;
 }
 
+.file-chip__action,
+.file-chip__remove {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--color-secondary-text);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.file-chip__action:hover,
 .file-chip__remove:hover {
   color: var(--color-accent);
   background: var(--color-control-hover);
 }
 
+.file-chip__action svg,
 .file-chip__remove svg {
   width: 16px;
   height: 16px;

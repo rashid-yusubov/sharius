@@ -3,3 +3,5 @@ dist/
 .DS_Store
 verification/
 *.zip
+.env.local
+.env.*.local

@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     jwt_secret: str = "change-me-for-production"
     jwt_algorithm: str = "HS256"
     access_token_ttl_minutes: int = 60
+    cors_origins: tuple[str, ...] = (
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    )
     max_file_size_bytes: int = 100 * 1024 * 1024
     allowed_file_extensions: tuple[str, ...] = (
         "txt",

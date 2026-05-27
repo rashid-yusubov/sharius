@@ -30,10 +30,12 @@
 }
 
 .header__login,
-.header__signup {
+.header__signup,
+.header__logout {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font: inherit;
   text-decoration: none;
   transition: color 160ms ease, background 160ms ease, transform 120ms ease;
 }
@@ -61,12 +63,54 @@
   font-weight: 800;
 }
 
+.header__logout {
+  min-width: 110px;
+  min-height: 48px;
+  padding: 0 24px;
+  color: var(--color-accent);
+  background: var(--color-control);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: 16px;
+  font-weight: 800;
+}
+
 .header__signup:hover {
   background: var(--color-primary-button-hover);
 }
 
+.header__logout:hover {
+  background: var(--color-control-hover);
+}
+
+.header__user {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.header__user-label {
+  color: var(--color-secondary-text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header__user strong {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--color-accent);
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .header__login:active,
-.header__signup:active {
+.header__signup:active,
+.header__logout:active {
   transform: scale(0.97);
 }
 
@@ -86,11 +130,16 @@
     gap: 8px;
   }
 
+  .header__user {
+    display: none;
+  }
+
   .header__login {
     font-size: 14px;
   }
 
-  .header__signup {
+  .header__signup,
+  .header__logout {
     min-width: 82px;
     min-height: 42px;
     padding: 0 14px;
