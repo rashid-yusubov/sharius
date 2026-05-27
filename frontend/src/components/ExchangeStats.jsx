@@ -1,7 +1,7 @@
 import './ExchangeStats.css';
 
 const formatTotalSize = (files) => {
-  const total = files.reduce((sum, file) => sum + file.size, 0);
+  const total = files.reduce((sum, file) => sum + (file.size ?? file.size_bytes ?? 0), 0);
   if (!total) return '0 KB';
   const units = ['B', 'KB', 'MB', 'GB'];
   const exponent = Math.min(Math.floor(Math.log(total) / Math.log(1024)), units.length - 1);
