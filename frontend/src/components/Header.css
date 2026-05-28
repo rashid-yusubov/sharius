@@ -31,7 +31,8 @@
 
 .header__login,
 .header__signup,
-.header__logout {
+.header__logout,
+.header__profile {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -83,6 +84,39 @@
   background: var(--color-control-hover);
 }
 
+.header__profile {
+  min-width: 132px;
+  min-height: 52px;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 18px;
+  color: var(--color-accent);
+  background: var(--color-control);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  text-decoration: none;
+}
+
+.header__profile:hover {
+  background: var(--color-control-hover);
+}
+
+.header__profile span {
+  color: var(--color-secondary-text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.header__profile strong {
+  max-width: 150px;
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .header__user {
   min-width: 0;
   display: flex;
@@ -110,7 +144,8 @@
 
 .header__login:active,
 .header__signup:active,
-.header__logout:active {
+.header__logout:active,
+.header__profile:active {
   transform: scale(0.97);
 }
 
@@ -139,10 +174,20 @@
   }
 
   .header__signup,
-  .header__logout {
+  .header__logout,
+  .header__profile {
     min-width: 82px;
     min-height: 42px;
     padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .header__profile span {
+    display: none;
+  }
+
+  .header__profile strong {
+    max-width: 92px;
     font-size: 14px;
   }
 }
