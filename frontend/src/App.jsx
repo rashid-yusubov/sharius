@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { getCurrentUser, login, register } from './api/auth.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { getCurrentUser, login, register, updateProfile } from './api/auth.js';
 import {
   createSession,
+  createSessionForContact,
+  deleteSession,
   deleteSessionFile,
   getSession,
   getSessionFileDownloadUrl,
@@ -11,8 +13,10 @@ import {
 } from './api/sessions.js';
 import Header from './components/Header.jsx';
 import ToastHost from './components/ToastHost.jsx';
+import FriendsPage from './pages/FriendsPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import './styles/app.css';
 
@@ -33,9 +37,15 @@ const getErrorMessage = (error) => {
     FORBIDDEN: 'You do not have access to modify this session.',
     INVALID_CREDENTIALS: 'Incorrect login or password.',
     LOGIN_ALREADY_EXISTS: 'This login is already taken.',
+    CONTACT_NOT_FOUND: 'Contact not found.',
+    CONTACT_REQUEST_ALREADY_EXISTS: 'This contact request already exists.',
+    CANNOT_ADD_SELF: 'You cannot add yourself as a friend.',
+    REQUEST_ALREADY_RESOLVED: 'This friend request has already been resolved.',
+    REQUEST_NOT_FOUND: 'Friend request not found.',
     SESSION_EXPIRED: 'This session has expired. Create a new one to continue.',
     SESSION_NOT_FOUND: 'Session not found. Check the code and try again.',
     TOKEN_INVALID: 'Your session is no longer valid. Please log in again.',
+    UNAUTHORIZED: 'Please log in to continue.',
     USER_NOT_FOUND: 'User not found.',
   };
 
@@ -62,16 +72,32 @@ const loadStoredSession = () => {
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [code, setCode] = useState(() => loadStoredSession()?.code || '');
   const [message, setMessage] = useState('');
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [isQrOpen, setIsQrOpen] = useState(false);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState(() => loadStoredSession()?.expiresAt || '');
   const [theme, setTheme] = useState(() => localStorage.getItem('sharius-theme') || 'dark');
   const [toasts, setToasts] = useState([]);
   const [auth, setAuth] = useState(() => loadStoredAuth());
   const [sessionAccess, setSessionAccess] = useState(() => loadStoredSession());
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isDeleteSessionConfirming, setIsDeleteSessionConfirming] = useState(false);
+  const [timerTick, setTimerTick] = useState(0);
   const fileInputRef = useRef(null);
+
+  const notify = useCallback((message, tone = 'default') => {
+    const id = crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`;
+    setToasts((current) => [...current, { id, message, tone }]);
+    window.setTimeout(() => {
+      setToasts((current) => current.filter((toast) => toast.id !== id));
+    }, 2600);
+  }, []);
+
+  const dismissToast = useCallback((toastId) => {
+    setToasts((current) => current.filter((toast) => toast.id !== toastId));
+  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -101,6 +127,14 @@ function App() {
   }, [sessionAccess]);
 
   useEffect(() => {
+    const timerId = window.setInterval(() => {
+      setTimerTick((current) => current + 1);
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, []);
+
+  useEffect(() => {
     if (!auth?.token) return;
 
     let isCancelled = false;
@@ -121,22 +155,28 @@ function App() {
     return () => {
       isCancelled = true;
     };
-  }, [auth?.token]);
+  }, [auth?.token, notify]);
+
+  useEffect(() => {
+    const preventFileOpen = (event) => {
+      const hasFiles = Array.from(event.dataTransfer?.types || []).includes('Files');
+
+      if (hasFiles) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('dragover', preventFileOpen);
+    window.addEventListener('drop', preventFileOpen);
+
+    return () => {
+      window.removeEventListener('dragover', preventFileOpen);
+      window.removeEventListener('drop', preventFileOpen);
+    };
+  }, []);
 
   const handleThemeToggle = () => {
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
-  };
-
-  const notify = (message, tone = 'default') => {
-    const id = crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`;
-    setToasts((current) => [...current, { id, message, tone }]);
-    window.setTimeout(() => {
-      setToasts((current) => current.filter((toast) => toast.id !== id));
-    }, 2600);
-  };
-
-  const dismissToast = (toastId) => {
-    setToasts((current) => current.filter((toast) => toast.id !== toastId));
   };
 
   const clearSessionAccess = () => {
@@ -147,9 +187,12 @@ function App() {
     setCode(session.code);
     setMessage(session.text?.content || '');
     setAttachedFiles(session.files || []);
+    setSessionExpiresAt(session.expires_at || '');
+    setIsDeleteSessionConfirming(false);
     setSessionAccess((current) => ({
       code: session.code,
       creatorToken: current?.code === session.code ? current?.creatorToken || session.creator_token || null : session.creator_token || null,
+      expiresAt: session.expires_at || null,
     }));
   };
 
@@ -202,6 +245,18 @@ function App() {
     notify('Logged out');
   };
 
+  const handleProfileUpdate = async ({ display_name }) => {
+    if (!auth?.token) {
+      notify('Please log in to continue.', 'warning');
+      navigate('/login');
+      return;
+    }
+
+    const user = await updateProfile({ display_name, token: auth.token });
+    setAuth((current) => (current ? { ...current, user } : current));
+    notify('Profile updated');
+  };
+
   const handleLogin = async (credentials) => {
     try {
       const authPayload = await login(credentials);
@@ -222,9 +277,39 @@ function App() {
     }
   };
 
+  const handleApiError = useCallback((error) => {
+    notify(getErrorMessage(error), 'warning');
+  }, [notify]);
+
+  const handleShareContact = async (contact) => {
+    if (!auth?.token) {
+      notify('Please log in to continue.', 'warning');
+      navigate('/login');
+      return;
+    }
+
+    setIsSyncing(true);
+
+    try {
+      const session = await createSessionForContact(contact.id, {
+        content: message,
+        token: auth.token,
+      });
+      syncSessionState(session);
+      notify(`Session ${session.code} created for ${contact.display_name}`);
+      navigate('/');
+    } catch (error) {
+      notify(getErrorMessage(error), 'warning');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const handleGenerateCode = () => {
     setCode(createAccessCode());
     clearSessionAccess();
+    setSessionExpiresAt('');
+    setIsDeleteSessionConfirming(false);
     notify('Quick access code generated');
   };
 
@@ -243,9 +328,61 @@ function App() {
   };
 
   const handleClear = () => {
+    if (code.trim() && sessionAccess?.creatorToken && !isDeleteSessionConfirming) {
+      setIsDeleteSessionConfirming(true);
+      notify('Press delete again to remove this session from the server.', 'warning');
+      return;
+    }
+
+    if (code.trim() && sessionAccess?.creatorToken && isDeleteSessionConfirming) {
+      handleDeleteCurrentSession();
+      return;
+    }
+
     setMessage('');
     setAttachedFiles([]);
+    setSessionExpiresAt('');
+    setIsDeleteSessionConfirming(false);
     notify('Text and files cleared');
+  };
+
+  const handleDeleteCurrentSession = async () => {
+    const normalizedCode = code.trim().toUpperCase();
+
+    if (!normalizedCode) {
+      setMessage('');
+      setAttachedFiles([]);
+      setSessionExpiresAt('');
+      clearSessionAccess();
+      setIsDeleteSessionConfirming(false);
+      notify('Text and files cleared');
+      return;
+    }
+
+    setIsSyncing(true);
+
+    try {
+      await deleteSession(normalizedCode, getSessionCredentials());
+      setCode('');
+      setMessage('');
+      setAttachedFiles([]);
+      setSessionExpiresAt('');
+      clearSessionAccess();
+      setIsDeleteSessionConfirming(false);
+      notify(`Session ${normalizedCode} deleted`);
+    } catch (error) {
+      if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
+        setCode('');
+        setMessage('');
+        setAttachedFiles([]);
+        setSessionExpiresAt('');
+        clearSessionAccess();
+        setIsDeleteSessionConfirming(false);
+      }
+      notify(getErrorMessage(error), 'warning');
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handlePaste = async () => {
@@ -271,10 +408,7 @@ function App() {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (event) => {
-    const files = Array.from(event.target.files || []);
-    event.target.value = '';
-
+  const handleFilesUpload = async (files) => {
     if (!files.length) return;
 
     setIsSyncing(true);
@@ -300,6 +434,12 @@ function App() {
     } finally {
       setIsSyncing(false);
     }
+  };
+
+  const handleFileChange = async (event) => {
+    const files = Array.from(event.target.files || []);
+    event.target.value = '';
+    await handleFilesUpload(files);
   };
 
   const handleRemoveFile = async (fileIndex) => {
@@ -382,6 +522,8 @@ function App() {
 
   const sessionStatusText = isSyncing
     ? 'Sync in progress. Actions are temporarily locked.'
+    : isDeleteSessionConfirming
+      ? 'Press delete again to remove this session from the server.'
     : sessionAccess?.creatorToken
       ? 'Owner access saved in this browser. You can edit files and text directly.'
       : code.trim()
@@ -391,13 +533,14 @@ function App() {
   return (
     <main className="app-shell">
       <div className="app-layout">
-        <Header authUser={auth?.user || null} onLogout={handleLogout} onThemeToggle={handleThemeToggle} theme={theme} />
+        <Header authUser={auth?.user || null} onThemeToggle={handleThemeToggle} theme={theme} />
         <Routes>
           <Route
             element={
               <HomePage
                 attachedFiles={attachedFiles}
                 code={code}
+                expiresAt={sessionExpiresAt}
                 fileInputRef={fileInputRef}
                 isSyncing={isSyncing}
                 message={message}
@@ -407,6 +550,7 @@ function App() {
                 onCopy={handleCopy}
                 onFileChange={handleFileChange}
                 onFileClick={handleFileClick}
+                onFilesDrop={handleFilesUpload}
                 onGenerateCode={handleGenerateCode}
                 onMessageChange={setMessage}
                 onPaste={handlePaste}
@@ -417,6 +561,7 @@ function App() {
                 onUpdate={handleUpdate}
                 isQrOpen={isQrOpen}
                 sessionStatusText={sessionStatusText}
+                timerTick={timerTick}
               />
             }
             path="/"
@@ -428,6 +573,39 @@ function App() {
           <Route
             element={auth?.token ? <Navigate replace to="/" /> : <SignInPage onRegister={handleRegister} />}
             path="/sign-in"
+          />
+          <Route
+            element={
+              auth?.token ? (
+                <FriendsPage
+                  onError={handleApiError}
+                  onNotify={notify}
+                  onShareContact={handleShareContact}
+                  token={auth.token}
+                />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+            path="/friends"
+          />
+          <Route
+            element={
+              auth?.token ? (
+                <ProfilePage
+                  onError={handleApiError}
+                  onLogout={handleLogout}
+                  onNotify={notify}
+                  onProfileUpdate={handleProfileUpdate}
+                  onShareContact={handleShareContact}
+                  token={auth.token}
+                  user={auth.user}
+                />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+            path="/profile"
           />
         </Routes>
       </div>

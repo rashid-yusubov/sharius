@@ -13,6 +13,19 @@ export function createSession({ custom_code, content = '', token }) {
   });
 }
 
+export function createSessionForContact(userId, { custom_code, content = '', token }) {
+  return request(`/sessions/for-contact/${encodeURIComponent(userId)}`, {
+    method: 'POST',
+    headers: buildHeaders({
+      token,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+    body: JSON.stringify({ custom_code, content }),
+  });
+}
+
 export function getSession(code) {
   return request(`/sessions/${encodeURIComponent(code)}`);
 }
@@ -44,6 +57,13 @@ export function uploadSessionFile(code, file, { token, creatorToken } = {}) {
 
 export function deleteSessionFile(code, fileId, { token, creatorToken } = {}) {
   return request(`/sessions/${encodeURIComponent(code)}/files/${encodeURIComponent(fileId)}`, {
+    method: 'DELETE',
+    headers: buildHeaders({ token, creatorToken }),
+  });
+}
+
+export function deleteSession(code, { token, creatorToken } = {}) {
+  return request(`/sessions/${encodeURIComponent(code)}`, {
     method: 'DELETE',
     headers: buildHeaders({ token, creatorToken }),
   });

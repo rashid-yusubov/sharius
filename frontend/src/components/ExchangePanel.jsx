@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import IconButton from './IconButton.jsx';
 import FileChip from './FileChip.jsx';
 import { ArrowUpIcon, ClipboardIcon, CopyIcon, PlusIcon, SyncIcon, TrashIcon } from './icons.jsx';
@@ -13,6 +14,7 @@ function ExchangePanel({
   onCopy,
   onFileChange,
   onFileClick,
+  onFilesDrop,
   onMessageChange,
   onPaste,
   onRemoveFile,
@@ -21,9 +23,69 @@ function ExchangePanel({
   sessionCode,
   statusText,
 }) {
+  const [isDragActive, setIsDragActive] = useState(false);
+  const dragDepthRef = useRef(0);
+
+  const hasDraggedFiles = (event) => {
+    const types = Array.from(event.dataTransfer?.types || []);
+    return types.includes('Files') || Boolean(event.dataTransfer?.files?.length);
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!isBusy && hasDraggedFiles(event)) {
+      dragDepthRef.current += 1;
+      setIsDragActive(true);
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!isBusy && hasDraggedFiles(event)) {
+      event.dataTransfer.dropEffect = 'copy';
+      setIsDragActive(true);
+    }
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    dragDepthRef.current = Math.max(0, dragDepthRef.current - 1);
+
+    if (dragDepthRef.current === 0) {
+      setIsDragActive(false);
+    }
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    dragDepthRef.current = 0;
+    setIsDragActive(false);
+
+    if (isBusy) return;
+
+    const files = Array.from(event.dataTransfer.files || []);
+    onFilesDrop?.(files);
+  };
+
   return (
     <section className="exchange" aria-label="Text exchange">
-      <div className="exchange__panel glass-panel">
+      <div
+        className={`exchange__panel glass-panel${isDragActive ? ' exchange__panel--drag-active' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        <div className="exchange__drop-overlay" aria-hidden="true">
+          <strong>Drop files to upload</strong>
+        </div>
         <div className="exchange__top-actions">
           <IconButton disabled={isBusy} label="Clear text" onClick={onClear} variant="panel">
             <TrashIcon />
