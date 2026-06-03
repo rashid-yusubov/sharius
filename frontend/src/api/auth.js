@@ -25,3 +25,16 @@ export function getCurrentUser(token) {
     headers: buildHeaders({ token }),
   });
 }
+
+export function updateProfile({ display_name, token }) {
+  return request('/profile', {
+    method: 'PATCH',
+    headers: buildHeaders({
+      token,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+    body: JSON.stringify({ display_name }),
+  });
+}

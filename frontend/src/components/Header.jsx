@@ -3,7 +3,7 @@ import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import './Header.css';
 
-function Header({ authUser, onLogout, onThemeToggle, theme }) {
+function Header({ authUser, onThemeToggle, theme }) {
   return (
     <header className="header">
       <nav className="header__nav glass-panel" aria-label="Main navigation">
@@ -15,15 +15,10 @@ function Header({ authUser, onLogout, onThemeToggle, theme }) {
         <div className="header__actions">
           <ThemeToggle onToggle={onThemeToggle} theme={theme} />
           {authUser ? (
-            <>
-              <div className="header__user" title={authUser.login}>
-                <span className="header__user-label">Signed in as</span>
-                <strong>{authUser.display_name}</strong>
-              </div>
-              <button className="header__logout" onClick={onLogout} type="button">
-                Log Out
-              </button>
-            </>
+            <Link className="header__profile" title={authUser.login} to="/profile">
+              <span>Profile</span>
+              <strong>{authUser.display_name}</strong>
+            </Link>
           ) : (
             <>
               <Link className="header__login" to="/login">

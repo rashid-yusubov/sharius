@@ -6,6 +6,7 @@ function HomePage({
   attachedFiles,
   code,
   fileInputRef,
+  expiresAt,
   isSyncing,
   message,
   onDownloadFile,
@@ -14,6 +15,7 @@ function HomePage({
   onCopy,
   onFileChange,
   onFileClick,
+  onFilesDrop,
   onGenerateCode,
   onMessageChange,
   onPaste,
@@ -24,6 +26,7 @@ function HomePage({
   onUpdate,
   isQrOpen,
   sessionStatusText,
+  timerTick,
 }) {
   return (
     <>
@@ -35,7 +38,7 @@ function HomePage({
         onQrClose={onQrClose}
         onQrOpen={onQrOpen}
       />
-      <ExchangeStats attachedFiles={attachedFiles} message={message} />
+      <ExchangeStats attachedFiles={attachedFiles} expiresAt={expiresAt} message={message} timerTick={timerTick} />
       <ExchangePanel
         attachedFiles={attachedFiles}
         fileInputRef={fileInputRef}
@@ -46,6 +49,7 @@ function HomePage({
         onCopy={onCopy}
         onFileChange={onFileChange}
         onFileClick={onFileClick}
+        onFilesDrop={onFilesDrop}
         onMessageChange={onMessageChange}
         onPaste={onPaste}
         onRemoveFile={onRemoveFile}

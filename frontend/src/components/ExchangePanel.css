@@ -11,6 +11,40 @@
   border-radius: var(--radius-panel);
 }
 
+.exchange__panel--drag-active {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-ring), var(--shadow-panel);
+}
+
+.exchange__drop-overlay {
+  position: absolute;
+  inset: 14px;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary-button-text);
+  background: rgba(244, 244, 245, 0.9);
+  border: 1px dashed rgba(10, 10, 11, 0.36);
+  border-radius: calc(var(--radius-panel) - 8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.exchange__drop-overlay strong {
+  font-size: 20px;
+}
+
+.exchange__panel--drag-active .exchange__drop-overlay {
+  opacity: 1;
+}
+
+:root[data-theme="light"] .exchange__drop-overlay {
+  color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(24, 24, 27, 0.28);
+}
+
 .exchange__workspace {
   flex: 1;
   min-height: 0;
