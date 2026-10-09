@@ -11,13 +11,12 @@ import {
   updateSessionText,
   uploadSessionFile,
 } from './api/sessions.js';
+import AuthModal from './components/AuthModal.jsx';
 import Header from './components/Header.jsx';
 import ToastHost from './components/ToastHost.jsx';
 import FriendsPage from './pages/FriendsPage.jsx';
 import HomePage from './pages/HomePage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
-import SignInPage from './pages/SignInPage.jsx';
 import './styles/app.css';
 
 const createAccessCode = () => {
@@ -84,8 +83,17 @@ function App() {
   const [sessionAccess, setSessionAccess] = useState(() => loadStoredSession());
   const [isSyncing, setIsSyncing] = useState(false);
   const [isDeleteSessionConfirming, setIsDeleteSessionConfirming] = useState(false);
+  const [authModalState, setAuthModalState] = useState({ isOpen: false, mode: 'login' });
   const [timerTick, setTimerTick] = useState(0);
   const fileInputRef = useRef(null);
+
+  const handleOpenAuth = useCallback((mode = 'login') => {
+    setAuthModalState({ isOpen: true, mode });
+  }, []);
+
+  const handleCloseAuth = useCallback(() => {
+    setAuthModalState((current) => ({ ...current, isOpen: false }));
+  }, []);
 
   const notify = useCallback((message, tone = 'default') => {
     const id = crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`;
@@ -98,6 +106,16 @@ function App() {
   const dismissToast = useCallback((toastId) => {
     setToasts((current) => current.filter((toast) => toast.id !== toastId));
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/login') {
+      handleOpenAuth('login');
+      navigate('/', { replace: true });
+    } else if (location.pathname === '/sign-in') {
+      handleOpenAuth('register');
+      navigate('/', { replace: true });
+    }
+  }, [location.pathname, navigate, handleOpenAuth]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -248,7 +266,7 @@ function App() {
   const handleProfileUpdate = async ({ display_name }) => {
     if (!auth?.token) {
       notify('Please log in to continue.', 'warning');
-      navigate('/login');
+      handleOpenAuth('login');
       return;
     }
 
@@ -284,7 +302,7 @@ function App() {
   const handleShareContact = async (contact) => {
     if (!auth?.token) {
       notify('Please log in to continue.', 'warning');
-      navigate('/login');
+      handleOpenAuth('login');
       return;
     }
 
@@ -533,7 +551,12 @@ function App() {
   return (
     <main className="app-shell">
       <div className="app-layout">
-        <Header authUser={auth?.user || null} onThemeToggle={handleThemeToggle} theme={theme} />
+        <Header
+          authUser={auth?.user || null}
+          onOpenAuth={handleOpenAuth}
+          onThemeToggle={handleThemeToggle}
+          theme={theme}
+        />
         <Routes>
           <Route
             element={
@@ -566,14 +589,8 @@ function App() {
             }
             path="/"
           />
-          <Route
-            element={auth?.token ? <Navigate replace to="/" /> : <LoginPage onLogin={handleLogin} />}
-            path="/login"
-          />
-          <Route
-            element={auth?.token ? <Navigate replace to="/" /> : <SignInPage onRegister={handleRegister} />}
-            path="/sign-in"
-          />
+          <Route element={<Navigate replace to="/" />} path="/login" />
+          <Route element={<Navigate replace to="/" />} path="/sign-in" />
           <Route
             element={
               auth?.token ? (
@@ -584,7 +601,7 @@ function App() {
                   token={auth.token}
                 />
               ) : (
-                <Navigate replace to="/login" />
+                <Navigate replace to="/" />
               )
             }
             path="/friends"
@@ -602,13 +619,20 @@ function App() {
                   user={auth.user}
                 />
               ) : (
-                <Navigate replace to="/login" />
+                <Navigate replace to="/" />
               )
             }
             path="/profile"
           />
         </Routes>
       </div>
+      <AuthModal
+        initialMode={authModalState.mode}
+        isOpen={authModalState.isOpen}
+        onClose={handleCloseAuth}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+      />
       <ToastHost onDismiss={dismissToast} toasts={toasts} />
     </main>
   );

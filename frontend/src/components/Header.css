@@ -37,6 +37,8 @@
   align-items: center;
   justify-content: center;
   font: inherit;
+  border: 0;
+  cursor: pointer;
   text-decoration: none;
   transition: color 160ms ease, background 160ms ease, transform 120ms ease;
 }
@@ -44,6 +46,7 @@
 .header__login {
   padding: 8px 0;
   color: var(--color-secondary-text);
+  background: transparent;
   font-size: 16px;
   font-weight: 500;
   white-space: nowrap;

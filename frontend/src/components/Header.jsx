@@ -3,7 +3,7 @@ import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import './Header.css';
 
-function Header({ authUser, onThemeToggle, theme }) {
+function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
   return (
     <header className="header">
       <nav className="header__nav glass-panel" aria-label="Main navigation">
@@ -21,12 +21,20 @@ function Header({ authUser, onThemeToggle, theme }) {
             </Link>
           ) : (
             <>
-              <Link className="header__login" to="/login">
+              <button
+                className="header__login"
+                onClick={() => onOpenAuth?.('login')}
+                type="button"
+              >
                 Log In
-              </Link>
-              <Link className="header__signup" to="/sign-in">
+              </button>
+              <button
+                className="header__signup"
+                onClick={() => onOpenAuth?.('register')}
+                type="button"
+              >
                 Sign In
-              </Link>
+              </button>
             </>
           )}
         </div>
