@@ -62,22 +62,41 @@
 | <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=flat-square" alt="Docker" height="28"/> | **Docker + docker-compose** |
 ---
 
+## 🚀 Быстрый запуск через Docker Compose
+
+Для запуска всех компонентов (PostgreSQL, Backend, Frontend) одной командой:
+
+1. **Скопируйте файл конфигурации окружения:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Запустите контейнеры:**
+   ```bash
+   docker compose up --build
+   ```
+
+После запуска сервисы будут доступны по следующим адресам:
+- **Frontend:** [http://localhost:5173](http://localhost:5173)
+- **Backend API & Swagger:** [http://localhost:9000/docs](http://localhost:9000/docs)
+- **База данных PostgreSQL:** `localhost:5432`
+
+---
+
 ## 📂 Структура проекта
 ```
 sharius/
-├── backend/                    # Основная часть проекта
-│   ├── app/
-│   │   ├── api/                # Роуты
-│   │   ├── models/             # SQLAlchemy модели
-│   │   ├── schemas/            # Pydantic схемы
-│   │   ├── services/           # Бизнес-логика
-│   │   └── ...
-│   ├── alembic/                # Миграции
+├── backend/                    # FastAPI бэкенд
+│   ├── app/                    # Исходный код API
+│   ├── alembic/                # Миграции базы данных
 │   ├── requirements.txt
-│   ├── Dockerfile
-│   └── docker-compose.yml
-│
-├── docs/                       # Документация
+│   ├── Dockerfile              # Dockerfile бэкенда
+│   └── entrypoint.sh           # Скрипт инициализации БД и запуска
+├── frontend/                   # React + Vite фронтенд
+│   ├── src/                    # Компоненты и страницы
+│   └── Dockerfile              # Multi-stage Dockerfile фронтенда
+├── .env.example                # Шаблон переменных окружения
+├── docker-compose.yml          # Единый файл оркестрации всех сервисов
 ├── LICENCE.md
 └── README.md
 ```

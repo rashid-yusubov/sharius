@@ -1,0 +1,89 @@
+services:
+  # -------------------------------------------------------------
+  # База данных PostgreSQL
+  # -------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: sharius_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-project_db}
+      POSTGRES_USER: ${DB_USER:-project_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-project_password}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-project_user} -d ${DB_NAME:-project_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - sharius_network
+
+  # -------------------------------------------------------------
+  # Бэкенд на FastAPI
+  # -------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sharius_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://${DB_USER:-project_user}:${DB_PASSWORD:-project_password}@db:5432/${DB_NAME:-project_db}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-project_user}
+      DB_PASSWORD: ${DB_PASSWORD:-project_password}
+      DB_NAME: ${DB_NAME:-project_db}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:9000,http://localhost:9000}
+    ports:
+      - "${BACKEND_PORT:-9000}:8000"
+    volumes:
+      - ./backend/app:/app/app
+      - backend_storage:/app/storage
+    networks:
+      - sharius_network
+
+  # -------------------------------------------------------------
+  # Фронтенд на React + Vite
+  # -------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: ${BUILD_TARGET:-development}
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:9000}
+    container_name: sharius_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:9000}
+      NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - /app/node_modules
+    networks:
+      - sharius_network
+
+networks:
+  sharius_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_storage:
+    driver: local
