@@ -1,20 +1,36 @@
-.DS_Store
-.env
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.ropeproject/
-.idea/
-.vscode/
-
+# Dependencies
+node_modules/
 venv/
 .venv/
 env/
 
+# Build & output artifacts
+dist/
+build/
+*.egg-info/
+
+# Environment configurations
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# Python cache & runtime
 __pycache__/
 *.pyc
 *.pyo
-
-backend/.env
+*.pyd
+*.db
 backend/*.db
 backend/storage/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE & OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.ropeproject/
