@@ -1,0 +1,91 @@
+.lang-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-switcher__button {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--color-accent, inherit);
+  background: var(--color-control, transparent);
+  border: 1px solid var(--color-border, transparent);
+  border-radius: var(--radius-element, 8px);
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease;
+}
+
+.lang-switcher__button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.lang-switcher__button:hover {
+  background: var(--color-control-hover, rgba(0, 0, 0, 0.05));
+}
+
+.lang-switcher__button:active {
+  transform: scale(0.96);
+}
+
+.lang-switcher__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 150px;
+  background: var(--color-background, #fff);
+  border: 1px solid var(--color-border, #eaeaea);
+  border-radius: var(--radius-element, 8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-switcher__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--color-text, #333);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.lang-switcher__option:hover {
+  background: var(--color-control-hover, rgba(0, 0, 0, 0.05));
+}
+
+.lang-switcher__option.active {
+  background: var(--color-control, rgba(0, 0, 0, 0.03));
+  font-weight: 700;
+}
+
+.lang-switcher__name {
+  flex-grow: 1;
+}
+
+/* Adjusting variables based on existing css if possible */
+:root[data-theme='dark'] .lang-switcher__dropdown {
+  background: var(--color-background, #1a1a1a);
+  border-color: var(--color-border, #333);
+}
+:root[data-theme='dark'] .lang-switcher__option {
+  color: var(--color-text, #eee);
+}
+
+@media (max-width: 640px) {
+  .lang-switcher__button {
+    width: 40px;
+    height: 40px;
+  }
+}

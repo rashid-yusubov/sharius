@@ -1,0 +1,103 @@
+{
+  "header": {
+    "login": "Войти",
+    "signup": "Регистрация",
+    "profile": "Профиль"
+  },
+  "home": {
+    "welcome": "Добро пожаловать в Sharius"
+  },
+  "stats": {
+    "files": "Файлы",
+    "size": "Размер",
+    "status": "Статус",
+    "expires": "Истекает",
+    "ready": "Готов",
+    "empty": "Пусто",
+    "no_session": "Нет сессии",
+    "unknown": "Неизвестно",
+    "expired": "Истёк"
+  },
+  "panel": {
+    "drop_files": "Отпустите файлы для загрузки",
+    "clear_text": "Очистить текст",
+    "paste": "Вставить из буфера",
+    "copy": "Копировать в буфер",
+    "active_session": "АКТИВНАЯ СЕССИЯ",
+    "local_draft": "Локальный черновик",
+    "placeholder": "Введите или вставьте текст, ссылки или заметки здесь для мгновенного обмена между устройствами...",
+    "add_file": "Добавить файл",
+    "update": "Обновить",
+    "send": "Отправить"
+  },
+  "quick_access": {
+    "placeholder": "Введите код быстрого доступа...",
+    "generate": "Сгенерировать код",
+    "show_qr": "Показать QR-код"
+  },
+  "auth": {
+    "login_tab": "Войти",
+    "register_tab": "Регистрация",
+    "welcome_back": "С возвращением",
+    "create_access": "Создание аккаунта",
+    "login_subtitle": "Войдите, чтобы продолжить обмен заметками, ссылками и файлами между устройствами.",
+    "register_subtitle": "Создайте аккаунт Sharius для сохранения сессий, быстрого сопряжения устройств и управления контактами.",
+    "name_label": "Имя",
+    "name_placeholder": "Ваше имя",
+    "login_label": "Логин",
+    "login_placeholder": "ваш_логин",
+    "password_label": "Пароль",
+    "password_login_placeholder": "Введите пароль",
+    "password_register_placeholder": "Придумайте пароль (мин. 6 символов)",
+    "logging_in": "Вход...",
+    "creating_account": "Создание аккаунта...",
+    "need_account": "Нужен аккаунт?",
+    "already_have_account": "Уже есть аккаунт?"
+  },
+  "profile": {
+    "name_empty_error": "Имя не может быть пустым.",
+    "update_failed": "Ошибка обновления профиля.",
+    "title": "Профиль",
+    "display_name_label": "Имя",
+    "saving": "Сохранение...",
+    "save": "Сохранить",
+    "logout": "Выйти"
+  },
+  "friends": {
+    "request_sent": "Запрос отправлен {{name}}",
+    "added_to_friends": "{{name}} добавлен в друзья",
+    "request_declined": "Запрос от {{name}} отклонен",
+    "removed_from_friends": "{{name}} удален из друзей",
+    "contacts_eyebrow": "Контакты",
+    "title": "Друзья",
+    "refresh": "Обновить",
+    "add_friend_title": "Добавить друга",
+    "searching": "Поиск...",
+    "found": "Найдено: {{count}}",
+    "search_placeholder": "Поиск по логину или имени",
+    "no_users_found": "Пользователи не найдены.",
+    "add_btn": "Добавить",
+    "incoming_title": "Входящие",
+    "no_pending_requests": "Нет ожидающих запросов.",
+    "accept_btn": "Принять",
+    "decline_btn": "Отклонить",
+    "your_friends_title": "Ваши друзья",
+    "your_contacts_empty": "Здесь появятся ваши контакты.",
+    "remove_confirm_text": "Удалить друга?",
+    "remove_btn": "Удалить",
+    "cancel_btn": "Отмена",
+    "share_btn": "Поделиться"
+  },
+  "qr": {
+    "scan_to_connect": "Сканируйте для подключения",
+    "title": "QR-код быстрого доступа",
+    "hint": "Окно закроется автоматически после подтверждения сканирования сервером."
+  },
+  "app": {
+    "sync_in_progress": "Идет синхронизация. Действия временно заблокированы.",
+    "press_delete": "Нажмите удалить еще раз, чтобы удалить эту сессию с сервера.",
+    "session_set": "Код сессии установлен. Нажмите Обновить для загрузки или Отправить для создания новой.",
+    "start_typing": "Начните вводить текст, затем нажмите Отправить для создания сессии.",
+    "text_synced": "Текст синхронизирован с {{code}}"
+  }
+}

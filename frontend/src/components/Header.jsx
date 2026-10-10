@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
+import LanguageSwitcher from './LanguageSwitcher.jsx';
 import './Header.css';
 
 function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
+  const { t } = useTranslation();
+
   return (
     <header className="header">
       <nav className="header__nav glass-panel" aria-label="Main navigation">
@@ -13,10 +17,11 @@ function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
         </Link>
 
         <div className="header__actions">
+          <LanguageSwitcher />
           <ThemeToggle onToggle={onThemeToggle} theme={theme} />
           {authUser ? (
             <Link className="header__profile" title={authUser.login} to="/profile">
-              <span>Profile</span>
+              <span>{t('header.profile')}</span>
               <strong>{authUser.display_name}</strong>
             </Link>
           ) : (
@@ -26,14 +31,14 @@ function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
                 onClick={() => onOpenAuth?.('login')}
                 type="button"
               >
-                Log In
+                {t('header.login')}
               </button>
               <button
                 className="header__signup"
                 onClick={() => onOpenAuth?.('register')}
                 type="button"
               >
-                Sign In
+                {t('header.signup')}
               </button>
             </>
           )}

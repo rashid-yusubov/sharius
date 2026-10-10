@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import './ExchangeStats.css';
 
 const formatTotalSize = (files) => {
@@ -9,12 +10,12 @@ const formatTotalSize = (files) => {
   return `${value >= 10 || exponent === 0 ? value.toFixed(0) : value.toFixed(1)} ${units[exponent]}`;
 };
 
-const formatExpiresIn = (expiresAt) => {
-  if (!expiresAt) return 'No session';
+const formatExpiresIn = (expiresAt, t) => {
+  if (!expiresAt) return t('stats.no_session');
 
   const diffMs = new Date(expiresAt).getTime() - Date.now();
-  if (Number.isNaN(diffMs)) return 'Unknown';
-  if (diffMs <= 0) return 'Expired';
+  if (Number.isNaN(diffMs)) return t('stats.unknown');
+  if (diffMs <= 0) return t('stats.expired');
 
   const totalSeconds = Math.ceil(diffMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
@@ -30,26 +31,30 @@ const formatExpiresIn = (expiresAt) => {
 };
 
 function ExchangeStats({ attachedFiles, expiresAt, message, timerTick }) {
-  const status = message.trim() || attachedFiles.length ? 'Ready' : 'Empty';
+  const { t } = useTranslation();
+  
+  const statusKey = message.trim() || attachedFiles.length ? 'ready' : 'empty';
+  const statusText = t(`stats.${statusKey}`);
+  
   void timerTick;
-  const expiresText = formatExpiresIn(expiresAt);
+  const expiresText = formatExpiresIn(expiresAt, t);
 
   return (
     <aside className="exchange-stats" aria-label="Exchange summary">
       <div className="exchange-stats__item">
-        <span>Files</span>
+        <span>{t('stats.files')}</span>
         <strong>{attachedFiles.length}</strong>
       </div>
       <div className="exchange-stats__item">
-        <span>Size</span>
+        <span>{t('stats.size')}</span>
         <strong>{formatTotalSize(attachedFiles)}</strong>
       </div>
-      <div className={`exchange-stats__item exchange-stats__item--${status.toLowerCase()}`}>
-        <span>Status</span>
-        <strong>{status}</strong>
+      <div className={`exchange-stats__item exchange-stats__item--${statusKey}`}>
+        <span>{t('stats.status')}</span>
+        <strong>{statusText}</strong>
       </div>
-      <div className={`exchange-stats__item exchange-stats__item--${expiresText === 'Expired' ? 'expired' : 'timer'}`}>
-        <span>Expires</span>
+      <div className={`exchange-stats__item exchange-stats__item--${expiresText === t('stats.expired') ? 'expired' : 'timer'}`}>
+        <span>{t('stats.expires')}</span>
         <strong>{expiresText}</strong>
       </div>
     </aside>

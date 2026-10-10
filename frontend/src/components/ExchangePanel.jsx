@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import IconButton from './IconButton.jsx';
 import FileChip from './FileChip.jsx';
 import { ArrowUpIcon, ClipboardIcon, CopyIcon, PlusIcon, SyncIcon, TrashIcon } from './icons.jsx';
@@ -23,6 +24,7 @@ function ExchangePanel({
   sessionCode,
   statusText,
 }) {
+  const { t } = useTranslation();
   const [isDragActive, setIsDragActive] = useState(false);
   const dragDepthRef = useRef(0);
 
@@ -84,16 +86,16 @@ function ExchangePanel({
         onDrop={handleDrop}
       >
         <div className="exchange__drop-overlay" aria-hidden="true">
-          <strong>Drop files to upload</strong>
+          <strong>{t('panel.drop_files')}</strong>
         </div>
         <div className="exchange__top-actions">
-          <IconButton disabled={isBusy} label="Clear text" onClick={onClear} variant="panel">
+          <IconButton disabled={isBusy} label={t('panel.clear_text')} onClick={onClear} variant="panel">
             <TrashIcon />
           </IconButton>
-          <IconButton disabled={isBusy} label="Paste from clipboard" onClick={onPaste} variant="panel">
+          <IconButton disabled={isBusy} label={t('panel.paste')} onClick={onPaste} variant="panel">
             <ClipboardIcon />
           </IconButton>
-          <IconButton label="Copy to clipboard" onClick={onCopy} variant="panel">
+          <IconButton label={t('panel.copy')} onClick={onCopy} variant="panel">
             <CopyIcon />
           </IconButton>
         </div>
@@ -101,8 +103,8 @@ function ExchangePanel({
           <div className="exchange__session-meta">
             <span className={`exchange__status-dot${isBusy ? ' exchange__status-dot--busy' : ''}`} />
             <div>
-              <p className="exchange__session-label">Active session</p>
-              <strong>{sessionCode || 'Local draft'}</strong>
+              <p className="exchange__session-label">{t('panel.active_session')}</p>
+              <strong>{sessionCode || t('panel.local_draft')}</strong>
             </div>
           </div>
           <p className="exchange__session-hint">{statusText}</p>
@@ -113,7 +115,7 @@ function ExchangePanel({
             className="exchange__textarea"
             disabled={isBusy}
             onChange={(event) => onMessageChange(event.target.value)}
-            placeholder="Type or paste your text, links, or notes here for instant cross-device sharing..."
+            placeholder={t('panel.placeholder')}
             value={message}
           />
         </div>
@@ -121,7 +123,7 @@ function ExchangePanel({
         <div className="exchange__bottom-actions">
           <div className="exchange__attachments">
             <input className="exchange__file-input" multiple onChange={onFileChange} ref={fileInputRef} type="file" />
-            <IconButton disabled={isBusy} label="Add file" onClick={onFileClick} size="large" variant="muted">
+            <IconButton disabled={isBusy} label={t('panel.add_file')} onClick={onFileClick} size="large" variant="muted">
               <PlusIcon />
             </IconButton>
             {attachedFiles.length > 0 && (
@@ -139,10 +141,10 @@ function ExchangePanel({
           </div>
 
           <div className="exchange__send-actions">
-            <IconButton disabled={isBusy} label="Update" onClick={onUpdate} size="large" variant="dark">
+            <IconButton disabled={isBusy} label={t('panel.update')} onClick={onUpdate} size="large" variant="dark">
               <SyncIcon />
             </IconButton>
-            <IconButton disabled={isBusy} label="Send" onClick={onSend} size="large" variant="primary">
+            <IconButton disabled={isBusy} label={t('panel.send')} onClick={onSend} size="large" variant="primary">
               <ArrowUpIcon />
             </IconButton>
           </div>

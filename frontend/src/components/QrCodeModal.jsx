@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
 import { CloseIcon } from './icons.jsx';
 import './QrCodeModal.css';
 
 function QrCodeModal({ isOpen, onClose, value }) {
+  const { t } = useTranslation();
   const [qrSource, setQrSource] = useState('');
 
   useEffect(() => {
@@ -59,10 +61,10 @@ function QrCodeModal({ isOpen, onClose, value }) {
         </div>
 
         <div className="qr-modal__content">
-          <p className="qr-modal__eyebrow">Scan to connect</p>
-          <h2 id="qr-modal-title">Quick access QR</h2>
+          <p className="qr-modal__eyebrow">{t('qr.scan_to_connect')}</p>
+          <h2 id="qr-modal-title">{t('qr.title')}</h2>
           <p className="qr-modal__code">{value}</p>
-          <p className="qr-modal__hint">The window will close automatically after backend scan confirmation.</p>
+          <p className="qr-modal__hint">{t('qr.hint')}</p>
         </div>
       </div>
     </div>
@@ -70,3 +72,4 @@ function QrCodeModal({ isOpen, onClose, value }) {
 }
 
 export default QrCodeModal;
+

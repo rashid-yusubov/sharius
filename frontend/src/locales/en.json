@@ -1,0 +1,103 @@
+{
+  "header": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "profile": "Profile"
+  },
+  "home": {
+    "welcome": "Welcome to Sharius"
+  },
+  "stats": {
+    "files": "Files",
+    "size": "Size",
+    "status": "Status",
+    "expires": "Expires",
+    "ready": "Ready",
+    "empty": "Empty",
+    "no_session": "No session",
+    "unknown": "Unknown",
+    "expired": "Expired"
+  },
+  "panel": {
+    "drop_files": "Drop files to upload",
+    "clear_text": "Clear text",
+    "paste": "Paste from clipboard",
+    "copy": "Copy to clipboard",
+    "active_session": "Active session",
+    "local_draft": "Local draft",
+    "placeholder": "Type or paste your text, links, or notes here for instant cross-device sharing...",
+    "add_file": "Add file",
+    "update": "Update",
+    "send": "Send"
+  },
+  "quick_access": {
+    "placeholder": "Enter quick access code...",
+    "generate": "Generate code",
+    "show_qr": "Show QR code"
+  },
+  "auth": {
+    "login_tab": "Log In",
+    "register_tab": "Sign In",
+    "welcome_back": "Welcome Back",
+    "create_access": "Create Access",
+    "login_subtitle": "Log in to continue exchanging notes, links, and files across devices.",
+    "register_subtitle": "Create your Sharius account to save sessions, pair devices faster, and manage contacts.",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "login_label": "Login",
+    "login_placeholder": "your_login",
+    "password_label": "Password",
+    "password_login_placeholder": "Enter password",
+    "password_register_placeholder": "Create password (min 6 chars)",
+    "logging_in": "Logging In...",
+    "creating_account": "Creating Account...",
+    "need_account": "Need an account?",
+    "already_have_account": "Already have an account?"
+  },
+  "profile": {
+    "name_empty_error": "Name cannot be empty.",
+    "update_failed": "Profile update failed.",
+    "title": "Profile",
+    "display_name_label": "Display name",
+    "saving": "Saving...",
+    "save": "Save",
+    "logout": "Log Out"
+  },
+  "friends": {
+    "request_sent": "Friend request sent to {{name}}",
+    "added_to_friends": "{{name}} added to friends",
+    "request_declined": "Request from {{name}} declined",
+    "removed_from_friends": "{{name}} removed from friends",
+    "contacts_eyebrow": "Contacts",
+    "title": "Friends",
+    "refresh": "Refresh",
+    "add_friend_title": "Add friend",
+    "searching": "Searching...",
+    "found": "{{count}} found",
+    "search_placeholder": "Search by login or name",
+    "no_users_found": "No users found.",
+    "add_btn": "Add",
+    "incoming_title": "Incoming",
+    "no_pending_requests": "No pending requests.",
+    "accept_btn": "Accept",
+    "decline_btn": "Decline",
+    "your_friends_title": "Your friends",
+    "your_contacts_empty": "Your contacts will appear here.",
+    "remove_confirm_text": "Remove this friend?",
+    "remove_btn": "Remove",
+    "cancel_btn": "Cancel",
+    "share_btn": "Share"
+  },
+  "qr": {
+    "scan_to_connect": "Scan to connect",
+    "title": "Quick access QR",
+    "hint": "The window will close automatically after backend scan confirmation."
+  },
+  "app": {
+    "sync_in_progress": "Sync in progress. Actions are temporarily locked.",
+    "press_delete": "Press delete again to remove this session from the server.",
+    "session_set": "Session code is set. Use Update to load it or Send to create a fresh session.",
+    "start_typing": "Start typing, then Send to create a shareable session.",
+    "text_synced": "Text synced to {{code}}"
+  }
+}

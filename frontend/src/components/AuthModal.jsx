@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CloseIcon } from './icons.jsx';
 import './AuthModal.css';
 
 function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister }) {
+  const { t } = useTranslation();
   const [mode, setMode] = useState(initialMode);
   const [formData, setFormData] = useState({ display_name: '', login: '', password: '' });
   const [error, setError] = useState('');
@@ -111,24 +113,22 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
 
         <div className="auth-modal__header">
           <h2 className="auth-modal__title" id="auth-modal-title">
-            {mode === 'login' ? 'Welcome Back' : 'Create Access'}
+            {mode === 'login' ? t('auth.welcome_back') : t('auth.create_access')}
           </h2>
           <p className="auth-modal__subtitle">
-            {mode === 'login'
-              ? 'Log in to continue exchanging notes, links, and files across devices.'
-              : 'Create your Sharius account to save sessions, pair devices faster, and manage contacts.'}
+            {mode === 'login' ? t('auth.login_subtitle') : t('auth.register_subtitle')}
           </p>
         </div>
 
         <form className="auth-modal__form" onSubmit={handleSubmit}>
           {mode === 'register' ? (
             <label className="auth-modal__field">
-              <span>Name</span>
+              <span>{t('auth.name_label')}</span>
               <input
                 autoComplete="name"
                 name="display_name"
                 onChange={handleChange}
-                placeholder="Your name"
+                placeholder={t('auth.name_placeholder')}
                 required
                 type="text"
                 value={formData.display_name}
@@ -137,12 +137,12 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
           ) : null}
 
           <label className="auth-modal__field">
-            <span>Login</span>
+            <span>{t('auth.login_label')}</span>
             <input
               autoComplete="username"
               name="login"
               onChange={handleChange}
-              placeholder="your_login"
+              placeholder={t('auth.login_placeholder')}
               required
               type="text"
               value={formData.login}
@@ -150,13 +150,13 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
           </label>
 
           <label className="auth-modal__field">
-            <span>Password</span>
+            <span>{t('auth.password_label')}</span>
             <input
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               minLength={mode === 'register' ? 6 : undefined}
               name="password"
               onChange={handleChange}
-              placeholder={mode === 'login' ? 'Enter password' : 'Create password (min 6 chars)'}
+              placeholder={mode === 'login' ? t('auth.password_login_placeholder') : t('auth.password_register_placeholder')}
               required
               type="password"
               value={formData.password}
@@ -167,18 +167,13 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
 
           <button className="auth-modal__submit" disabled={isSubmitting} type="submit">
             {isSubmitting
-              ? mode === 'login'
-                ? 'Logging In...'
-                : 'Creating Account...'
-              : mode === 'login'
-                ? 'Log In'
-                : 'Sign In'}
+              ? mode === 'login' ? t('auth.logging_in') : t('auth.creating_account') : mode === 'login' ? t('auth.login_tab') : t('auth.register_tab')}
           </button>
 
           <div className="auth-modal__switch">
             {mode === 'login' ? (
               <span>
-                Need an account?{' '}
+                {t('auth.need_account')} {' '}
                 <button
                   className="auth-modal__switch-button"
                   onClick={() => handleTabSwitch('register')}
@@ -189,7 +184,7 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
               </span>
             ) : (
               <span>
-                Already have an account?{' '}
+                {t('auth.already_have_account')} {' '}
                 <button
                   className="auth-modal__switch-button"
                   onClick={() => handleTabSwitch('login')}
@@ -207,3 +202,4 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
 }
 
 export default AuthModal;
+

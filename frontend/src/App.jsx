@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser, login, register, updateProfile } from './api/auth.js';
 import {
@@ -70,6 +71,7 @@ const loadStoredSession = () => {
 };
 
 function App() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const [code, setCode] = useState(() => loadStoredSession()?.code || '');
@@ -539,14 +541,14 @@ function App() {
   };
 
   const sessionStatusText = isSyncing
-    ? 'Sync in progress. Actions are temporarily locked.'
+    ? t('app.sync_in_progress')
     : isDeleteSessionConfirming
-      ? 'Press delete again to remove this session from the server.'
+      ? t('app.press_delete')
     : sessionAccess?.creatorToken
-      ? 'Owner access saved in this browser. You can edit files and text directly.'
+      ? ''
       : code.trim()
-        ? 'Session code is set. Use Update to load it or Send to create a fresh session.'
-        : 'Start typing, then Send to create a shareable session.';
+        ? t('app.session_set')
+        : t('app.start_typing');
 
   return (
     <main className="app-shell">
@@ -639,3 +641,4 @@ function App() {
 }
 
 export default App;
+

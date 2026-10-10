@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import FriendsPage from './FriendsPage.jsx';
 import './ProfilePage.css';
 
 function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareContact, token, user }) {
+  const { t } = useTranslation();
   const [displayName, setDisplayName] = useState(user.display_name);
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -16,7 +18,7 @@ function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareCont
 
     const nextDisplayName = displayName.trim();
     if (!nextDisplayName) {
-      setError('Name cannot be empty.');
+      setError(t('profile.name_empty_error'));
       return;
     }
 
@@ -26,7 +28,7 @@ function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareCont
     try {
       await onProfileUpdate({ display_name: nextDisplayName });
     } catch (submitError) {
-      setError(submitError.message || 'Profile update failed.');
+      setError(submitError.message || t('profile.update_failed'));
       onError(submitError);
     } finally {
       setIsSaving(false);
@@ -37,14 +39,14 @@ function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareCont
     <div className="profile-page">
       <section className="profile-page__summary glass-panel">
         <div className="profile-page__identity">
-          <p>Profile</p>
+          <p>{t('profile.title')}</p>
           <h1>{user.display_name}</h1>
           <span>@{user.login}</span>
         </div>
 
         <form className="profile-page__form" onSubmit={handleSubmit}>
           <label>
-            Display name
+            {t('profile.display_name_label')}
             <input
               maxLength="255"
               onChange={(event) => setDisplayName(event.target.value)}
@@ -55,7 +57,7 @@ function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareCont
           {error ? <p className="profile-page__error">{error}</p> : null}
           <div className="profile-page__actions">
             <button className="profile-page__save" disabled={isSaving} type="submit">
-              {isSaving ? 'Saving...' : 'Save'}
+              {isSaving ? t('profile.saving') : t('profile.save')}
             </button>
             <button className="profile-page__logout" onClick={onLogout} type="button">
               Log Out
@@ -70,3 +72,4 @@ function ProfilePage({ onError, onLogout, onNotify, onProfileUpdate, onShareCont
 }
 
 export default ProfilePage;
+

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+﻿import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   acceptContactRequest,
   createContactRequest,
@@ -26,6 +27,7 @@ function UserIdentity({ user }) {
 }
 
 function FriendsPage({ onError, onNotify, onShareContact, token }) {
+  const { t } = useTranslation();
   const [contacts, setContacts] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [query, setQuery] = useState('');
@@ -161,8 +163,8 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
     <section className="friends-page glass-panel" aria-busy={isLoading}>
       <div className="friends-page__hero">
         <div>
-          <p className="friends-page__eyebrow">Contacts</p>
-          <h1>Friends</h1>
+          <p className="friends-page__eyebrow">{t('friends.contacts_eyebrow')}</p>
+          <h1>{t('friends.title')}</h1>
         </div>
         <button className="friends-page__refresh" disabled={isLoading} onClick={loadFriendsData} type="button">
           Refresh
@@ -172,20 +174,20 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
       <div className="friends-page__grid">
         <section className="friends-page__panel friends-page__panel--wide">
           <div className="friends-page__section-head">
-            <h2>Add friend</h2>
+            <h2>{t('friends.add_friend_title')}</h2>
             <span>{isSearching ? 'Searching...' : `${filteredSearchResults.length} found`}</span>
           </div>
           <input
             className="friends-page__search"
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by login or name"
+            placeholder={t('friends.search_placeholder')}
             type="search"
             value={query}
           />
 
           <div className="friends-page__list">
             {query.trim() && !isSearching && !filteredSearchResults.length ? (
-              <EmptyState>No users found.</EmptyState>
+              <EmptyState>{t('friends.no_users_found')}</EmptyState>
             ) : null}
 
             {filteredSearchResults.map((user) => (
@@ -206,12 +208,12 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 
         <section className="friends-page__panel">
           <div className="friends-page__section-head">
-            <h2>Incoming</h2>
+            <h2>{t('friends.incoming_title')}</h2>
             <span>{incomingRequests.length}</span>
           </div>
 
           <div className="friends-page__list">
-            {!incomingRequests.length ? <EmptyState>No pending requests.</EmptyState> : null}
+            {!incomingRequests.length ? <EmptyState>{t('friends.no_pending_requests')}</EmptyState> : null}
 
             {incomingRequests.map((request) => (
               <article className="friends-page__item friends-page__item--stacked" key={request.id}>
@@ -241,12 +243,12 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 
         <section className="friends-page__panel">
           <div className="friends-page__section-head">
-            <h2>Your friends</h2>
+            <h2>{t('friends.your_friends_title')}</h2>
             <span>{contacts.length}</span>
           </div>
 
           <div className="friends-page__list">
-            {!contacts.length ? <EmptyState>Your contacts will appear here.</EmptyState> : null}
+            {!contacts.length ? <EmptyState>{t('friends.your_contacts_empty')}</EmptyState> : null}
 
             {contacts.map((contact) => (
               <article
@@ -256,7 +258,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                 <UserIdentity user={contact} />
                 {contactPendingDeleteId === contact.id ? (
                   <div className="friends-page__confirm">
-                    <p>Remove this friend?</p>
+                    <p>{t('friends.remove_confirm_text')}</p>
                     <div className="friends-page__actions">
                       <button
                         className="friends-page__button friends-page__button--danger"
@@ -306,3 +308,4 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 }
 
 export default FriendsPage;
+

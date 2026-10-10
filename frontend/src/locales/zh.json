@@ -1,0 +1,33 @@
+﻿{
+  "header": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "profile": "Profile"
+  },
+  "home": {
+    "welcome": "Welcome to Sharius"
+  },
+  "stats": {
+    "files": "Files",
+    "size": "Size",
+    "status": "Status",
+    "expires": "Expires",
+    "ready": "Ready",
+    "empty": "Empty",
+    "no_session": "No session",
+    "unknown": "Unknown",
+    "expired": "Expired"
+  },
+  "panel": {
+    "drop_files": "Drop files to upload",
+    "clear_text": "Clear text",
+    "paste": "Paste from clipboard",
+    "copy": "Copy to clipboard",
+    "active_session": "Active session",
+    "local_draft": "Local draft",
+    "placeholder": "Type or paste your text, links, or notes here for instant cross-device sharing...",
+    "add_file": "Add file",
+    "update": "Update",
+    "send": "Send"
+  }
+}
