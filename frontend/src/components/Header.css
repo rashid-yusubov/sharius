@@ -179,11 +179,17 @@
   }
 
   .header__signup,
-  .header__logout,
-  .header__profile {
+  .header__logout {
     min-width: 82px;
     min-height: 42px;
     padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .header__profile {
+    min-width: 0;
+    min-height: 42px;
+    padding: 0 12px;
     font-size: 14px;
   }
 
@@ -192,7 +198,7 @@
   }
 
   .header__profile strong {
-    max-width: 92px;
+    max-width: 64px;
     font-size: 14px;
   }
 }

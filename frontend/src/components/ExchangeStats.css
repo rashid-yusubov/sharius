@@ -1,4 +1,4 @@
-.exchange-stats {
+﻿.exchange-stats {
   width: 100%;
   min-height: 96px;
   display: grid;
@@ -68,9 +68,10 @@
   }
 }
 
+
+
 @media (max-width: 520px) {
   .exchange-stats {
-    grid-template-columns: 1fr;
     gap: 10px;
     padding: 12px;
   }

@@ -2,7 +2,7 @@ export const resolveApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
 
   if (typeof window === 'undefined') {
-    return envUrl || 'http://127.0.0.1:9000';
+    return envUrl || 'http://127.0.0.1:8000';
   }
 
   const currentHostname = window.location.hostname;
@@ -27,7 +27,7 @@ export const resolveApiBaseUrl = () => {
     }
   }
 
-  return `${currentProtocol}//${currentHostname || 'localhost'}:9000`;
+  return `${currentProtocol}//${currentHostname || 'localhost'}:8000`;
 };
 
 export const API_BASE_URL = resolveApiBaseUrl();

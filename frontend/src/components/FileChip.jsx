@@ -63,7 +63,7 @@ function FileChip({ file, onDownload, onRemove }) {
   const canDownload = Boolean(file.id && onDownload);
 
   return (
-    <div className={`file-chip file-chip--${kind}`}>
+    <div className={`file-chip file-chip--${kind}`} title={fileName}>
       <span className="file-chip__icon" aria-hidden="true">
         <FileKindIcon />
       </span>
@@ -72,11 +72,11 @@ function FileChip({ file, onDownload, onRemove }) {
         <span className="file-chip__size">{formatFileSize(fileSize)}</span>
       </span>
       {canDownload ? (
-        <button className="file-chip__action" onClick={onDownload} type="button" aria-label={`Download ${fileName}`}>
+        <button className="file-chip__action" onClick={onDownload} type="button" aria-label={`Download ${fileName}`} title="Download">
           <ArrowDownIcon />
         </button>
       ) : null}
-      <button className="file-chip__remove" onClick={onRemove} type="button" aria-label={`Remove ${fileName}`}>
+      <button className="file-chip__remove" onClick={onRemove} type="button" aria-label={`Remove ${fileName}`} title="Remove">
         <CloseIcon />
       </button>
     </div>

@@ -21,8 +21,6 @@ function ExchangePanel({
   onRemoveFile,
   onSend,
   onUpdate,
-  sessionCode,
-  statusText,
 }) {
   const { t } = useTranslation();
   const [isDragActive, setIsDragActive] = useState(false);
@@ -88,28 +86,18 @@ function ExchangePanel({
         <div className="exchange__drop-overlay" aria-hidden="true">
           <strong>{t('panel.drop_files')}</strong>
         </div>
-        <div className="exchange__top-actions">
-          <IconButton disabled={isBusy} label={t('panel.clear_text')} onClick={onClear} variant="panel">
-            <TrashIcon />
-          </IconButton>
-          <IconButton disabled={isBusy} label={t('panel.paste')} onClick={onPaste} variant="panel">
-            <ClipboardIcon />
-          </IconButton>
-          <IconButton label={t('panel.copy')} onClick={onCopy} variant="panel">
-            <CopyIcon />
-          </IconButton>
-        </div>
-        <div className="exchange__session-bar">
-          <div className="exchange__session-meta">
-            <span className={`exchange__status-dot${isBusy ? ' exchange__status-dot--busy' : ''}`} />
-            <div>
-              <p className="exchange__session-label">{t('panel.active_session')}</p>
-              <strong>{sessionCode || t('panel.local_draft')}</strong>
-            </div>
-          </div>
-          <p className="exchange__session-hint">{statusText}</p>
-        </div>
         <div className="exchange__workspace">
+          <div className="exchange__top-actions">
+            <IconButton disabled={isBusy} label={t('panel.clear_text')} onClick={onClear} variant="panel">
+              <TrashIcon />
+            </IconButton>
+            <IconButton disabled={isBusy} label={t('panel.paste')} onClick={onPaste} variant="panel">
+              <ClipboardIcon />
+            </IconButton>
+            <IconButton label={t('panel.copy')} onClick={onCopy} variant="panel">
+              <CopyIcon />
+            </IconButton>
+          </div>
           <textarea
             aria-label="Shared text"
             className="exchange__textarea"
@@ -121,32 +109,35 @@ function ExchangePanel({
         </div>
 
         <div className="exchange__bottom-actions">
-          <div className="exchange__attachments">
-            <input className="exchange__file-input" multiple onChange={onFileChange} ref={fileInputRef} type="file" />
-            <IconButton disabled={isBusy} label={t('panel.add_file')} onClick={onFileClick} size="large" variant="muted">
-              <PlusIcon />
-            </IconButton>
-            {attachedFiles.length > 0 && (
-              <div className="exchange__file-list" aria-label="Attached files">
-                {attachedFiles.map((file, index) => (
-                  <FileChip
-                    file={file}
-                    key={`${file.id || file.name || file.original_name}-${file.lastModified || file.created_at || index}`}
-                    onDownload={file.id ? () => onDownloadFile(file) : undefined}
-                    onRemove={() => onRemoveFile(index)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          {attachedFiles.length > 0 && (
+            <div className="exchange__file-list" aria-label="Attached files">
+              {attachedFiles.map((file, index) => (
+                <FileChip
+                  file={file}
+                  key={`${file.id || file.name || file.original_name}-${file.lastModified || file.created_at || index}`}
+                  onDownload={file.id ? () => onDownloadFile(file) : undefined}
+                  onRemove={() => onRemoveFile(index)}
+                />
+              ))}
+            </div>
+          )}
 
-          <div className="exchange__send-actions">
-            <IconButton disabled={isBusy} label={t('panel.update')} onClick={onUpdate} size="large" variant="dark">
-              <SyncIcon />
-            </IconButton>
-            <IconButton disabled={isBusy} label={t('panel.send')} onClick={onSend} size="large" variant="primary">
-              <ArrowUpIcon />
-            </IconButton>
+          <div className="exchange__controls">
+            <div className="exchange__attachments">
+              <input className="exchange__file-input" multiple onChange={onFileChange} ref={fileInputRef} type="file" />
+              <IconButton disabled={isBusy} label={t('panel.add_file')} onClick={onFileClick} size="large" variant="muted">
+                <PlusIcon />
+              </IconButton>
+            </div>
+
+            <div className="exchange__send-actions">
+              <IconButton disabled={isBusy} label={t('panel.update')} onClick={onUpdate} size="large" variant="dark">
+                <SyncIcon />
+              </IconButton>
+              <IconButton disabled={isBusy} label={t('panel.send')} onClick={onSend} size="large" variant="primary">
+                <ArrowUpIcon />
+              </IconButton>
+            </div>
           </div>
         </div>
       </div>

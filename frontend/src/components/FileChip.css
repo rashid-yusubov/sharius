@@ -1,16 +1,19 @@
 .file-chip {
-  min-width: 0;
+  flex: 0 0 auto;
+  min-width: 190px;
   max-width: 320px;
   height: 60px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px 8px 10px;
+  padding: 8px 12px 8px 10px;
   color: var(--color-accent);
   background: var(--color-control);
   border: 1px solid var(--color-border);
-  border-radius: 22px;
+  border-radius: 20px;
   box-shadow: var(--shadow-control);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .file-chip__icon {
@@ -20,7 +23,7 @@
   place-items: center;
   flex: 0 0 auto;
   color: #ffffff;
-  border-radius: 16px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #64748b, #27272a);
 }
 
@@ -63,9 +66,11 @@
 
 .file-chip__meta {
   min-width: 0;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  overflow: hidden;
 }
 
 .file-chip__name {
@@ -73,7 +78,7 @@
   color: var(--color-accent);
   font-size: 14px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -82,25 +87,13 @@
   color: var(--color-secondary-text);
   font-size: 12px;
   line-height: 1.2;
-}
-
-.file-chip__remove {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  color: var(--color-secondary-text);
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  transition: background 160ms ease, color 160ms ease;
+  white-space: nowrap;
 }
 
 .file-chip__action,
 .file-chip__remove {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -109,6 +102,7 @@
   border: 0;
   border-radius: 50%;
   transition: background 160ms ease, color 160ms ease;
+  touch-action: manipulation;
 }
 
 .file-chip__action:hover,
@@ -127,8 +121,38 @@
   box-shadow: none;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 640px) {
   .file-chip {
-    max-width: min(100%, 280px);
+    min-width: 160px;
+    max-width: min(240px, calc(100vw - 48px));
+    height: 52px;
+    padding: 6px 10px 6px 8px;
+    gap: 8px;
+    border-radius: 16px;
+  }
+
+  .file-chip__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .file-chip__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .file-chip__name {
+    font-size: 13px;
+  }
+
+  .file-chip__size {
+    font-size: 11px;
+  }
+
+  .file-chip__action,
+  .file-chip__remove {
+    width: 28px;
+    height: 28px;
   }
 }
