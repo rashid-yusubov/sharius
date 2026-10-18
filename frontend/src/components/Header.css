@@ -30,14 +30,14 @@
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .header__auth-group {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .header__login,
@@ -51,15 +51,17 @@
   border: 0;
   cursor: pointer;
   text-decoration: none;
+  box-sizing: border-box;
   transition: color 160ms ease, background 160ms ease, transform 120ms ease;
 }
 
 .header__login {
-  padding: 8px 0;
+  height: 44px;
+  padding: 0 12px;
   color: var(--color-secondary-text);
   background: transparent;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -69,25 +71,25 @@
 
 .header__signup {
   min-width: 110px;
-  min-height: 48px;
-  padding: 0 24px;
+  height: 44px;
+  padding: 0 20px;
   color: var(--color-primary-button-text);
   background: var(--color-primary-button);
   border-radius: var(--radius-element);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   white-space: nowrap;
 }
 
 .header__logout {
   min-width: 110px;
-  min-height: 48px;
-  padding: 0 24px;
+  height: 44px;
+  padding: 0 20px;
   color: var(--color-accent);
   background: var(--color-control);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-element);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -101,11 +103,12 @@
 }
 
 .header__profile {
-  min-height: 52px;
+  height: 44px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 16px;
+  gap: 9px;
+  padding: 0 14px 0 8px;
   color: var(--color-accent);
   background: var(--color-control);
   border: 1px solid var(--color-border);
@@ -117,9 +120,12 @@
   background: var(--color-control-hover);
 }
 
-.header__profile-icon {
-  width: 20px;
-  height: 20px;
+.header__profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-control-hover);
+  border: 1px solid var(--color-border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -127,30 +133,18 @@
   color: var(--color-accent);
 }
 
-.header__profile-icon svg {
-  width: 100%;
-  height: 100%;
+.header__profile-avatar svg {
+  width: 16px;
+  height: 16px;
 }
 
-.header__profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 0;
-}
-
-.header__profile-info span {
-  color: var(--color-secondary-text);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.header__profile-info strong {
+.header__profile-name {
   max-width: 150px;
   overflow: hidden;
+  color: var(--color-accent);
   font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -212,6 +206,7 @@
   }
 
   .header__login {
+    height: 36px;
     padding: 0 4px;
     font-size: 13px;
   }
@@ -219,7 +214,7 @@
   .header__signup,
   .header__logout {
     min-width: 0;
-    min-height: 36px;
+    height: 36px;
     padding: 0 12px;
     border-radius: 10px;
     font-size: 13px;
@@ -228,23 +223,25 @@
 
   .header__profile {
     min-width: 0;
+    height: 36px;
     min-height: 36px;
-    padding: 0 10px;
-    gap: 6px;
+    padding: 0 10px 0 6px;
+    gap: 7px;
     border-radius: 10px;
   }
 
-  .header__profile-icon {
-    width: 16px;
-    height: 16px;
+  .header__profile-avatar {
+    width: 24px;
+    height: 24px;
   }
 
-  .header__profile-info span {
-    display: none;
+  .header__profile-avatar svg {
+    width: 14px;
+    height: 14px;
   }
 
-  .header__profile-info strong {
-    max-width: 80px;
+  .header__profile-name {
+    max-width: 85px;
     font-size: 13px;
   }
 }
@@ -268,22 +265,27 @@
   }
 
   .header__login {
+    height: 36px;
     font-size: 12px;
+    padding: 0 3px;
   }
 
   .header__signup,
   .header__logout {
+    height: 36px;
     padding: 0 10px;
     font-size: 12px;
   }
 
   .header__profile {
-    padding: 0 8px;
-    gap: 5px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0 8px 0 5px;
+    gap: 6px;
   }
 
-  .header__profile-info strong {
-    max-width: 64px;
+  .header__profile-name {
+    max-width: 68px;
     font-size: 12px;
   }
 }
@@ -304,8 +306,9 @@
     font-size: 11.5px;
   }
 
-  .header__profile-info strong {
+  .header__profile-name {
     max-width: 55px;
   }
 }
+
 

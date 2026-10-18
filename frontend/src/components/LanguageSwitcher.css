@@ -13,6 +13,7 @@
   background: var(--color-control, transparent);
   border: 1px solid var(--color-border, transparent);
   border-radius: var(--radius-element, 8px);
+  box-sizing: border-box;
   cursor: pointer;
   transition: background 160ms ease, transform 120ms ease;
 }
@@ -89,6 +90,7 @@
   .lang-switcher__button {
     width: 36px;
     height: 36px;
+    border-radius: 10px;
   }
 
   .lang-switcher__button svg {
@@ -96,3 +98,4 @@
     height: 18px;
   }
 }
+

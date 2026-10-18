@@ -22,13 +22,10 @@ function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
           <ThemeToggle onToggle={onThemeToggle} theme={theme} />
           {authUser ? (
             <Link className="header__profile" title={authUser.login} to="/profile">
-              <span className="header__profile-icon">
+              <span className="header__profile-avatar">
                 <UserIcon />
               </span>
-              <div className="header__profile-info">
-                <span>{t('header.profile')}</span>
-                <strong>{authUser.display_name}</strong>
-              </div>
+              <span className="header__profile-name">{authUser.display_name || authUser.login}</span>
             </Link>
           ) : (
             <div className="header__auth-group">
