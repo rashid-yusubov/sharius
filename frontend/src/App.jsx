@@ -406,13 +406,43 @@ function App() {
   };
 
   const handlePaste = async () => {
+    if (navigator.clipboard?.read) {
+      try {
+        const items = await navigator.clipboard.read();
+        const files = [];
+        for (const item of items) {
+          for (const type of item.types) {
+            if (type.startsWith('image/')) {
+              const blob = await item.getType(type);
+              const ext = type.split('/')[1] || 'png';
+              files.push(new File([blob], `screenshot-${Date.now()}.${ext}`, { type }));
+            }
+          }
+        }
+        if (files.length > 0) {
+          await handleFilesUpload(files);
+          return;
+        }
+      } catch {
+        // Fall back to readText
+      }
+    }
+
     if (!navigator.clipboard?.readText) {
       notify('Clipboard is not available', 'warning');
       return;
     }
-    const clipboardText = await navigator.clipboard.readText();
-    setMessage((current) => (current ? `${current}\n${clipboardText}` : clipboardText));
-    notify('Text pasted from clipboard');
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+      if (clipboardText) {
+        setMessage((current) => (current ? `${current}\n${clipboardText}` : clipboardText));
+        notify('Text pasted from clipboard');
+      } else {
+        notify('Clipboard is empty', 'warning');
+      }
+    } catch {
+      notify('Could not read from clipboard', 'warning');
+    }
   };
 
   const handleCopy = async () => {
