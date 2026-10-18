@@ -82,11 +82,20 @@ function ProfilePage({
       setImgFailed(false);
     } catch (err) {
       setLocalPreviewUrl(null);
+      const isNetworkError =
+        err?.message?.includes('NetworkError') ||
+        err?.message?.includes('Failed to fetch') ||
+        err?.name === 'TypeError';
       setAvatarError(
-        err?.message ||
-          t('profile.avatar_upload_failed', {
-            defaultValue: 'Не удалось загрузить аватарку.',
-          })
+        isNetworkError
+          ? t('profile.avatar_network_error', {
+              defaultValue:
+                'Ошибка сети при загрузке. Проверьте соединение или отключите блокировщик рекламы (AdBlock).',
+            })
+          : err?.message ||
+            t('profile.avatar_upload_failed', {
+              defaultValue: 'Не удалось загрузить аватарку.',
+            })
       );
       onError?.(err);
     } finally {
