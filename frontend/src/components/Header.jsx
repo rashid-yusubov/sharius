@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import LanguageSwitcher from './LanguageSwitcher.jsx';
+import { UserIcon } from './icons.jsx';
 import './Header.css';
 
 function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
@@ -21,11 +22,16 @@ function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
           <ThemeToggle onToggle={onThemeToggle} theme={theme} />
           {authUser ? (
             <Link className="header__profile" title={authUser.login} to="/profile">
-              <span>{t('header.profile')}</span>
-              <strong>{authUser.display_name}</strong>
+              <span className="header__profile-icon">
+                <UserIcon />
+              </span>
+              <div className="header__profile-info">
+                <span>{t('header.profile')}</span>
+                <strong>{authUser.display_name}</strong>
+              </div>
             </Link>
           ) : (
-            <>
+            <div className="header__auth-group">
               <button
                 className="header__login"
                 onClick={() => onOpenAuth?.('login')}
@@ -40,7 +46,7 @@ function Header({ authUser, onOpenAuth, onThemeToggle, theme }) {
               >
                 {t('header.signup')}
               </button>
-            </>
+            </div>
           )}
         </div>
       </nav>

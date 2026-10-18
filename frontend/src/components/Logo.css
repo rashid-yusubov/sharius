@@ -18,7 +18,14 @@
 
 @media (max-width: 640px) {
   .logo-mark {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 375px) {
+  .logo-mark {
+    width: 32px;
+    height: 32px;
   }
 }

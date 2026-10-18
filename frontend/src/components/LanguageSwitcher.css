@@ -87,7 +87,12 @@
 
 @media (max-width: 640px) {
   .lang-switcher__button {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .lang-switcher__button svg {
+    width: 18px;
+    height: 18px;
   }
 }
