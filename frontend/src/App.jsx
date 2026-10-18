@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { getCurrentUser, login, register, updateProfile } from './api/auth.js';
+import { changePassword, getCurrentUser, login, register, updateProfile } from './api/auth.js';
 import {
   createSession,
   createSessionForContact,
@@ -37,6 +37,8 @@ const getErrorMessage = (error) => {
     FILE_TYPE_NOT_ALLOWED: 'This file type is not allowed.',
     FORBIDDEN: 'You do not have access to modify this session.',
     INVALID_CREDENTIALS: 'Incorrect login or password.',
+    INVALID_CURRENT_PASSWORD: 'The current password you entered is incorrect.',
+    SAME_PASSWORD: 'The new password must be different from current password.',
     LOGIN_ALREADY_EXISTS: 'This login is already taken.',
     CONTACT_NOT_FOUND: 'Contact not found.',
     CONTACT_REQUEST_ALREADY_EXISTS: 'This contact request already exists.',
@@ -431,6 +433,23 @@ function App() {
     notify('Profile updated');
   };
 
+  const handleChangePassword = async ({ current_password, new_password }) => {
+    if (!auth?.token) {
+      notify('Please log in to continue.', 'warning');
+      handleOpenAuth('login');
+      return;
+    }
+
+    const authPayload = await changePassword({
+      current_password,
+      new_password,
+      token: auth.token,
+    });
+    persistAuth(authPayload);
+    notify(t('profile.password_changed_success', { defaultValue: 'Password changed successfully!' }));
+  };
+
+
   const handleLogin = async (credentials) => {
     try {
       const authPayload = await login(credentials);
@@ -820,6 +839,7 @@ function App() {
             element={
               auth?.token ? (
                 <ProfilePage
+                  onChangePassword={handleChangePassword}
                   onError={handleApiError}
                   onLogout={handleLogout}
                   onNotify={notify}

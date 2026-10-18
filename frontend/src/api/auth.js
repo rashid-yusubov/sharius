@@ -38,3 +38,17 @@ export function updateProfile({ display_name, token }) {
     body: JSON.stringify({ display_name }),
   });
 }
+
+export function changePassword({ current_password, new_password, token }) {
+  return request('/profile/change-password', {
+    method: 'POST',
+    headers: buildHeaders({
+      token,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+    body: JSON.stringify({ current_password, new_password }),
+  });
+}
+

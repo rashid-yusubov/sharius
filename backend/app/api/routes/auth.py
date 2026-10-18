@@ -2,7 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database.db import get_db
-from app.schemas.auth import AuthResponse, LoginRequest, ProfileResponse, RegisterRequest, UpdateProfileRequest
+from app.schemas.auth import (
+    AuthResponse,
+    ChangePasswordRequest,
+    LoginRequest,
+    ProfileResponse,
+    RegisterRequest,
+    UpdateProfileRequest,
+)
 from app.schemas.common import error_response, success_response
 from app.services.auth import AuthService
 from app.api.dependencies.auth import get_current_user
@@ -65,3 +72,19 @@ def update_profile(
             "updated_at": user.updated_at,
         }
     )
+
+
+@profile_router.post("/change-password", response_model=AuthResponse)
+def change_password(
+    payload: ChangePasswordRequest,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    service = AuthService(db)
+    try:
+        result = service.change_password(current_user, payload.current_password, payload.new_password)
+    except ValueError as exc:
+        code = str(exc)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response(code)) from exc
+    return success_response(result)
+

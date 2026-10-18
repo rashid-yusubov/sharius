@@ -4,7 +4,8 @@
   gap: 24px;
 }
 
-.profile-page__summary {
+.profile-page__summary,
+.profile-page__card {
   min-height: 188px;
   display: flex;
   align-items: flex-start;
@@ -20,7 +21,8 @@
 }
 
 .profile-page__identity p,
-.profile-page__identity h1 {
+.profile-page__identity h1,
+.profile-page__identity h2 {
   margin: 0;
 }
 
@@ -42,7 +44,28 @@
   white-space: nowrap;
 }
 
-.profile-page__identity span {
+.profile-page__identity h2 {
+  margin-top: 8px;
+  overflow: hidden;
+  color: var(--color-accent);
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-page__subtitle {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-secondary-text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.profile-page__identity span:not(.profile-page__subtitle) {
   display: block;
   margin-top: 8px;
   overflow: hidden;
@@ -94,6 +117,13 @@
   margin: 0;
   color: #fca5a5;
   font-size: 14px;
+}
+
+.profile-page__success {
+  margin: 0;
+  color: #22c55e;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .profile-page__actions {
@@ -148,7 +178,8 @@
     gap: 16px;
   }
 
-  .profile-page__summary {
+  .profile-page__summary,
+  .profile-page__card {
     align-items: stretch;
     flex-direction: column;
     padding: 22px;
@@ -156,6 +187,10 @@
 
   .profile-page__identity h1 {
     font-size: 34px;
+  }
+
+  .profile-page__identity h2 {
+    font-size: 24px;
   }
 
   .profile-page__form {
@@ -171,3 +206,4 @@
     width: 100%;
   }
 }
+

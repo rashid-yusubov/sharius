@@ -54,6 +54,19 @@ class AuthService:
         self.db.refresh(user)
         return user
 
+    def change_password(self, user: User, current_password: str, new_password: str) -> dict:
+        if not self._verify_password(current_password, user.password_hash):
+            raise ValueError("INVALID_CURRENT_PASSWORD")
+        if current_password == new_password:
+            raise ValueError("SAME_PASSWORD")
+
+        user.password_hash = self._hash_password(new_password)
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+        return {"token": self._create_access_token(user), "user": user}
+
     def _get_user_by_login(self, login: str) -> User | None:
         return self.db.query(User).filter(User.login == login).first()
 
