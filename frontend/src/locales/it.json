@@ -1,0 +1,111 @@
+{
+  "header": {
+    "login": "Accedi",
+    "signup": "Registrati",
+    "profile": "Profilo"
+  },
+  "home": {
+    "welcome": "Benvenuto su Sharius"
+  },
+  "stats": {
+    "files": "File",
+    "size": "Dimensione",
+    "status": "Stato",
+    "expires": "Scade",
+    "ready": "Pronto",
+    "empty": "Vuoto",
+    "draft": "Bozza",
+    "syncing": "Sincronizzazione...",
+    "synced": "Sincronizzato",
+    "no_session": "Nessuna sessione",
+    "unknown": "Sconosciuto",
+    "expired": "Scaduto"
+  },
+  "panel": {
+    "drop_files": "Rilascia i file da caricare",
+    "clear_text": "Cancella testo",
+    "paste": "Incolla dagli appunti",
+    "copy": "Copia negli appunti",
+    "active_session": "Sessione attiva",
+    "local_draft": "Bozza locale",
+    "placeholder": "Digita o incolla testo, link o note qui per la condivisione istantanea tra dispositivi...",
+    "add_file": "Aggiungi file",
+    "update": "Aggiorna",
+    "send": "Invia"
+  },
+  "quick_access": {
+    "placeholder": "Inserisci codice di accesso rapido...",
+    "generate": "Genera codice",
+    "show_qr": "Mostra codice QR"
+  },
+  "auth": {
+    "login_tab": "Accedi",
+    "register_tab": "Registrati",
+    "welcome_back": "Bentornato",
+    "create_access": "Crea account",
+    "login_subtitle": "Accedi per continuare a scambiare note, link e file tra i tuoi dispositivi.",
+    "register_subtitle": "Crea un account Sharius per salvare le sessioni, associare dispositivi e gestire i contatti.",
+    "name_label": "Nome",
+    "name_placeholder": "Il tuo nome",
+    "login_label": "Username",
+    "login_placeholder": "tuo_username",
+    "password_label": "Password",
+    "password_login_placeholder": "Inserisci la password",
+    "password_register_placeholder": "Crea una password (min. 6 caratteri)",
+    "logging_in": "Accesso in corso...",
+    "creating_account": "Creazione account...",
+    "need_account": "Non hai un account?",
+    "already_have_account": "Hai già un account?"
+  },
+  "profile": {
+    "name_empty_error": "Il nome non può essere vuoto.",
+    "update_failed": "Aggiornamento del profilo non riuscito.",
+    "title": "Profilo",
+    "display_name_label": "Nome visualizzato",
+    "saving": "Salvataggio...",
+    "save": "Salva",
+    "logout": "Esci"
+  },
+  "friends": {
+    "request_sent": "Richiesta di amicizia inviata a {{name}}",
+    "added_to_friends": "{{name}} aggiunto agli amici",
+    "request_declined": "Richiesta di {{name}} rifiutata",
+    "removed_from_friends": "{{name}} rimosso dagli amici",
+    "contacts_eyebrow": "Contatti",
+    "title": "Amici",
+    "refresh": "Aggiorna",
+    "add_friend_title": "Aggiungi amico",
+    "searching": "Ricerca in corso...",
+    "found": "{{count}} trovati",
+    "search_placeholder": "Cerca per username o nome",
+    "no_users_found": "Nessun utente trovato.",
+    "add_btn": "Aggiungi",
+    "incoming_title": "In arrivo",
+    "no_pending_requests": "Nessuna richiesta in sospeso.",
+    "accept_btn": "Accetta",
+    "decline_btn": "Rifiuta",
+    "your_friends_title": "I tuoi amici",
+    "your_contacts_empty": "I tuoi contatti appariranno qui.",
+    "remove_confirm_text": "Rimuovere questo amico?",
+    "remove_btn": "Rimuovi",
+    "cancel_btn": "Annulla",
+    "share_btn": "Condividi"
+  },
+  "qr": {
+    "scan_to_connect": "Scansiona per collegarti",
+    "title": "QR Code di accesso rapido",
+    "hint": "Scansiona con la fotocamera del tuo smartphone per aprire istantaneamente la sessione su un altro dispositivo.",
+    "copy_link": "Copia link",
+    "copied": "Link copiato!"
+  },
+  "app": {
+    "sync_in_progress": "Sincronizzazione in corso. Azioni temporaneamente bloccate.",
+    "press_delete": "Premi nuovamente elimina per rimuovere questa sessione dal server.",
+    "session_set": "Codice sessione impostato. Usa Aggiorna per caricare o Invia per creare una nuova sessione.",
+    "start_typing": "Inizia a digitare, quindi premi Invia per creare una sessione condivisibile.",
+    "text_synced": "Testo sincronizzato con {{code}}",
+    "remote_changes_available": "Sessione aggiornata su un altro dispositivo.",
+    "connected_to_session": "Collegato alla sessione {{code}}",
+    "session_code_applied": "Codice sessione {{code}} applicato"
+  }
+}

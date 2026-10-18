@@ -1,0 +1,111 @@
+{
+  "header": {
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "profile": "Profil"
+  },
+  "home": {
+    "welcome": "Sharius'a Hoş Geldiniz"
+  },
+  "stats": {
+    "files": "Dosyalar",
+    "size": "Boyut",
+    "status": "Durum",
+    "expires": "Kalan Süre",
+    "ready": "Hazır",
+    "empty": "Boş",
+    "draft": "Taslak",
+    "syncing": "Senkronize ediliyor...",
+    "synced": "Senkronize Edildi",
+    "no_session": "Oturum Yok",
+    "unknown": "Bilinmiyor",
+    "expired": "Süresi Doldu"
+  },
+  "panel": {
+    "drop_files": "Yüklemek için dosyaları bırakın",
+    "clear_text": "Metni temizle",
+    "paste": "Panodan yapıştır",
+    "copy": "Panoya kopyala",
+    "active_session": "Aktif Oturum",
+    "local_draft": "Yerel Taslak",
+    "placeholder": "Cihazlar arasında anında paylaşım için buraya metin, bağlantı veya not yapıştırın...",
+    "add_file": "Dosya ekle",
+    "update": "Güncelle",
+    "send": "Gönder"
+  },
+  "quick_access": {
+    "placeholder": "Hızlı erişim kodunu girin...",
+    "generate": "Kod oluştur",
+    "show_qr": "QR kodunu göster"
+  },
+  "auth": {
+    "login_tab": "Giriş Yap",
+    "register_tab": "Kayıt Ol",
+    "welcome_back": "Tekrar Hoş Geldiniz",
+    "create_access": "Hesap Oluştur",
+    "login_subtitle": "Cihazlar arasında not, bağlantı ve dosya paylaşmaya devam etmek için giriş yapın.",
+    "register_subtitle": "Oturumları kaydetmek, cihazları eşleştirmek ve kişileri yönetmek için Sharius hesabı oluşturun.",
+    "name_label": "İsim",
+    "name_placeholder": "Adınız",
+    "login_label": "Kullanıcı Adı",
+    "login_placeholder": "kullanici_adiniz",
+    "password_label": "Şifre",
+    "password_login_placeholder": "Şifrenizi girin",
+    "password_register_placeholder": "Şifre oluşturun (en az 6 karakter)",
+    "logging_in": "Giriş yapılıyor...",
+    "creating_account": "Hesap oluşturuluyor...",
+    "need_account": "Hesabınız yok mu?",
+    "already_have_account": "Zaten bir hesabınız var mı?"
+  },
+  "profile": {
+    "name_empty_error": "İsim alanı boş bırakılamaz.",
+    "update_failed": "Profil güncellenemedi.",
+    "title": "Profil",
+    "display_name_label": "Görünen İsim",
+    "saving": "Kaydediliyor...",
+    "save": "Kaydet",
+    "logout": "Çıkış Yap"
+  },
+  "friends": {
+    "request_sent": "{{name}} kullanıcısına arkadaşlık isteği gönderildi",
+    "added_to_friends": "{{name}} arkadaşlara eklendi",
+    "request_declined": "{{name}} kullanıcısının isteği reddedildi",
+    "removed_from_friends": "{{name}} arkadaşlardan çıkarıldı",
+    "contacts_eyebrow": "Kişiler",
+    "title": "Arkadaşlar",
+    "refresh": "Yenile",
+    "add_friend_title": "Arkadaş Ekle",
+    "searching": "Aranıyor...",
+    "found": "{{count}} kişi bulundu",
+    "search_placeholder": "Kullanıcı adı veya isme göre ara",
+    "no_users_found": "Kullanıcı bulunamadı.",
+    "add_btn": "Ekle",
+    "incoming_title": "Gelen İstekler",
+    "no_pending_requests": "Bekleyen istek yok.",
+    "accept_btn": "Kabul Et",
+    "decline_btn": "Reddet",
+    "your_friends_title": "Arkadaşlarınız",
+    "your_contacts_empty": "Kişileriniz burada görünecek.",
+    "remove_confirm_text": "Bu arkadaşı çıkarmak istediğinize emin misiniz?",
+    "remove_btn": "Kaldır",
+    "cancel_btn": "İptal",
+    "share_btn": "Paylaş"
+  },
+  "qr": {
+    "scan_to_connect": "Bağlanmak için tarayın",
+    "title": "Hızlı Erişim QR Kodu",
+    "hint": "Oturumu başka bir cihazda anında açmak için telefonunuzun kamerasıyla tarayın.",
+    "copy_link": "Bağlantıyı Kopyala",
+    "copied": "Bağlantı kopyalandı!"
+  },
+  "app": {
+    "sync_in_progress": "Senkronizasyon sürüyor. İşlemler geçici olarak kilitlendi.",
+    "press_delete": "Bu oturumu sunucudan silmek için tekrar sil düğmesine basın.",
+    "session_set": "Oturum kodu ayarlandı. Yüklemek için Güncelle'ye, yeni oturum için Gönder'e basın.",
+    "start_typing": "Paylaşılabilir bir oturum oluşturmak için yazmaya başlayın ve ardından Gönder'e basın.",
+    "text_synced": "Metin {{code}} ile senkronize edildi",
+    "remote_changes_available": "Oturum başka bir cihazda güncellendi.",
+    "connected_to_session": "{{code}} oturumuna bağlanıldı",
+    "session_code_applied": "{{code}} oturum kodu uygulandı"
+  }
+}

@@ -1,33 +1,111 @@
-﻿{
+{
   "header": {
-    "login": "Log In",
-    "signup": "Sign Up",
-    "profile": "Profile"
+    "login": "登录",
+    "signup": "注册",
+    "profile": "个人资料"
   },
   "home": {
-    "welcome": "Welcome to Sharius"
+    "welcome": "欢迎使用 Sharius"
   },
   "stats": {
-    "files": "Files",
-    "size": "Size",
-    "status": "Status",
-    "expires": "Expires",
-    "ready": "Ready",
-    "empty": "Empty",
-    "no_session": "No session",
-    "unknown": "Unknown",
-    "expired": "Expired"
+    "files": "文件",
+    "size": "大小",
+    "status": "状态",
+    "expires": "到期时间",
+    "ready": "就绪",
+    "empty": "空",
+    "draft": "草稿",
+    "syncing": "同步中...",
+    "synced": "已同步",
+    "no_session": "无会话",
+    "unknown": "未知",
+    "expired": "已过期"
   },
   "panel": {
-    "drop_files": "Drop files to upload",
-    "clear_text": "Clear text",
-    "paste": "Paste from clipboard",
-    "copy": "Copy to clipboard",
-    "active_session": "Active session",
-    "local_draft": "Local draft",
-    "placeholder": "Type or paste your text, links, or notes here for instant cross-device sharing...",
-    "add_file": "Add file",
-    "update": "Update",
-    "send": "Send"
+    "drop_files": "拖放文件即可上传",
+    "clear_text": "清空文本",
+    "paste": "从剪贴板粘贴",
+    "copy": "复制到剪贴板",
+    "active_session": "活跃会话",
+    "local_draft": "本地草稿",
+    "placeholder": "在此输入或粘贴文本、链接或备忘录，即可在不同设备间即时共享...",
+    "add_file": "添加文件",
+    "update": "更新",
+    "send": "发送"
+  },
+  "quick_access": {
+    "placeholder": "输入快捷访问代码...",
+    "generate": "生成代码",
+    "show_qr": "显示二维码"
+  },
+  "auth": {
+    "login_tab": "登录",
+    "register_tab": "注册",
+    "welcome_back": "欢迎回来",
+    "create_access": "创建账户",
+    "login_subtitle": "登录以继续在跨设备间共享笔记、链接和文件。",
+    "register_subtitle": "创建您的 Sharius 账户以保存会话、更快配对设备并管理联系人。",
+    "name_label": "姓名",
+    "name_placeholder": "您的姓名",
+    "login_label": "用户名",
+    "login_placeholder": "your_login",
+    "password_label": "密码",
+    "password_login_placeholder": "输入密码",
+    "password_register_placeholder": "创建密码（至少 6 位）",
+    "logging_in": "登录中...",
+    "creating_account": "正在创建账户...",
+    "need_account": "需要新账户？",
+    "already_have_account": "已有账户？"
+  },
+  "profile": {
+    "name_empty_error": "姓名不能为空。",
+    "update_failed": "更新个人资料失败。",
+    "title": "个人资料",
+    "display_name_label": "显示名称",
+    "saving": "保存中...",
+    "save": "保存",
+    "logout": "退出登录"
+  },
+  "friends": {
+    "request_sent": "已向 {{name}} 发送好友请求",
+    "added_to_friends": "{{name}} 已添加为好友",
+    "request_declined": "已拒绝来自 {{name}} 的请求",
+    "removed_from_friends": "{{name}} 已从好友中移除",
+    "contacts_eyebrow": "联系人",
+    "title": "好友",
+    "refresh": "刷新",
+    "add_friend_title": "添加好友",
+    "searching": "搜索中...",
+    "found": "找到 {{count}} 个用户",
+    "search_placeholder": "按用户名或姓名搜索",
+    "no_users_found": "未找到用户。",
+    "add_btn": "添加",
+    "incoming_title": "收到的请求",
+    "no_pending_requests": "暂无待处理的请求。",
+    "accept_btn": "接受",
+    "decline_btn": "拒绝",
+    "your_friends_title": "您的好友",
+    "your_contacts_empty": "您的联系人将显示在此处。",
+    "remove_confirm_text": "确定要移除此好友吗？",
+    "remove_btn": "移除",
+    "cancel_btn": "取消",
+    "share_btn": "分享"
+  },
+  "qr": {
+    "scan_to_connect": "扫码快速连接",
+    "title": "快捷访问二维码",
+    "hint": "使用手机相机扫码即可在其他设备上即时打开该会话。",
+    "copy_link": "复制链接",
+    "copied": "链接已复制！"
+  },
+  "app": {
+    "sync_in_progress": "正在同步，操作暂时锁定。",
+    "press_delete": "再次点击删除以从服务器上彻底移除此会话。",
+    "session_set": "会话代码已设置。点击更新即可加载，或点击发送创建新会话。",
+    "start_typing": "开始输入文本，然后点击发送即可创建可共享的会话。",
+    "text_synced": "文本已同步至 {{code}}",
+    "remote_changes_available": "其他设备上更新了此会话。",
+    "connected_to_session": "已连接到会话 {{code}}",
+    "session_code_applied": "已应用会话代码 {{code}}"
   }
 }

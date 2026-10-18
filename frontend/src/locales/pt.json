@@ -1,0 +1,111 @@
+{
+  "header": {
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "profile": "Perfil"
+  },
+  "home": {
+    "welcome": "Bem-vindo ao Sharius"
+  },
+  "stats": {
+    "files": "Arquivos",
+    "size": "Tamanho",
+    "status": "Status",
+    "expires": "Expira em",
+    "ready": "Pronto",
+    "empty": "Vazio",
+    "draft": "Rascunho",
+    "syncing": "Sincronizando...",
+    "synced": "Sincronizado",
+    "no_session": "Sem sessão",
+    "unknown": "Desconhecido",
+    "expired": "Expirado"
+  },
+  "panel": {
+    "drop_files": "Solte os arquivos para enviar",
+    "clear_text": "Limpar texto",
+    "paste": "Colar da área de transferência",
+    "copy": "Copiar para a área de transferência",
+    "active_session": "Sessão Ativa",
+    "local_draft": "Rascunho Local",
+    "placeholder": "Digite ou cole texto, links ou notas aqui para compartilhamento instantâneo entre dispositivos...",
+    "add_file": "Adicionar arquivo",
+    "update": "Atualizar",
+    "send": "Enviar"
+  },
+  "quick_access": {
+    "placeholder": "Digite o código de acesso rápido...",
+    "generate": "Gerar código",
+    "show_qr": "Mostrar código QR"
+  },
+  "auth": {
+    "login_tab": "Entrar",
+    "register_tab": "Cadastrar",
+    "welcome_back": "Bem-vindo de volta",
+    "create_access": "Criar Conta",
+    "login_subtitle": "Entre para continuar trocando notas, links e arquivos entre dispositivos.",
+    "register_subtitle": "Crie sua conta Sharius para salvar sessões, emparelhar dispositivos e gerenciar contatos.",
+    "name_label": "Nome",
+    "name_placeholder": "Seu nome",
+    "login_label": "Usuário",
+    "login_placeholder": "seu_usuario",
+    "password_label": "Senha",
+    "password_login_placeholder": "Digite sua senha",
+    "password_register_placeholder": "Crie uma senha (mín. 6 caracteres)",
+    "logging_in": "Entrando...",
+    "creating_account": "Criando conta...",
+    "need_account": "Precisa de uma conta?",
+    "already_have_account": "Já possui uma conta?"
+  },
+  "profile": {
+    "name_empty_error": "O nome não pode ficar em branco.",
+    "update_failed": "Falha ao atualizar o perfil.",
+    "title": "Perfil",
+    "display_name_label": "Nome de exibição",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "logout": "Sair"
+  },
+  "friends": {
+    "request_sent": "Pedido de amizade enviado para {{name}}",
+    "added_to_friends": "{{name}} adicionado(a) aos amigos",
+    "request_declined": "Pedido de {{name}} recusado",
+    "removed_from_friends": "{{name}} removido(a) dos amigos",
+    "contacts_eyebrow": "Contatos",
+    "title": "Amigos",
+    "refresh": "Atualizar",
+    "add_friend_title": "Adicionar amigo",
+    "searching": "Buscando...",
+    "found": "{{count}} encontrados",
+    "search_placeholder": "Buscar por usuário ou nome",
+    "no_users_found": "Nenhum usuário encontrado.",
+    "add_btn": "Adicionar",
+    "incoming_title": "Recebidos",
+    "no_pending_requests": "Nenhum pedido pendente.",
+    "accept_btn": "Aceitar",
+    "decline_btn": "Recusar",
+    "your_friends_title": "Seus amigos",
+    "your_contacts_empty": "Seus contatos aparecerão aqui.",
+    "remove_confirm_text": "Remover este amigo?",
+    "remove_btn": "Remover",
+    "cancel_btn": "Cancelar",
+    "share_btn": "Compartilhar"
+  },
+  "qr": {
+    "scan_to_connect": "Escanear para conectar",
+    "title": "Código QR de Acesso Rápido",
+    "hint": "Escaneie com a câmera do celular para abrir instantaneamente a sessão em outro dispositivo.",
+    "copy_link": "Copiar link",
+    "copied": "Link copiado!"
+  },
+  "app": {
+    "sync_in_progress": "Sincronização em andamento. Ações temporariamente bloqueadas.",
+    "press_delete": "Pressione excluir novamente para remover esta sessão do servidor.",
+    "session_set": "Código de sessão definido. Use Atualizar para carregar ou Enviar para criar uma nova.",
+    "start_typing": "Comece a digitar e clique em Enviar para criar uma sessão compartilhável.",
+    "text_synced": "Texto sincronizado com {{code}}",
+    "remote_changes_available": "Sessão atualizada em outro dispositivo.",
+    "connected_to_session": "Conectado à sessão {{code}}",
+    "session_code_applied": "Código de sessão {{code}} aplicado"
+  }
+}

@@ -1,33 +1,111 @@
-﻿{
+{
   "header": {
-    "login": "Log In",
-    "signup": "Sign Up",
-    "profile": "Profile"
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "profile": "Perfil"
   },
   "home": {
-    "welcome": "Welcome to Sharius"
+    "welcome": "Bienvenido a Sharius"
   },
   "stats": {
-    "files": "Files",
-    "size": "Size",
-    "status": "Status",
-    "expires": "Expires",
-    "ready": "Ready",
-    "empty": "Empty",
-    "no_session": "No session",
-    "unknown": "Unknown",
-    "expired": "Expired"
+    "files": "Archivos",
+    "size": "Tamaño",
+    "status": "Estado",
+    "expires": "Expira",
+    "ready": "Listo",
+    "empty": "Vacío",
+    "draft": "Borrador",
+    "syncing": "Sincronizando...",
+    "synced": "Sincronizado",
+    "no_session": "Sin sesión",
+    "unknown": "Desconocido",
+    "expired": "Expirado"
   },
   "panel": {
-    "drop_files": "Drop files to upload",
-    "clear_text": "Clear text",
-    "paste": "Paste from clipboard",
-    "copy": "Copy to clipboard",
-    "active_session": "Active session",
-    "local_draft": "Local draft",
-    "placeholder": "Type or paste your text, links, or notes here for instant cross-device sharing...",
-    "add_file": "Add file",
-    "update": "Update",
-    "send": "Send"
+    "drop_files": "Suelte archivos para subir",
+    "clear_text": "Borrar texto",
+    "paste": "Pegar del portapapeles",
+    "copy": "Copiar al portapapeles",
+    "active_session": "Sesión activa",
+    "local_draft": "Borrador local",
+    "placeholder": "Escriba o pegue texto, enlaces o notas aquí para compartir al instante entre dispositivos...",
+    "add_file": "Añadir archivo",
+    "update": "Actualizar",
+    "send": "Enviar"
+  },
+  "quick_access": {
+    "placeholder": "Ingrese código de acceso rápido...",
+    "generate": "Generar código",
+    "show_qr": "Mostrar código QR"
+  },
+  "auth": {
+    "login_tab": "Iniciar sesión",
+    "register_tab": "Registrarse",
+    "welcome_back": "Bienvenido de nuevo",
+    "create_access": "Crear cuenta",
+    "login_subtitle": "Inicie sesión para continuar compartiendo notas, enlaces y archivos entre dispositivos.",
+    "register_subtitle": "Cree una cuenta de Sharius para guardar sesiones, conectar dispositivos y gestionar contactos.",
+    "name_label": "Nombre",
+    "name_placeholder": "Su nombre",
+    "login_label": "Usuario",
+    "login_placeholder": "su_usuario",
+    "password_label": "Contraseña",
+    "password_login_placeholder": "Ingrese contraseña",
+    "password_register_placeholder": "Cree una contraseña (mín. 6 caracteres)",
+    "logging_in": "Iniciando sesión...",
+    "creating_account": "Creando cuenta...",
+    "need_account": "¿Necesita una cuenta?",
+    "already_have_account": "¿Ya tiene una cuenta?"
+  },
+  "profile": {
+    "name_empty_error": "El nombre no puede estar vacío.",
+    "update_failed": "Error al actualizar el perfil.",
+    "title": "Perfil",
+    "display_name_label": "Nombre para mostrar",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "logout": "Cerrar sesión"
+  },
+  "friends": {
+    "request_sent": "Solicitud de amistad enviada a {{name}}",
+    "added_to_friends": "{{name}} añadido a amigos",
+    "request_declined": "Solicitud de {{name}} rechazada",
+    "removed_from_friends": "{{name}} eliminado de amigos",
+    "contacts_eyebrow": "Contactos",
+    "title": "Amigos",
+    "refresh": "Actualizar",
+    "add_friend_title": "Añadir amigo",
+    "searching": "Buscando...",
+    "found": "{{count}} encontrados",
+    "search_placeholder": "Buscar por usuario o nombre",
+    "no_users_found": "No se encontraron usuarios.",
+    "add_btn": "Añadir",
+    "incoming_title": "Entrantes",
+    "no_pending_requests": "No hay solicitudes pendientes.",
+    "accept_btn": "Aceptar",
+    "decline_btn": "Rechazar",
+    "your_friends_title": "Tus amigos",
+    "your_contacts_empty": "Tus contactos aparecerán aquí.",
+    "remove_confirm_text": "¿Eliminar a este amigo?",
+    "remove_btn": "Eliminar",
+    "cancel_btn": "Cancelar",
+    "share_btn": "Compartir"
+  },
+  "qr": {
+    "scan_to_connect": "Escanear para conectar",
+    "title": "Código QR de acceso rápido",
+    "hint": "Escanee con la cámara de su teléfono para abrir instantáneamente la sesión en otro dispositivo.",
+    "copy_link": "Copiar enlace",
+    "copied": "¡Enlace copiado!"
+  },
+  "app": {
+    "sync_in_progress": "Sincronización en curso. Acciones temporalmente bloqueadas.",
+    "press_delete": "Presione eliminar nuevamente para borrar esta sesión del servidor.",
+    "session_set": "Código de sesión establecido. Use Actualizar para cargar o Enviar para crear una nueva.",
+    "start_typing": "Comience a escribir, luego presione Enviar para crear una sesión compartible.",
+    "text_synced": "Texto sincronizado con {{code}}",
+    "remote_changes_available": "Sesión actualizada en otro dispositivo.",
+    "connected_to_session": "Conectado a la sesión {{code}}",
+    "session_code_applied": "Código de sesión {{code}} aplicado"
   }
 }

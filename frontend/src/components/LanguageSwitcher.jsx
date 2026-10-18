@@ -5,7 +5,14 @@ import './LanguageSwitcher.css';
 
 const languages = [
   { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'en', name: 'English', flag: '🇬🇧' }
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' }
 ];
 
 function LanguageSwitcher() {
@@ -14,7 +21,7 @@ function LanguageSwitcher() {
   
   // Find current language from i18n or fallback to the first one (ru)
   const [currentLang, setCurrentLang] = useState(
-    languages.find((l) => l.code === i18n.resolvedLanguage) || languages[0]
+    languages.find((l) => l.code === i18n.resolvedLanguage || i18n.resolvedLanguage?.startsWith(l.code)) || languages[0]
   );
   
   const dropdownRef = useRef(null);
@@ -33,7 +40,9 @@ function LanguageSwitcher() {
 
   // Update component state when i18n language changes (e.g., initialized by detector)
   useEffect(() => {
-    const langObj = languages.find((l) => l.code === i18n.resolvedLanguage);
+    const langObj = languages.find(
+      (l) => l.code === i18n.resolvedLanguage || i18n.resolvedLanguage?.startsWith(l.code)
+    );
     if (langObj) {
       setCurrentLang(langObj);
     }

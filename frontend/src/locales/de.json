@@ -1,33 +1,111 @@
-﻿{
+{
   "header": {
-    "login": "Log In",
-    "signup": "Sign Up",
-    "profile": "Profile"
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "profile": "Profil"
   },
   "home": {
-    "welcome": "Welcome to Sharius"
+    "welcome": "Willkommen bei Sharius"
   },
   "stats": {
-    "files": "Files",
-    "size": "Size",
+    "files": "Dateien",
+    "size": "Größe",
     "status": "Status",
-    "expires": "Expires",
-    "ready": "Ready",
-    "empty": "Empty",
-    "no_session": "No session",
-    "unknown": "Unknown",
-    "expired": "Expired"
+    "expires": "Läuft ab",
+    "ready": "Bereit",
+    "empty": "Leer",
+    "draft": "Entwurf",
+    "syncing": "Synchronisieren...",
+    "synced": "Synchronisiert",
+    "no_session": "Keine Sitzung",
+    "unknown": "Unbekannt",
+    "expired": "Abgelaufen"
   },
   "panel": {
-    "drop_files": "Drop files to upload",
-    "clear_text": "Clear text",
-    "paste": "Paste from clipboard",
-    "copy": "Copy to clipboard",
-    "active_session": "Active session",
-    "local_draft": "Local draft",
-    "placeholder": "Type or paste your text, links, or notes here for instant cross-device sharing...",
-    "add_file": "Add file",
-    "update": "Update",
-    "send": "Send"
+    "drop_files": "Dateien zum Hochladen ablegen",
+    "clear_text": "Text löschen",
+    "paste": "Aus Zwischenablage einfügen",
+    "copy": "In Zwischenablage kopieren",
+    "active_session": "Aktive Sitzung",
+    "local_draft": "Lokaler Entwurf",
+    "placeholder": "Geben Sie hier Text, Links oder Notizen ein für sofortigen Austausch zwischen Geräten...",
+    "add_file": "Datei hinzufügen",
+    "update": "Aktualisieren",
+    "send": "Senden"
+  },
+  "quick_access": {
+    "placeholder": "Schnellzugriffscode eingeben...",
+    "generate": "Code generieren",
+    "show_qr": "QR-Code anzeigen"
+  },
+  "auth": {
+    "login_tab": "Anmelden",
+    "register_tab": "Registrieren",
+    "welcome_back": "Willkommen zurück",
+    "create_access": "Konto erstellen",
+    "login_subtitle": "Melden Sie sich an, um Notizen, Links und Dateien zwischen Geräten auszutauschen.",
+    "register_subtitle": "Erstellen Sie ein Sharius-Konto, um Sitzungen zu speichern und Kontakte zu verwalten.",
+    "name_label": "Name",
+    "name_placeholder": "Ihr Name",
+    "login_label": "Benutzername",
+    "login_placeholder": "ihr_benutzername",
+    "password_label": "Passwort",
+    "password_login_placeholder": "Passwort eingeben",
+    "password_register_placeholder": "Passwort erstellen (mind. 6 Zeichen)",
+    "logging_in": "Anmeldung läuft...",
+    "creating_account": "Konto wird erstellt...",
+    "need_account": "Noch kein Konto?",
+    "already_have_account": "Bereits ein Konto vorhanden?"
+  },
+  "profile": {
+    "name_empty_error": "Name darf nicht leer sein.",
+    "update_failed": "Profilaktualisierung fehlgeschlagen.",
+    "title": "Profil",
+    "display_name_label": "Anzeigename",
+    "saving": "Speichern...",
+    "save": "Speichern",
+    "logout": "Abmelden"
+  },
+  "friends": {
+    "request_sent": "Freundschaftsanfrage an {{name}} gesendet",
+    "added_to_friends": "{{name}} zu Freunden hinzugefügt",
+    "request_declined": "Anfrage von {{name}} abgelehnt",
+    "removed_from_friends": "{{name}} aus Freunden entfernt",
+    "contacts_eyebrow": "Kontakte",
+    "title": "Freunde",
+    "refresh": "Aktualisieren",
+    "add_friend_title": "Freund hinzufügen",
+    "searching": "Suchen...",
+    "found": "{{count}} gefunden",
+    "search_placeholder": "Nach Benutzername oder Name suchen",
+    "no_users_found": "Keine Benutzer gefunden.",
+    "add_btn": "Hinzufügen",
+    "incoming_title": "Eingehend",
+    "no_pending_requests": "Keine ausstehenden Anfragen.",
+    "accept_btn": "Annehmen",
+    "decline_btn": "Ablehnen",
+    "your_friends_title": "Ihre Freunde",
+    "your_contacts_empty": "Ihre Kontakte erscheinen hier.",
+    "remove_confirm_text": "Diesen Freund entfernen?",
+    "remove_btn": "Entfernen",
+    "cancel_btn": "Abbrechen",
+    "share_btn": "Teilen"
+  },
+  "qr": {
+    "scan_to_connect": "Zum Verbinden scannen",
+    "title": "Schnellzugriff-QR-Code",
+    "hint": "Mit der Smartphone-Kamera scannen, um die Sitzung sofort auf einem anderen Gerät zu öffnen.",
+    "copy_link": "Link kopieren",
+    "copied": "Link kopiert!"
+  },
+  "app": {
+    "sync_in_progress": "Synchronisierung läuft. Aktionen sind vorübergehend gesperrt.",
+    "press_delete": "Erneut auf Löschen drücken, um diese Sitzung vom Server zu entfernen.",
+    "session_set": "Sitzungscode festgelegt. Nutzen Sie Aktualisieren zum Laden oder Senden zum Erstellen.",
+    "start_typing": "Tippen Sie los und klicken Sie auf Senden, um eine Sitzung zu starten.",
+    "text_synced": "Text synchronisiert mit {{code}}",
+    "remote_changes_available": "Sitzung auf einem anderen Gerät aktualisiert.",
+    "connected_to_session": "Verbunden mit Sitzung {{code}}",
+    "session_code_applied": "Sitzungscode {{code}} angewendet"
   }
 }
