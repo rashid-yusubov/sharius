@@ -85,7 +85,7 @@ def upload_session_file(
 
 
 @router.get("/{code}/files/{file_id}")
-def download_session_file(code: str, file_id: str, db: Session = Depends(get_db)):
+def download_session_file(code: str, file_id: str, inline: bool = False, db: Session = Depends(get_db)):
     service = SessionService(db)
     session = service.get_session_by_code(code)
     if not session:
@@ -101,6 +101,7 @@ def download_session_file(code: str, file_id: str, db: Session = Depends(get_db)
         path=file_record.storage_path,
         media_type=file_record.mime_type,
         filename=file_record.original_name,
+        content_disposition_type="inline" if inline else "attachment",
     )
 
 

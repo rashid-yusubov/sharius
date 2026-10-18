@@ -18,9 +18,11 @@ function ExchangePanel({
   onFilesDrop,
   onMessageChange,
   onPaste,
+  onPreviewFile,
   onRemoveFile,
   onSend,
   onUpdate,
+  sessionCode,
 }) {
   const { t } = useTranslation();
   const [isDragActive, setIsDragActive] = useState(false);
@@ -194,9 +196,12 @@ function ExchangePanel({
               {attachedFiles.map((file, index) => (
                 <FileChip
                   file={file}
+                  index={index}
                   key={`${file.id || file.name || file.original_name}-${file.lastModified || file.created_at || index}`}
                   onDownload={file.id ? () => onDownloadFile(file) : undefined}
+                  onPreview={onPreviewFile}
                   onRemove={() => onRemoveFile(index)}
+                  sessionCode={sessionCode}
                 />
               ))}
             </div>

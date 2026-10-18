@@ -19,6 +19,7 @@ function HomePage({
   onGenerateCode,
   onMessageChange,
   onPaste,
+  onPreviewFile,
   onQrClose,
   onQrOpen,
   onRemoveFile,
@@ -52,6 +53,7 @@ function HomePage({
         onFilesDrop={onFilesDrop}
         onMessageChange={onMessageChange}
         onPaste={onPaste}
+        onPreviewFile={onPreviewFile}
         onRemoveFile={onRemoveFile}
         onSend={onSend}
         onUpdate={onUpdate}

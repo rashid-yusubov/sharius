@@ -69,6 +69,11 @@ export function deleteSession(code, { token, creatorToken } = {}) {
   });
 }
 
-export function getSessionFileDownloadUrl(code, fileId) {
-  return getApiUrl(`/sessions/${encodeURIComponent(code)}/files/${encodeURIComponent(fileId)}`);
+export function getSessionFileDownloadUrl(code, fileId, { inline = false } = {}) {
+  const query = inline ? '?inline=true' : '';
+  return getApiUrl(`/sessions/${encodeURIComponent(code)}/files/${encodeURIComponent(fileId)}${query}`);
+}
+
+export function getSessionFilePreviewUrl(code, fileId) {
+  return getSessionFileDownloadUrl(code, fileId, { inline: true });
 }

@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser, login, register, updateProfile } from './api/auth.js';
@@ -13,6 +13,7 @@ import {
   uploadSessionFile,
 } from './api/sessions.js';
 import AuthModal from './components/AuthModal.jsx';
+import FilePreviewModal from './components/FilePreviewModal.jsx';
 import Header from './components/Header.jsx';
 import ToastHost from './components/ToastHost.jsx';
 import FriendsPage from './pages/FriendsPage.jsx';
@@ -86,6 +87,7 @@ function App() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isDeleteSessionConfirming, setIsDeleteSessionConfirming] = useState(false);
   const [authModalState, setAuthModalState] = useState({ isOpen: false, mode: 'login' });
+  const [previewState, setPreviewState] = useState({ isOpen: false, fileIndex: 0 });
   const [timerTick, setTimerTick] = useState(0);
   const fileInputRef = useRef(null);
 
@@ -95,6 +97,21 @@ function App() {
 
   const handleCloseAuth = useCallback(() => {
     setAuthModalState((current) => ({ ...current, isOpen: false }));
+  }, []);
+
+  const handlePreviewFile = useCallback((file, index) => {
+    setPreviewState({
+      isOpen: true,
+      fileIndex: typeof index === 'number' && index >= 0 ? index : 0,
+    });
+  }, []);
+
+  const handleClosePreview = useCallback(() => {
+    setPreviewState((current) => ({ ...current, isOpen: false }));
+  }, []);
+
+  const handleSelectPreviewIndex = useCallback((index) => {
+    setPreviewState((current) => ({ ...current, fileIndex: index }));
   }, []);
 
   const notify = useCallback((message, tone = 'default') => {
@@ -609,6 +626,7 @@ function App() {
                 onGenerateCode={handleGenerateCode}
                 onMessageChange={setMessage}
                 onPaste={handlePaste}
+                onPreviewFile={handlePreviewFile}
                 onQrClose={handleQrClose}
                 onQrOpen={handleQrOpen}
                 onRemoveFile={handleRemoveFile}
@@ -664,6 +682,15 @@ function App() {
         onClose={handleCloseAuth}
         onLogin={handleLogin}
         onRegister={handleRegister}
+      />
+      <FilePreviewModal
+        currentIndex={previewState.fileIndex}
+        files={attachedFiles}
+        isOpen={previewState.isOpen}
+        onClose={handleClosePreview}
+        onDownload={handleDownloadFile}
+        onSelectIndex={handleSelectPreviewIndex}
+        sessionCode={code.trim()}
       />
       <ToastHost onDismiss={dismissToast} toasts={toasts} />
     </main>
