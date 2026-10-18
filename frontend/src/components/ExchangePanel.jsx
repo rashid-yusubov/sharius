@@ -27,6 +27,28 @@ function ExchangePanel({
   const { t } = useTranslation();
   const [isDragActive, setIsDragActive] = useState(false);
   const dragDepthRef = useRef(0);
+  const fileListRef = useRef(null);
+
+  useEffect(() => {
+    const element = fileListRef.current;
+    if (!element) return;
+
+    const handleWheel = (event) => {
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+        return;
+      }
+
+      if (event.deltaY !== 0 && element.scrollWidth > element.clientWidth) {
+        event.preventDefault();
+        element.scrollLeft += event.deltaY;
+      }
+    };
+
+    element.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      element.removeEventListener('wheel', handleWheel);
+    };
+  }, [attachedFiles]);
 
   const extractFilesFromClipboard = (clipboardData) => {
     if (!clipboardData) return [];
@@ -192,7 +214,7 @@ function ExchangePanel({
 
         <div className="exchange__bottom-actions">
           {attachedFiles.length > 0 && (
-            <div className="exchange__file-list" aria-label="Attached files">
+            <div className="exchange__file-list" aria-label="Attached files" ref={fileListRef}>
               {attachedFiles.map((file, index) => (
                 <FileChip
                   file={file}
