@@ -101,6 +101,7 @@
     "press_delete": "Press delete again to remove this session from the server.",
     "session_set": "Session code is set. Use Update to load it or Send to create a fresh session.",
     "start_typing": "Start typing, then Send to create a shareable session.",
-    "text_synced": "Text synced to {{code}}"
+    "text_synced": "Text synced to {{code}}",
+    "remote_changes_available": "Session updated on another device."
   }
 }

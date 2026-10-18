@@ -91,6 +91,16 @@ function App() {
   const [previewState, setPreviewState] = useState({ isOpen: false, fileIndex: 0 });
   const [timerTick, setTimerTick] = useState(0);
   const fileInputRef = useRef(null);
+  const messageRef = useRef(message);
+  messageRef.current = message;
+  const lastSyncedMessageRef = useRef(lastSyncedMessage);
+  lastSyncedMessageRef.current = lastSyncedMessage;
+  const attachedFilesRef = useRef(attachedFiles);
+  attachedFilesRef.current = attachedFiles;
+  const isSyncingRef = useRef(isSyncing);
+  isSyncingRef.current = isSyncing;
+  const sessionAccessRef = useRef(sessionAccess);
+  sessionAccessRef.current = sessionAccess;
 
   const handleOpenAuth = useCallback((mode = 'login') => {
     setAuthModalState({ isOpen: true, mode });
@@ -249,6 +259,86 @@ function App() {
         // Ignored if session is expired or not found
       });
   }, []);
+
+  useEffect(() => {
+    const normalizedCode = code.trim().toUpperCase();
+    if (!normalizedCode || normalizedCode.length < 4) return;
+
+    let isCancelled = false;
+    let isPolling = false;
+
+    const pollSession = async () => {
+      if (isPolling || isSyncingRef.current || document.hidden) return;
+
+      isPolling = true;
+      try {
+        const session = await getSession(normalizedCode);
+        if (isCancelled) return;
+
+        const remoteContent = session.text?.content || '';
+        const remoteFiles = session.files || [];
+        const currentMsg = messageRef.current;
+        const currentSynced = lastSyncedMessageRef.current;
+        const currentFiles = attachedFilesRef.current;
+
+        const remoteTextChanged = remoteContent !== currentSynced;
+        const prevFileIds = currentFiles.map((f) => f.id).join(',');
+        const remoteFileIds = remoteFiles.map((f) => f.id).join(',');
+        const remoteFilesChanged = prevFileIds !== remoteFileIds;
+
+        if (remoteTextChanged || remoteFilesChanged) {
+          const hasLocalDraft = currentMsg.trim() !== currentSynced.trim();
+
+          if (!hasLocalDraft) {
+            setMessage(remoteContent);
+            setLastSyncedMessage(remoteContent);
+          } else if (remoteTextChanged) {
+            setLastSyncedMessage(remoteContent);
+            notify(t('app.remote_changes_available', { defaultValue: 'Сессия обновлена на другом устройстве.' }), 'warning');
+          }
+
+          if (remoteFilesChanged) {
+            setAttachedFiles(remoteFiles);
+          }
+
+          if (session.expires_at) {
+            setSessionExpiresAt(session.expires_at);
+          }
+
+          setSessionAccess((current) => ({
+            code: session.code,
+            creatorToken: current?.code === session.code ? current?.creatorToken || session.creator_token || null : session.creator_token || null,
+            expiresAt: session.expires_at || null,
+          }));
+        }
+      } catch (error) {
+        if (isCancelled) return;
+        if ((error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') && sessionAccessRef.current?.code === normalizedCode) {
+          setSessionExpiresAt(new Date(0).toISOString());
+        }
+      } finally {
+        isPolling = false;
+      }
+    };
+
+    const intervalId = window.setInterval(pollSession, 2000);
+
+    const handleFocusOrVisible = () => {
+      if (!document.hidden) {
+        pollSession();
+      }
+    };
+
+    window.addEventListener('focus', handleFocusOrVisible);
+    document.addEventListener('visibilitychange', handleFocusOrVisible);
+
+    return () => {
+      isCancelled = true;
+      window.clearInterval(intervalId);
+      window.removeEventListener('focus', handleFocusOrVisible);
+      document.removeEventListener('visibilitychange', handleFocusOrVisible);
+    };
+  }, [code, notify, t]);
 
   const getSessionCredentials = (overrides = {}) => ({
     token: auth?.token || null,
