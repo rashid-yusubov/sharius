@@ -1,10 +1,3 @@
-import contentCopyIcon from '../assets/icons/content-copy.svg';
-import contentPasteIcon from '../assets/icons/content-paste.svg';
-import deleteIcon from '../assets/icons/delete.svg';
-import qrCodeScannerIcon from '../assets/icons/qr-code-scanner.svg';
-import repeatIcon from '../assets/icons/repeat.svg';
-import wandStarsIcon from '../assets/icons/wand-stars.svg';
-
 const iconProps = {
   'aria-hidden': 'true',
   fill: 'none',
@@ -15,28 +8,50 @@ const iconProps = {
   viewBox: '0 0 24 24',
 };
 
-function AssetIcon({ src }) {
-  return <span aria-hidden="true" className="asset-icon" style={{ '--asset-icon-url': `url(${src})` }} />;
-}
+const materialIconProps = {
+  'aria-hidden': 'true',
+  fill: 'currentColor',
+  viewBox: '0 -960 960 960',
+};
 
 export function MagicIcon() {
-  return <AssetIcon src={wandStarsIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="m176-120-56-56 301-302-181-45 198-123-17-234 179 151 216-88-87 217 151 178-234-16-124 198-45-181-301 301Zm24-520-80-80 80-80 80 80-80 80Zm355 197 48-79 93 7-60-71 35-86-86 35-71-59 7 92-79 49 90 22 23 90Zm165 323-80-80 80-80 80 80-80 80ZM569-570Z" />
+    </svg>
+  );
 }
 
 export function QrIcon() {
-  return <AssetIcon src={qrCodeScannerIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z" />
+    </svg>
+  );
 }
 
 export function TrashIcon() {
-  return <AssetIcon src={deleteIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+    </svg>
+  );
 }
 
 export function ClipboardIcon() {
-  return <AssetIcon src={contentPasteIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm308.5-571.5Q520-783 520-800t-11.5-28.5Q497-840 480-840t-28.5 11.5Q440-817 440-800t11.5 28.5Q463-760 480-760t28.5-11.5Z" />
+    </svg>
+  );
 }
 
 export function CopyIcon() {
-  return <AssetIcon src={contentCopyIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
+    </svg>
+  );
 }
 
 export function PlusIcon() {
@@ -48,7 +63,11 @@ export function PlusIcon() {
 }
 
 export function SyncIcon() {
-  return <AssetIcon src={repeatIcon} />;
+  return (
+    <svg {...materialIconProps}>
+      <path d="M280-80 120-240l160-160 56 58-62 62h406v-160h80v240H274l62 62-56 58Zm-80-440v-240h486l-62-62 56-58 160 160-160 160-56-58 62-62H280v160h-80Z" />
+    </svg>
+  );
 }
 
 export function ArrowUpIcon() {
