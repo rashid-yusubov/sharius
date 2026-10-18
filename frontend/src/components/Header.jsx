@@ -67,11 +67,6 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
 
               {isMenuOpen && (
                 <div className="header__dropdown" role="menu">
-                  <div className="header__dropdown-user">
-                    <span className="header__dropdown-name">{authUser.display_name}</span>
-                    <span className="header__dropdown-login">@{authUser.login}</span>
-                  </div>
-                  <div className="header__dropdown-divider" />
                   <button
                     className="header__dropdown-item"
                     onClick={handleSettingsClick}

@@ -127,7 +127,7 @@
 
 .header__profile-menu-container {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
 }
 
 .header__profile-avatar {
@@ -181,16 +181,20 @@
 .header__dropdown {
   position: absolute;
   top: calc(100% + 8px);
+  left: 0;
   right: 0;
-  min-width: 200px;
+  width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
   background: var(--color-dark);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-element);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
-  padding: 6px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
+  gap: 2px;
   z-index: 100;
   animation: dropdownFadeIn 140ms ease-out;
 }
@@ -206,42 +210,12 @@
   }
 }
 
-.header__dropdown-user {
-  padding: 8px 10px 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.header__dropdown-name {
-  color: var(--color-accent);
-  font-size: 14px;
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.header__dropdown-login {
-  color: var(--color-secondary-text);
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.header__dropdown-divider {
-  height: 1px;
-  background: var(--color-border);
-  margin: 4px 0 6px;
-}
-
 .header__dropdown-item {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
+  gap: 8px;
+  padding: 8px 10px;
   background: transparent;
   border: 0;
   border-radius: calc(var(--radius-element) - 4px);
@@ -253,6 +227,7 @@
   cursor: pointer;
   transition: background 140ms ease, color 140ms ease;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .header__dropdown-item svg {
@@ -390,13 +365,21 @@
   }
 
   .header__dropdown {
-    min-width: 180px;
+    width: 100%;
+    min-width: 100%;
     border-radius: 10px;
+    padding: 4px;
   }
 
   .header__dropdown-item {
-    padding: 8px 10px;
+    padding: 7px 8px;
     font-size: 13px;
+    gap: 6px;
+  }
+
+  .header__dropdown-item svg {
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -449,7 +432,13 @@
   }
 
   .header__dropdown {
-    min-width: 165px;
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .header__dropdown-item {
+    padding: 6px 6px;
+    font-size: 12px;
   }
 }
 
