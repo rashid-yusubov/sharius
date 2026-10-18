@@ -94,7 +94,9 @@
   "qr": {
     "scan_to_connect": "Scan to connect",
     "title": "Quick access QR",
-    "hint": "The window will close automatically after backend scan confirmation."
+    "hint": "Scan with your phone camera to instantly open the session on another device.",
+    "copy_link": "Copy link",
+    "copied": "Link copied!"
   },
   "app": {
     "sync_in_progress": "Sync in progress. Actions are temporarily locked.",
@@ -102,6 +104,8 @@
     "session_set": "Session code is set. Use Update to load it or Send to create a fresh session.",
     "start_typing": "Start typing, then Send to create a shareable session.",
     "text_synced": "Text synced to {{code}}",
-    "remote_changes_available": "Session updated on another device."
+    "remote_changes_available": "Session updated on another device.",
+    "connected_to_session": "Connected to session {{code}}",
+    "session_code_applied": "Session code {{code}} applied"
   }
 }

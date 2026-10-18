@@ -1,12 +1,18 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
-import { CloseIcon } from './icons.jsx';
+import { CloseIcon, CopyIcon } from './icons.jsx';
 import './QrCodeModal.css';
 
 function QrCodeModal({ isOpen, onClose, value }) {
   const { t } = useTranslation();
   const [qrSource, setQrSource] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const trimmedCode = value?.trim().toUpperCase() || '';
+  const shareUrl = typeof window !== 'undefined' && trimmedCode
+    ? `${window.location.origin}/?code=${encodeURIComponent(trimmedCode)}`
+    : trimmedCode;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -22,12 +28,12 @@ function QrCodeModal({ isOpen, onClose, value }) {
   useEffect(() => {
     let isActive = true;
 
-    if (!isOpen || !value.trim()) {
+    if (!isOpen || !shareUrl) {
       setQrSource('');
       return undefined;
     }
 
-    QRCode.toDataURL(value.trim(), {
+    QRCode.toDataURL(shareUrl, {
       color: {
         dark: '#0a0a0b',
         light: '#ffffff',
@@ -43,7 +49,20 @@ function QrCodeModal({ isOpen, onClose, value }) {
     return () => {
       isActive = false;
     };
-  }, [isOpen, value]);
+  }, [isOpen, shareUrl]);
+
+  const handleCopyLink = async () => {
+    if (!shareUrl) return;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {
+      // ignore
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -57,13 +76,17 @@ function QrCodeModal({ isOpen, onClose, value }) {
         </button>
 
         <div className="qr-modal__qr-frame">
-          {qrSource ? <img alt={`QR code for ${value}`} className="qr-modal__image" src={qrSource} /> : null}
+          {qrSource ? <img alt={`QR code for session ${trimmedCode}`} className="qr-modal__image" src={qrSource} /> : null}
         </div>
 
         <div className="qr-modal__content">
           <p className="qr-modal__eyebrow">{t('qr.scan_to_connect')}</p>
           <h2 id="qr-modal-title">{t('qr.title')}</h2>
-          <p className="qr-modal__code">{value}</p>
+          <p className="qr-modal__code">{trimmedCode}</p>
+          <button className="qr-modal__copy-link" onClick={handleCopyLink} type="button">
+            <CopyIcon />
+            <span>{copied ? t('qr.copied') : t('qr.copy_link')}</span>
+          </button>
           <p className="qr-modal__hint">{t('qr.hint')}</p>
         </div>
       </div>

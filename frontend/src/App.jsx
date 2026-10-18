@@ -148,6 +148,36 @@ function App() {
   }, [location.pathname, navigate, handleOpenAuth]);
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const queryCode = params.get('code')?.trim().toUpperCase();
+    const pathMatch = location.pathname.match(/^\/s\/([A-Za-z0-9_-]+)$/);
+    const pathCode = pathMatch ? pathMatch[1].trim().toUpperCase() : null;
+    const targetCode = queryCode || pathCode;
+
+    if (targetCode && targetCode.length >= 4) {
+      setCode(targetCode);
+      setIsSyncing(true);
+      getSession(targetCode)
+        .then((session) => {
+          syncSessionState(session);
+          notify(t('app.connected_to_session', { code: session.code, defaultValue: `Connected to session ${session.code}` }));
+        })
+        .catch((error) => {
+          if (error?.code === 'SESSION_EXPIRED') {
+            notify(getErrorMessage(error), 'warning');
+          } else {
+            notify(t('app.session_code_applied', { code: targetCode, defaultValue: `Session code ${targetCode} applied` }));
+          }
+        })
+        .finally(() => {
+          setIsSyncing(false);
+        });
+
+      navigate('/', { replace: true });
+    }
+  }, [location.pathname, location.search, navigate, notify, t]);
+
+  useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('sharius-theme', theme);
   }, [theme]);
@@ -726,6 +756,37 @@ function App() {
         ? t('app.session_set')
         : t('app.start_typing');
 
+  const homePageElement = (
+    <HomePage
+      attachedFiles={attachedFiles}
+      code={code}
+      expiresAt={sessionExpiresAt}
+      fileInputRef={fileInputRef}
+      isSyncing={isSyncing}
+      message={message}
+      onDownloadFile={handleDownloadFile}
+      onClear={handleClear}
+      onCodeChange={setCode}
+      onCopy={handleCopy}
+      onFileChange={handleFileChange}
+      onFileClick={handleFileClick}
+      onFilesDrop={handleFilesUpload}
+      onGenerateCode={handleGenerateCode}
+      onMessageChange={setMessage}
+      onPaste={handlePaste}
+      onPreviewFile={handlePreviewFile}
+      onQrClose={handleQrClose}
+      onQrOpen={handleQrOpen}
+      onRemoveFile={handleRemoveFile}
+      onSend={handleSend}
+      onUpdate={handleUpdate}
+      isQrOpen={isQrOpen}
+      sessionStatusText={sessionStatusText}
+      syncStatus={syncStatus}
+      timerTick={timerTick}
+    />
+  );
+
   return (
     <main className="app-shell">
       <div className="app-layout">
@@ -736,39 +797,8 @@ function App() {
           theme={theme}
         />
         <Routes>
-          <Route
-            element={
-              <HomePage
-                attachedFiles={attachedFiles}
-                code={code}
-                expiresAt={sessionExpiresAt}
-                fileInputRef={fileInputRef}
-                isSyncing={isSyncing}
-                message={message}
-                onDownloadFile={handleDownloadFile}
-                onClear={handleClear}
-                onCodeChange={setCode}
-                onCopy={handleCopy}
-                onFileChange={handleFileChange}
-                onFileClick={handleFileClick}
-                onFilesDrop={handleFilesUpload}
-                onGenerateCode={handleGenerateCode}
-                onMessageChange={setMessage}
-                onPaste={handlePaste}
-                onPreviewFile={handlePreviewFile}
-                onQrClose={handleQrClose}
-                onQrOpen={handleQrOpen}
-                onRemoveFile={handleRemoveFile}
-                onSend={handleSend}
-                onUpdate={handleUpdate}
-                isQrOpen={isQrOpen}
-                sessionStatusText={sessionStatusText}
-                syncStatus={syncStatus}
-                timerTick={timerTick}
-              />
-            }
-            path="/"
-          />
+          <Route element={homePageElement} path="/" />
+          <Route element={homePageElement} path="/s/:sessionCode" />
           <Route element={<Navigate replace to="/" />} path="/login" />
           <Route element={<Navigate replace to="/" />} path="/sign-in" />
           <Route

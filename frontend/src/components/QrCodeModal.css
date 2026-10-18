@@ -104,8 +104,37 @@
   font-weight: 800;
 }
 
+.qr-modal__copy-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 8px 18px;
+  background: var(--color-control);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease;
+}
+
+.qr-modal__copy-link:hover {
+  background: var(--color-control-hover);
+}
+
+.qr-modal__copy-link:active {
+  transform: scale(0.97);
+}
+
+.qr-modal__copy-link svg {
+  width: 16px;
+  height: 16px;
+}
+
 .qr-modal__hint {
-  margin: 12px auto 0;
+  margin: 14px auto 0;
   max-width: 360px;
   color: var(--color-secondary-text);
   font-size: 14px;
