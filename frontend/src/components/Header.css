@@ -107,8 +107,8 @@
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 14px 0 8px;
+  gap: 8px;
+  padding: 0 12px 0 8px;
   color: var(--color-accent);
   background: var(--color-control);
   border: 1px solid var(--color-border);
@@ -118,6 +118,16 @@
 
 .header__profile:hover {
   background: var(--color-control-hover);
+}
+
+.header__profile.is-active {
+  background: var(--color-control-hover);
+  border-color: var(--color-focus);
+}
+
+.header__profile-menu-container {
+  position: relative;
+  display: inline-block;
 }
 
 .header__profile-avatar {
@@ -147,6 +157,135 @@
   line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.header__profile-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary-text);
+  transition: transform 180ms ease, color 160ms ease;
+  margin-left: 1px;
+}
+
+.header__profile-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.header__profile-chevron.is-open {
+  transform: rotate(180deg);
+  color: var(--color-accent);
+}
+
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: var(--color-dark);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  animation: dropdownFadeIn 140ms ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header__dropdown-user {
+  padding: 8px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header__dropdown-name {
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__dropdown-login {
+  color: var(--color-secondary-text);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__dropdown-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 4px 0 6px;
+}
+
+.header__dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-element) - 4px);
+  color: var(--color-accent);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+  box-sizing: border-box;
+}
+
+.header__dropdown-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-secondary-text);
+  transition: color 140ms ease;
+  flex-shrink: 0;
+}
+
+.header__dropdown-item:hover {
+  background: var(--color-control-hover);
+}
+
+.header__dropdown-item:hover svg {
+  color: var(--color-accent);
+}
+
+.header__dropdown-item--logout {
+  color: #f87171;
+}
+
+.header__dropdown-item--logout svg {
+  color: #f87171;
+}
+
+.header__dropdown-item--logout:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.header__dropdown-item--logout:hover svg {
+  color: #ef4444;
 }
 
 .header__user {
@@ -225,8 +364,8 @@
     min-width: 0;
     height: 36px;
     min-height: 36px;
-    padding: 0 10px 0 6px;
-    gap: 7px;
+    padding: 0 8px 0 5px;
+    gap: 6px;
     border-radius: 10px;
   }
 
@@ -240,8 +379,23 @@
     height: 14px;
   }
 
+  .header__profile-chevron svg {
+    width: 12px;
+    height: 12px;
+  }
+
   .header__profile-name {
-    max-width: 85px;
+    max-width: 80px;
+    font-size: 13px;
+  }
+
+  .header__dropdown {
+    min-width: 180px;
+    border-radius: 10px;
+  }
+
+  .header__dropdown-item {
+    padding: 8px 10px;
     font-size: 13px;
   }
 }
@@ -280,13 +434,22 @@
   .header__profile {
     height: 36px;
     min-height: 36px;
-    padding: 0 8px 0 5px;
-    gap: 6px;
+    padding: 0 6px 0 4px;
+    gap: 4px;
+  }
+
+  .header__profile-chevron svg {
+    width: 11px;
+    height: 11px;
   }
 
   .header__profile-name {
-    max-width: 68px;
+    max-width: 58px;
     font-size: 12px;
+  }
+
+  .header__dropdown {
+    min-width: 165px;
   }
 }
 
@@ -307,7 +470,7 @@
   }
 
   .header__profile-name {
-    max-width: 55px;
+    max-width: 46px;
   }
 }
 

@@ -2,7 +2,9 @@
   "header": {
     "login": "Войти",
     "signup": "Регистрация",
-    "profile": "Профиль"
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "logout": "Выйти"
   },
   "home": {
     "welcome": "Добро пожаловать в Sharius"

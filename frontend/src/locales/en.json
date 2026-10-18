@@ -2,7 +2,9 @@
   "header": {
     "login": "Log In",
     "signup": "Sign Up",
-    "profile": "Profile"
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log Out"
   },
   "home": {
     "welcome": "Welcome to Sharius"

@@ -2,7 +2,9 @@
   "header": {
     "login": "Anmelden",
     "signup": "Registrieren",
-    "profile": "Profil"
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
   },
   "home": {
     "welcome": "Willkommen bei Sharius"

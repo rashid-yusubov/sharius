@@ -811,6 +811,7 @@ function App() {
       <div className="app-layout">
         <Header
           authUser={auth?.user || null}
+          onLogout={handleLogout}
           onOpenAuth={handleOpenAuth}
           onThemeToggle={handleThemeToggle}
           theme={theme}

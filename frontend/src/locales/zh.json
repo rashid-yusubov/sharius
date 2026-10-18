@@ -2,7 +2,9 @@
   "header": {
     "login": "登录",
     "signup": "注册",
-    "profile": "个人资料"
+    "profile": "个人资料",
+    "settings": "设置",
+    "logout": "退出登录"
   },
   "home": {
     "welcome": "欢迎使用 Sharius"

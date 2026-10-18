@@ -2,7 +2,9 @@
   "header": {
     "login": "Giriş Yap",
     "signup": "Kayıt Ol",
-    "profile": "Profil"
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap"
   },
   "home": {
     "welcome": "Sharius'a Hoş Geldiniz"
