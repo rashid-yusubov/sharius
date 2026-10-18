@@ -24,15 +24,15 @@ class Settings(BaseSettings):
     # CORS origins as comma-separated string, will be parsed
     cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173"
     max_file_size_bytes: int = 100 * 1024 * 1024
-    allowed_file_extensions: tuple[str, ...] = (
-        "txt",
-        "docx",
-        "pdf",
-        "png",
-        "jpg",
-        "jpeg",
-    )
+    # Allowed file extensions ("*" allows all file types)
+    allowed_file_extensions: tuple[str, ...] = ("*",)
     storage_dir: Path = STORAGE_DIR
+
+    def is_file_extension_allowed(self, ext: str) -> bool:
+        """Check if file extension is allowed. Empty tuple or '*' allows any extension."""
+        if not self.allowed_file_extensions or "*" in self.allowed_file_extensions:
+            return True
+        return ext.lower() in (e.lower() for e in self.allowed_file_extensions)
 
     def get_cors_origins(self) -> tuple[str, ...]:
         """Parse comma-separated CORS origins string into tuple"""

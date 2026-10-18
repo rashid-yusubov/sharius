@@ -62,16 +62,16 @@ class SessionService:
         self.db.refresh(session)
 
     def save_file(self, session: SessionModel, upload_file: UploadFile) -> None:
-        filename = upload_file.filename or ""
-        extension = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
-        if extension not in settings.allowed_file_extensions:
+        filename = (upload_file.filename or "file")[:255]
+        extension = filename.rsplit(".", 1)[-1].lower()[:10] if "." in filename else ""
+        if not settings.is_file_extension_allowed(extension):
             raise ValueError("FILE_TYPE_NOT_ALLOWED")
 
         content = upload_file.file.read()
         if len(content) > settings.max_file_size_bytes:
             raise ValueError("FILE_TOO_LARGE")
 
-        stored_name = f"{uuid.uuid4()}.{extension}"
+        stored_name = f"{uuid.uuid4()}.{extension}" if extension else f"{uuid.uuid4()}"
         storage_path = self.storage_dir / stored_name
         storage_path.write_bytes(content)
 
@@ -79,7 +79,7 @@ class SessionService:
             session_id=session.id,
             original_name=filename,
             stored_name=stored_name,
-            mime_type=upload_file.content_type or "application/octet-stream",
+            mime_type=(upload_file.content_type or "application/octet-stream")[:100],
             extension=extension,
             size_bytes=len(content),
             storage_path=str(storage_path),
