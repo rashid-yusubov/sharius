@@ -1,4 +1,4 @@
-﻿.exchange-stats {
+.exchange-stats {
   width: 100%;
   min-height: 96px;
   display: grid;
@@ -46,8 +46,27 @@
   white-space: nowrap;
 }
 
-.exchange-stats__item--ready strong {
+.exchange-stats__item--ready strong,
+.exchange-stats__item--synced strong {
   color: #22c55e;
+}
+
+.exchange-stats__item--draft strong {
+  color: #f59e0b;
+}
+
+.exchange-stats__item--syncing strong {
+  color: #38bdf8;
+  animation: pulseSync 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseSync {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 .exchange-stats__item--empty strong {

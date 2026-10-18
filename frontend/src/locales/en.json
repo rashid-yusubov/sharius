@@ -14,6 +14,9 @@
     "expires": "Expires",
     "ready": "Ready",
     "empty": "Empty",
+    "draft": "Draft",
+    "syncing": "Syncing...",
+    "synced": "Synced",
     "no_session": "No session",
     "unknown": "Unknown",
     "expired": "Expired"

@@ -30,12 +30,12 @@ const formatExpiresIn = (expiresAt, t) => {
   return `${minutes}:${String(seconds).padStart(2, '0')}`;
 };
 
-function ExchangeStats({ attachedFiles, expiresAt, message, timerTick }) {
+function ExchangeStats({ attachedFiles, expiresAt, isSyncing, message, status, timerTick }) {
   const { t } = useTranslation();
-  
-  const statusKey = message.trim() || attachedFiles.length ? 'ready' : 'empty';
-  const statusText = t(`stats.${statusKey}`);
-  
+
+  const statusKey = status || (isSyncing ? 'syncing' : (message.trim() || attachedFiles.length ? 'synced' : 'empty'));
+  const statusText = t(`stats.${statusKey}`, { defaultValue: statusKey });
+
   void timerTick;
   const expiresText = formatExpiresIn(expiresAt, t);
 

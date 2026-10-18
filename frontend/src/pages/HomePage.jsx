@@ -27,6 +27,7 @@ function HomePage({
   onUpdate,
   isQrOpen,
   sessionStatusText,
+  syncStatus,
   timerTick,
 }) {
   return (
@@ -39,7 +40,14 @@ function HomePage({
         onQrClose={onQrClose}
         onQrOpen={onQrOpen}
       />
-      <ExchangeStats attachedFiles={attachedFiles} expiresAt={expiresAt} message={message} timerTick={timerTick} />
+      <ExchangeStats
+        attachedFiles={attachedFiles}
+        expiresAt={expiresAt}
+        isSyncing={isSyncing}
+        message={message}
+        status={syncStatus}
+        timerTick={timerTick}
+      />
       <ExchangePanel
         attachedFiles={attachedFiles}
         fileInputRef={fileInputRef}

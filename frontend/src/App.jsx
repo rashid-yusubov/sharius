@@ -77,6 +77,7 @@ function App() {
   const navigate = useNavigate();
   const [code, setCode] = useState(() => loadStoredSession()?.code || '');
   const [message, setMessage] = useState('');
+  const [lastSyncedMessage, setLastSyncedMessage] = useState('');
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [isQrOpen, setIsQrOpen] = useState(false);
   const [sessionExpiresAt, setSessionExpiresAt] = useState(() => loadStoredSession()?.expiresAt || '');
@@ -222,7 +223,9 @@ function App() {
 
   const syncSessionState = (session) => {
     setCode(session.code);
-    setMessage(session.text?.content || '');
+    const content = session.text?.content || '';
+    setMessage(content);
+    setLastSyncedMessage(content);
     setAttachedFiles(session.files || []);
     setSessionExpiresAt(session.expires_at || '');
     setIsDeleteSessionConfirming(false);
@@ -232,6 +235,20 @@ function App() {
       expiresAt: session.expires_at || null,
     }));
   };
+
+  useEffect(() => {
+    const stored = loadStoredSession();
+    if (!stored?.code) return;
+    if (stored.expiresAt && new Date(stored.expiresAt).getTime() <= Date.now()) return;
+
+    getSession(stored.code)
+      .then((session) => {
+        syncSessionState(session);
+      })
+      .catch(() => {
+        // Ignored if session is expired or not found
+      });
+  }, []);
 
   const getSessionCredentials = (overrides = {}) => ({
     token: auth?.token || null,
@@ -344,6 +361,7 @@ function App() {
 
   const handleGenerateCode = () => {
     setCode(createAccessCode());
+    setLastSyncedMessage('');
     clearSessionAccess();
     setSessionExpiresAt('');
     setIsDeleteSessionConfirming(false);
@@ -353,6 +371,7 @@ function App() {
   const handleQrOpen = () => {
     if (!code.trim()) {
       setCode(createAccessCode());
+      setLastSyncedMessage('');
       notify('Code generated for QR');
     }
     setIsQrOpen(true);
@@ -377,6 +396,7 @@ function App() {
     }
 
     setMessage('');
+    setLastSyncedMessage('');
     setAttachedFiles([]);
     setSessionExpiresAt('');
     setIsDeleteSessionConfirming(false);
@@ -388,6 +408,7 @@ function App() {
 
     if (!normalizedCode) {
       setMessage('');
+      setLastSyncedMessage('');
       setAttachedFiles([]);
       setSessionExpiresAt('');
       clearSessionAccess();
@@ -402,6 +423,7 @@ function App() {
       await deleteSession(normalizedCode, getSessionCredentials());
       setCode('');
       setMessage('');
+      setLastSyncedMessage('');
       setAttachedFiles([]);
       setSessionExpiresAt('');
       clearSessionAccess();
@@ -411,6 +433,7 @@ function App() {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         setCode('');
         setMessage('');
+        setLastSyncedMessage('');
         setAttachedFiles([]);
         setSessionExpiresAt('');
         clearSessionAccess();
@@ -587,6 +610,22 @@ function App() {
     }
   };
 
+  const isSessionExpired = sessionExpiresAt ? new Date(sessionExpiresAt).getTime() <= Date.now() : false;
+
+  const syncStatus = (() => {
+    if (isSessionExpired) return 'expired';
+    if (isSyncing) return 'syncing';
+    const hasUnsyncedText = message.trim() !== lastSyncedMessage.trim();
+    if (hasUnsyncedText) {
+      if (message.trim()) return 'draft';
+      if (lastSyncedMessage.trim()) return 'draft';
+    }
+    if (lastSyncedMessage.trim() || attachedFiles.length > 0) {
+      return 'synced';
+    }
+    return 'empty';
+  })();
+
   const sessionStatusText = isSyncing
     ? t('app.sync_in_progress')
     : isDeleteSessionConfirming
@@ -634,6 +673,7 @@ function App() {
                 onUpdate={handleUpdate}
                 isQrOpen={isQrOpen}
                 sessionStatusText={sessionStatusText}
+                syncStatus={syncStatus}
                 timerTick={timerTick}
               />
             }
