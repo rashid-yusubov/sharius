@@ -98,15 +98,19 @@ export async function request(path, options = {}) {
 
 export const getApiUrl = (path) => `${resolveApiBaseUrl()}${path}`;
 
-export const getAvatarUrl = (path) => {
+export const getAvatarUrl = (path, version) => {
   if (!path) return null;
-  if (
-    path.startsWith('http://') ||
-    path.startsWith('https://') ||
-    path.startsWith('blob:') ||
-    path.startsWith('data:')
-  ) {
+  if (path.startsWith('blob:') || path.startsWith('data:')) {
     return path;
   }
-  return getApiUrl(path.startsWith('/') ? path : `/${path}`);
+  let url = path;
+  if (!path.startsWith('http://') && !path.startsWith('https://')) {
+    url = getApiUrl(path.startsWith('/') ? path : `/${path}`);
+  }
+
+  if (version) {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}v=${encodeURIComponent(version)}`;
+  }
+  return url;
 };

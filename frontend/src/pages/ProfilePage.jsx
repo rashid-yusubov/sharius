@@ -28,6 +28,7 @@ function ProfilePage({
   const [avatarError, setAvatarError] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
+  const [localPreviewUrl, setLocalPreviewUrl] = useState(null);
 
   // Change password states
   const [currentPassword, setCurrentPassword] = useState('');
@@ -44,7 +45,7 @@ function ProfilePage({
   useEffect(() => {
     setImgFailed(false);
     setAvatarError('');
-  }, [user.avatar_url]);
+  }, [user.avatar_url, user.updated_at]);
 
   const handleAvatarFile = async (file) => {
     if (!file) return;
@@ -69,13 +70,18 @@ function ProfilePage({
       return;
     }
 
+    const objectUrl = URL.createObjectURL(file);
+    setLocalPreviewUrl(objectUrl);
+    setImgFailed(false);
     setIsAvatarLoading(true);
+
     try {
       if (onAvatarUpload) {
         await onAvatarUpload(file);
       }
       setImgFailed(false);
     } catch (err) {
+      setLocalPreviewUrl(null);
       setAvatarError(
         err?.message ||
           t('profile.avatar_upload_failed', {
@@ -107,6 +113,7 @@ function ProfilePage({
   const handleAvatarRemove = async () => {
     setAvatarError('');
     setIsAvatarLoading(true);
+    setLocalPreviewUrl(null);
     try {
       if (onAvatarDelete) {
         await onAvatarDelete();
@@ -218,7 +225,10 @@ function ProfilePage({
     }
   };
 
-  const avatarSrc = getAvatarUrl(user.avatar_url);
+  const remoteAvatarSrc = user.avatar_url
+    ? getAvatarUrl(user.avatar_url, user.updated_at)
+    : null;
+  const avatarSrc = localPreviewUrl || remoteAvatarSrc;
 
   return (
     <div className="profile-page">
@@ -246,7 +256,16 @@ function ProfilePage({
                 <img
                   alt={user.display_name}
                   className="profile-page__avatar-img"
-                  onError={() => setImgFailed(true)}
+                  onError={(e) => {
+                    console.error('Failed to load avatar:', avatarSrc, e);
+                    setImgFailed(true);
+                  }}
+                  onLoad={() => {
+                    if (localPreviewUrl && avatarSrc === remoteAvatarSrc) {
+                      URL.revokeObjectURL(localPreviewUrl);
+                      setLocalPreviewUrl(null);
+                    }
+                  }}
                   src={avatarSrc}
                 />
               ) : (
@@ -280,11 +299,11 @@ function ProfilePage({
                 onClick={handleAvatarClick}
                 type="button"
               >
-                {user.avatar_url
+                {user.avatar_url || localPreviewUrl
                   ? t('profile.change_avatar_btn', { defaultValue: 'Сменить' })
                   : t('profile.upload_avatar_btn', { defaultValue: 'Загрузить' })}
               </button>
-              {user.avatar_url && (
+              {(user.avatar_url || localPreviewUrl) && (
                 <button
                   className="profile-page__avatar-btn profile-page__avatar-btn--delete"
                   disabled={isAvatarLoading}

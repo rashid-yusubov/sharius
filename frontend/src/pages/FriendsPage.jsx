@@ -20,12 +20,18 @@ function EmptyState({ children }) {
 }
 
 function UserIdentity({ user }) {
-  const avatarSrc = getAvatarUrl(user.avatar_url);
+  const [imgFailed, setImgFailed] = useState(false);
+  const avatarSrc = getAvatarUrl(user.avatar_url, user.updated_at);
   return (
     <div className="friends-page__identity">
       <div className="friends-page__avatar">
-        {avatarSrc ? (
-          <img alt="" className="friends-page__avatar-img" src={avatarSrc} />
+        {avatarSrc && !imgFailed ? (
+          <img
+            alt=""
+            className="friends-page__avatar-img"
+            onError={() => setImgFailed(true)}
+            src={avatarSrc}
+          />
         ) : (
           <UserIcon />
         )}

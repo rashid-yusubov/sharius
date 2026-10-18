@@ -21,6 +21,7 @@ services:
 
   backend:
     image: ghcr.io/rashid-yusubov/sharius-backend:latest
+    pull_policy: always
     container_name: sharius_backend
     restart: unless-stopped
     depends_on:
@@ -40,6 +41,7 @@ services:
 
   frontend:
     image: ghcr.io/rashid-yusubov/sharius-frontend:latest
+    pull_policy: always
     container_name: sharius_frontend
     restart: unless-stopped
     depends_on:

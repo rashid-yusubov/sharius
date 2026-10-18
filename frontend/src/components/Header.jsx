@@ -17,7 +17,7 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
 
   useEffect(() => {
     setAvatarFailed(false);
-  }, [authUser?.avatar_url]);
+  }, [authUser?.avatar_url, authUser?.updated_at]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -68,7 +68,7 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
                       alt=""
                       className="header__profile-avatar-img"
                       onError={() => setAvatarFailed(true)}
-                      src={getAvatarUrl(authUser.avatar_url)}
+                      src={getAvatarUrl(authUser.avatar_url, authUser.updated_at)}
                     />
                   ) : (
                     <UserIcon />

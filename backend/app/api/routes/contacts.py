@@ -30,6 +30,19 @@ def search_users(
     return success_response(users)
 
 
+@users_router.get("/{user_id}/avatar")
+def get_user_avatar(user_id: str, db: Session = Depends(get_db)):
+    from app.models.models import User
+    from app.api.routes.auth import get_avatar
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or not user.avatar_url:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("NO_AVATAR"))
+
+    filename = user.avatar_url.replace("/profile/avatar/", "").strip()
+    return get_avatar(filename)
+
+
 @contacts_router.post("/requests", response_model=ContactRequestResponse, status_code=status.HTTP_201_CREATED)
 def create_contact_request(
     payload: ContactRequestCreate,
