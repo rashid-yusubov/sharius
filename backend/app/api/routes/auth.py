@@ -127,7 +127,8 @@ def get_avatar(filename: str):
     if not filename or "/" in filename or "\\" in filename or ".." in filename:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response("INVALID_FILENAME"))
 
-    avatars_dir = (settings.storage_dir / "avatars").resolve()
+    avatars_dir = (Path(settings.storage_dir) / "avatars").resolve()
+    avatars_dir.mkdir(parents=True, exist_ok=True)
     file_path = (avatars_dir / filename).resolve()
 
     try:
@@ -136,7 +137,11 @@ def get_avatar(filename: str):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=error_response("FORBIDDEN"))
 
     if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("FILE_NOT_FOUND"))
+        matches = list(avatars_dir.glob(f"{filename}*"))
+        if matches and matches[0].is_file():
+            file_path = matches[0]
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("FILE_NOT_FOUND"))
 
     media_type, _ = mimetypes.guess_type(str(file_path))
     if not media_type:

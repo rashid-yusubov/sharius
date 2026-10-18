@@ -12,7 +12,12 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    setAvatarFailed(false);
+  }, [authUser?.avatar_url]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -58,10 +63,11 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
                 type="button"
               >
                 <span className="header__profile-avatar">
-                  {authUser.avatar_url ? (
+                  {authUser.avatar_url && !avatarFailed ? (
                     <img
                       alt=""
                       className="header__profile-avatar-img"
+                      onError={() => setAvatarFailed(true)}
                       src={getAvatarUrl(authUser.avatar_url)}
                     />
                   ) : (
