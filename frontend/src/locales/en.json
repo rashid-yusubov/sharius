@@ -40,7 +40,7 @@
   },
   "auth": {
     "login_tab": "Log In",
-    "register_tab": "Sign In",
+    "register_tab": "Sign Up",
     "welcome_back": "Welcome Back",
     "create_access": "Create Access",
     "login_subtitle": "Log in to continue exchanging notes, links, and files across devices.",

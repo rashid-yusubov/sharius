@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseIcon } from './icons.jsx';
 import './AuthModal.css';
@@ -98,7 +98,7 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
             role="tab"
             type="button"
           >
-            Log In
+            {t('auth.login_tab', { defaultValue: 'Log In' })}
           </button>
           <button
             aria-selected={mode === 'register'}
@@ -107,7 +107,7 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
             role="tab"
             type="button"
           >
-            Sign In
+            {t('auth.register_tab', { defaultValue: 'Sign Up' })}
           </button>
         </div>
 
@@ -173,24 +173,24 @@ function AuthModal({ initialMode = 'login', isOpen, onClose, onLogin, onRegister
           <div className="auth-modal__switch">
             {mode === 'login' ? (
               <span>
-                {t('auth.need_account')} {' '}
+                {t('auth.need_account')}{' '}
                 <button
                   className="auth-modal__switch-button"
                   onClick={() => handleTabSwitch('register')}
                   type="button"
                 >
-                  Sign In
+                  {t('auth.register_tab', { defaultValue: 'Sign Up' })}
                 </button>
               </span>
             ) : (
               <span>
-                {t('auth.already_have_account')} {' '}
+                {t('auth.already_have_account')}{' '}
                 <button
                   className="auth-modal__switch-button"
                   onClick={() => handleTabSwitch('login')}
                   type="button"
                 >
-                  Log In
+                  {t('auth.login_tab', { defaultValue: 'Log In' })}
                 </button>
               </span>
             )}
