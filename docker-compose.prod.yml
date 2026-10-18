@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sharius_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sharius}
+      POSTGRES_USER: ${POSTGRES_USER:-sharius_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sharius_user} -d ${POSTGRES_DB:-sharius}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - sharius_network
+
+  backend:
+    image: ghcr.io/rashid-yusubov/sharius-backend:latest
+    container_name: sharius_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-sharius_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-sharius}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      SESSION_TTL_MINUTES: ${SESSION_TTL_MINUTES:-15}
+      STORAGE_DIR: /app/storage
+    volumes:
+      - backend_storage:/app/storage
+    networks:
+      - sharius_network
+
+  frontend:
+    image: ghcr.io/rashid-yusubov/sharius-frontend:latest
+    container_name: sharius_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    networks:
+      - sharius_network
+
+volumes:
+  postgres_data:
+  backend_storage:
+
+networks:
+  sharius_network:
+    name: sharius_network
+

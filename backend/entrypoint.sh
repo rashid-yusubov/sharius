@@ -85,4 +85,11 @@ except Exception as e:
 EOF
 
 echo "Starting Sharius Backend API..."
-exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --reload
+if [ "$ENVIRONMENT" = "production" ] || [ "$ENV" = "production" ]; then
+    echo "Running in production mode (no reload)..."
+    exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+else
+    echo "Running in development mode (with reload)..."
+    exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --reload
+fi
+

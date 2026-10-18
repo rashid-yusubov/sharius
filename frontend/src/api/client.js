@@ -8,7 +8,10 @@ export const resolveApiBaseUrl = () => {
   const currentHostname = window.location.hostname;
   const currentProtocol = window.location.protocol;
 
-  if (envUrl) {
+  if (envUrl !== undefined && envUrl !== null) {
+    if (envUrl === '') {
+      return '';
+    }
     try {
       const url = new URL(envUrl);
       // If configured for localhost/127.0.0.1, but opened from another device on LAN (e.g. phone via 192.168.x.x):
@@ -25,6 +28,17 @@ export const resolveApiBaseUrl = () => {
     } catch {
       // ignore URL parsing error
     }
+  }
+
+  // In production (Vite build) or when accessed via standard web ports (80/443),
+  // API requests should be relative to the current origin (handled by Nginx reverse proxy)
+  if (
+    import.meta.env.PROD ||
+    window.location.port === '' ||
+    window.location.port === '80' ||
+    window.location.port === '443'
+  ) {
+    return '';
   }
 
   return `${currentProtocol}//${currentHostname || 'localhost'}:8000`;
