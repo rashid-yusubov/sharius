@@ -122,24 +122,58 @@
 .friends-page__identity {
   min-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 12px;
 }
 
-.friends-page__identity span,
-.friends-page__identity strong {
+.friends-page__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--color-secondary-text);
+}
+
+.friends-page__avatar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.friends-page__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.friends-page__identity-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.friends-page__identity-text span,
+.friends-page__identity-text strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.friends-page__identity span {
+.friends-page__identity-text span {
   color: var(--color-accent);
   font-size: 16px;
   font-weight: 800;
 }
 
-.friends-page__identity strong {
+.friends-page__identity-text strong {
   color: var(--color-secondary-text);
   font-size: 13px;
 }

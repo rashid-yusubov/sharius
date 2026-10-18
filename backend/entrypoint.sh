@@ -82,6 +82,14 @@ except Exception as e:
     print(f"Notice: {e}. Fallback to Base.metadata.create_all...")
     Base.metadata.create_all(engine)
     print("✓ Tables created successfully!")
+
+# Ensure new columns exist even if running against older non-migrated DBs
+try:
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500);"))
+except Exception as col_err:
+    print(f"Notice avatar_url check: {col_err}")
 EOF
 
 echo "Starting Sharius Backend API..."

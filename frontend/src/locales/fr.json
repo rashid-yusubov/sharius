@@ -84,7 +84,20 @@
     "passwords_do_not_match": "Les mots de passe ne correspondent pas.",
     "new_password_same_as_current": "Le nouveau mot de passe doit être différent du mot de passe actuel.",
     "invalid_current_password": "Mot de passe actuel incorrect.",
-    "change_password_failed": "Échec du changement de mot de passe."
+    "change_password_failed": "Échec du changement de mot de passe.",
+    "change_avatar": "Changer la photo de profil",
+    "change_avatar_btn": "Modifier",
+    "upload_avatar_btn": "Téléverser",
+    "change_photo_short": "Modifier",
+    "remove_avatar_title": "Supprimer la photo de profil",
+    "remove_avatar_btn": "Supprimer",
+    "avatar_size_hint": "PNG, JPG, WEBP ou GIF jusqu'à 5 Mo",
+    "avatar_invalid_type": "Seuls les fichiers image (JPEG, PNG, WEBP, GIF) sont autorisés.",
+    "avatar_too_large": "La taille du fichier ne doit pas dépasser 5 Mo.",
+    "avatar_upload_failed": "Échec du téléversement de la photo de profil.",
+    "avatar_remove_failed": "Échec de la suppression de la photo de profil.",
+    "avatar_updated": "Photo de profil mise à jour avec succès !",
+    "avatar_removed": "Photo de profil supprimée."
   },
   "friends": {
     "request_sent": "Demande d'ami envoyée à {{name}}",

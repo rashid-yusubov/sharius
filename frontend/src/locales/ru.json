@@ -84,7 +84,20 @@
     "passwords_do_not_match": "Пароли не совпадают.",
     "new_password_same_as_current": "Новый пароль должен отличаться от текущего.",
     "invalid_current_password": "Неверный текущий пароль.",
-    "change_password_failed": "Не удалось сменить пароль."
+    "change_password_failed": "Не удалось сменить пароль.",
+    "change_avatar": "Сменить аватарку",
+    "change_avatar_btn": "Сменить",
+    "upload_avatar_btn": "Загрузить",
+    "change_photo_short": "Изменить",
+    "remove_avatar_title": "Удалить аватарку",
+    "remove_avatar_btn": "Удалить",
+    "avatar_size_hint": "PNG, JPG, WEBP или GIF до 5 МБ",
+    "avatar_invalid_type": "Поддерживаются только изображения (JPEG, PNG, WEBP, GIF).",
+    "avatar_too_large": "Размер файла не должен превышать 5 МБ.",
+    "avatar_upload_failed": "Не удалось загрузить аватарку.",
+    "avatar_remove_failed": "Не удалось удалить аватарку.",
+    "avatar_updated": "Аватарка успешно обновлена!",
+    "avatar_removed": "Аватарка удалена."
   },
   "friends": {
     "request_sent": "Запрос отправлен {{name}}",

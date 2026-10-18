@@ -20,7 +20,15 @@ class ContactService:
             .limit(20)
             .all()
         )
-        return [{"id": user.id, "login": user.login, "display_name": user.display_name} for user in users]
+        return [
+            {
+                "id": user.id,
+                "login": user.login,
+                "display_name": user.display_name,
+                "avatar_url": user.avatar_url,
+            }
+            for user in users
+        ]
 
     def create_contact_request(self, from_user_id: str, to_user_id: str) -> dict:
         if from_user_id == to_user_id:
@@ -78,6 +86,7 @@ class ContactService:
                     "id": user.id,
                     "login": user.login,
                     "display_name": user.display_name,
+                    "avatar_url": user.avatar_url,
                 },
                 "status": req.status.value,
                 "created_at": req.created_at,
@@ -118,6 +127,7 @@ class ContactService:
                 "id": user.id,
                 "login": user.login,
                 "display_name": user.display_name,
+                "avatar_url": user.avatar_url,
             }
             for _, user in contacts
         ]

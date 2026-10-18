@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { changePassword, getCurrentUser, login, register, updateProfile } from './api/auth.js';
+import {
+  changePassword,
+  deleteAvatar,
+  getCurrentUser,
+  login,
+  register,
+  updateProfile,
+  uploadAvatar,
+} from './api/auth.js';
 import {
   createSession,
   createSessionForContact,
@@ -50,6 +58,8 @@ const getErrorMessage = (error) => {
     TOKEN_INVALID: 'Your session is no longer valid. Please log in again.',
     UNAUTHORIZED: 'Please log in to continue.',
     USER_NOT_FOUND: 'User not found.',
+    AVATAR_TOO_LARGE: 'Avatar image must not exceed 5 MB.',
+    INVALID_IMAGE_TYPE: 'Only image files (JPEG, PNG, WEBP, GIF) are allowed for avatars.',
   };
 
   return messages[error?.code] || messages[error?.message] || 'Request failed. Please try again.';
@@ -449,6 +459,29 @@ function App() {
     notify(t('profile.password_changed_success', { defaultValue: 'Password changed successfully!' }));
   };
 
+  const handleAvatarUpload = async (file) => {
+    if (!auth?.token) {
+      notify(t('auth.login_required', { defaultValue: 'Please log in to continue.' }), 'warning');
+      handleOpenAuth('login');
+      return null;
+    }
+
+    const updatedUser = await uploadAvatar({ file, token: auth.token });
+    setAuth((current) => (current ? { ...current, user: updatedUser } : current));
+    notify(t('profile.avatar_updated', { defaultValue: 'Аватарка успешно обновлена!' }));
+    return updatedUser;
+  };
+
+  const handleAvatarDelete = async () => {
+    if (!auth?.token) return null;
+
+    const updatedUser = await deleteAvatar({ token: auth.token });
+    setAuth((current) => (current ? { ...current, user: updatedUser } : current));
+    notify(t('profile.avatar_removed', { defaultValue: 'Аватарка удалена.' }));
+    return updatedUser;
+  };
+
+
 
   const handleLogin = async (credentials) => {
     try {
@@ -840,6 +873,8 @@ function App() {
             element={
               auth?.token ? (
                 <ProfilePage
+                  onAvatarDelete={handleAvatarDelete}
+                  onAvatarUpload={handleAvatarUpload}
                   onChangePassword={handleChangePassword}
                   onError={handleApiError}
                   onLogout={handleLogout}

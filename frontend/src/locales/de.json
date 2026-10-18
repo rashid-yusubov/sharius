@@ -84,7 +84,20 @@
     "passwords_do_not_match": "Passwörter stimmen nicht überein.",
     "new_password_same_as_current": "Das neue Passwort muss sich vom aktuellen Passwort unterscheiden.",
     "invalid_current_password": "Aktuelles Passwort ist falsch.",
-    "change_password_failed": "Passwort konnte nicht geändert werden."
+    "change_password_failed": "Passwort konnte nicht geändert werden.",
+    "change_avatar": "Profilbild ändern",
+    "change_avatar_btn": "Ändern",
+    "upload_avatar_btn": "Hochladen",
+    "change_photo_short": "Ändern",
+    "remove_avatar_title": "Profilbild entfernen",
+    "remove_avatar_btn": "Entfernen",
+    "avatar_size_hint": "PNG, JPG, WEBP oder GIF bis zu 5 MB",
+    "avatar_invalid_type": "Nur Bilddateien (JPEG, PNG, WEBP, GIF) sind erlaubt.",
+    "avatar_too_large": "Dateigröße darf 5 MB nicht überschreiten.",
+    "avatar_upload_failed": "Profilbild konnte nicht hochgeladen werden.",
+    "avatar_remove_failed": "Profilbild konnte nicht entfernt werden.",
+    "avatar_updated": "Profilbild erfolgreich aktualisiert!",
+    "avatar_removed": "Profilbild entfernt."
   },
   "friends": {
     "request_sent": "Freundschaftsanfrage an {{name}} gesendet",

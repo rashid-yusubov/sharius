@@ -84,7 +84,20 @@
     "passwords_do_not_match": "Şifreler eşleşmiyor.",
     "new_password_same_as_current": "Yeni şifre mevcut şifreden farklı olmalıdır.",
     "invalid_current_password": "Mevcut şifre hatalı.",
-    "change_password_failed": "Şifre değiştirilemedi."
+    "change_password_failed": "Şifre değiştirilemedi.",
+    "change_avatar": "Profil fotoğrafını değiştir",
+    "change_avatar_btn": "Değiştir",
+    "upload_avatar_btn": "Yükle",
+    "change_photo_short": "Değiştir",
+    "remove_avatar_title": "Profil fotoğrafını kaldır",
+    "remove_avatar_btn": "Kaldır",
+    "avatar_size_hint": "PNG, JPG, WEBP veya GIF en fazla 5 MB",
+    "avatar_invalid_type": "Yalnızca resim dosyalarına (JPEG, PNG, WEBP, GIF) izin verilir.",
+    "avatar_too_large": "Dosya boyutu 5 MB'ı geçemez.",
+    "avatar_upload_failed": "Profil fotoğrafı yüklenemedi.",
+    "avatar_remove_failed": "Profil fotoğrafı kaldırılamadı.",
+    "avatar_updated": "Profil fotoğrafı başarıyla güncellendi!",
+    "avatar_removed": "Profil fotoğrafı kaldırıldı."
   },
   "friends": {
     "request_sent": "{{name}} kullanıcısına arkadaşlık isteği gönderildi",

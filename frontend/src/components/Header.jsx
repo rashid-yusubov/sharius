@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { getAvatarUrl } from '../api/client.js';
 import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import LanguageSwitcher from './LanguageSwitcher.jsx';
@@ -57,7 +58,15 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
                 type="button"
               >
                 <span className="header__profile-avatar">
-                  <UserIcon />
+                  {authUser.avatar_url ? (
+                    <img
+                      alt=""
+                      className="header__profile-avatar-img"
+                      src={getAvatarUrl(authUser.avatar_url)}
+                    />
+                  ) : (
+                    <UserIcon />
+                  )}
                 </span>
                 <span className="header__profile-name">{authUser.display_name || authUser.login}</span>
                 <span className={`header__profile-chevron ${isMenuOpen ? 'is-open' : ''}`}>

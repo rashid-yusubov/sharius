@@ -84,7 +84,20 @@
     "passwords_do_not_match": "密码不匹配。",
     "new_password_same_as_current": "新密码必须与当前密码不同。",
     "invalid_current_password": "当前密码错误。",
-    "change_password_failed": "修改密码失败。"
+    "change_password_failed": "修改密码失败。",
+    "change_avatar": "更换头像",
+    "change_avatar_btn": "更换",
+    "upload_avatar_btn": "上传",
+    "change_photo_short": "修改",
+    "remove_avatar_title": "删除头像",
+    "remove_avatar_btn": "删除",
+    "avatar_size_hint": "支持 PNG、JPG、WEBP 或 GIF，最大 5 MB",
+    "avatar_invalid_type": "仅支持图片文件（JPEG、PNG、WEBP、GIF）。",
+    "avatar_too_large": "文件大小不能超过 5 MB。",
+    "avatar_upload_failed": "头像上传失败。",
+    "avatar_remove_failed": "删除头像失败。",
+    "avatar_updated": "头像已成功更新！",
+    "avatar_removed": "头像已删除。"
   },
   "friends": {
     "request_sent": "已向 {{name}} 发送好友请求",

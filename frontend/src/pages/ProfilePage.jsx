@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAvatarUrl } from '../api/client.js';
+import { CameraIcon, TrashIcon, UserIcon } from '../components/icons.jsx';
 import FriendsPage from './FriendsPage.jsx';
 import './ProfilePage.css';
 
 function ProfilePage({
+  onAvatarDelete,
+  onAvatarUpload,
   onChangePassword,
   onError,
   onLogout,
@@ -14,9 +18,16 @@ function ProfilePage({
   user,
 }) {
   const { t } = useTranslation();
+  const fileInputRef = useRef(null);
   const [displayName, setDisplayName] = useState(user.display_name);
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  // Avatar states
+  const [isAvatarLoading, setIsAvatarLoading] = useState(false);
+  const [avatarError, setAvatarError] = useState('');
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [imgFailed, setImgFailed] = useState(false);
 
   // Change password states
   const [currentPassword, setCurrentPassword] = useState('');
@@ -29,6 +40,112 @@ function ProfilePage({
   useEffect(() => {
     setDisplayName(user.display_name);
   }, [user.display_name]);
+
+  useEffect(() => {
+    setImgFailed(false);
+    setAvatarError('');
+  }, [user.avatar_url]);
+
+  const handleAvatarFile = async (file) => {
+    if (!file) return;
+    setAvatarError('');
+
+    if (!file.type.startsWith('image/')) {
+      setAvatarError(
+        t('profile.avatar_invalid_type', {
+          defaultValue: 'Поддерживаются только изображения (JPEG, PNG, WEBP, GIF).',
+        })
+      );
+      return;
+    }
+
+    const MAX_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setAvatarError(
+        t('profile.avatar_too_large', {
+          defaultValue: 'Размер файла не должен превышать 5 МБ.',
+        })
+      );
+      return;
+    }
+
+    setIsAvatarLoading(true);
+    try {
+      if (onAvatarUpload) {
+        await onAvatarUpload(file);
+      }
+      setImgFailed(false);
+    } catch (err) {
+      setAvatarError(
+        err?.message ||
+          t('profile.avatar_upload_failed', {
+            defaultValue: 'Не удалось загрузить аватарку.',
+          })
+      );
+      onError?.(err);
+    } finally {
+      setIsAvatarLoading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleAvatarClick = () => {
+    if (fileInputRef.current && !isAvatarLoading) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleAvatarFile(file);
+    }
+  };
+
+  const handleAvatarRemove = async () => {
+    setAvatarError('');
+    setIsAvatarLoading(true);
+    try {
+      if (onAvatarDelete) {
+        await onAvatarDelete();
+      }
+      setImgFailed(false);
+    } catch (err) {
+      setAvatarError(
+        err?.message ||
+          t('profile.avatar_remove_failed', {
+            defaultValue: 'Не удалось удалить аватарку.',
+          })
+      );
+      onError?.(err);
+    } finally {
+      setIsAvatarLoading(false);
+    }
+  };
+
+  const handleAvatarDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleAvatarDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleAvatarDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleAvatarFile(files[0]);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -101,13 +218,97 @@ function ProfilePage({
     }
   };
 
+  const avatarSrc = getAvatarUrl(user.avatar_url);
+
   return (
     <div className="profile-page">
       <section className="profile-page__summary glass-panel">
-        <div className="profile-page__identity">
-          <p>{t('profile.title')}</p>
-          <h1>{user.display_name}</h1>
-          <span>@{user.login}</span>
+        <div className="profile-page__summary-main">
+          <div className="profile-page__avatar-box">
+            <div
+              aria-label={t('profile.change_avatar', { defaultValue: 'Сменить аватарку' })}
+              className={`profile-page__avatar-wrapper ${isAvatarLoading ? 'is-loading' : ''} ${isDragOver ? 'is-drag-over' : ''}`}
+              onClick={handleAvatarClick}
+              onDragLeave={handleAvatarDragLeave}
+              onDragOver={handleAvatarDragOver}
+              onDrop={handleAvatarDrop}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleAvatarClick();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              title={t('profile.change_avatar', { defaultValue: 'Сменить аватарку' })}
+            >
+              {avatarSrc && !imgFailed ? (
+                <img
+                  alt={user.display_name}
+                  className="profile-page__avatar-img"
+                  onError={() => setImgFailed(true)}
+                  src={avatarSrc}
+                />
+              ) : (
+                <div className="profile-page__avatar-placeholder">
+                  <UserIcon />
+                </div>
+              )}
+              <div className="profile-page__avatar-overlay">
+                <CameraIcon />
+                <span>{t('profile.change_photo_short', { defaultValue: 'Изменить' })}</span>
+              </div>
+              {isAvatarLoading && (
+                <div className="profile-page__avatar-spinner-overlay">
+                  <span className="profile-page__avatar-spinner" />
+                </div>
+              )}
+            </div>
+
+            <input
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              onChange={handleFileInputChange}
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              type="file"
+            />
+
+            <div className="profile-page__avatar-actions">
+              <button
+                className="profile-page__avatar-btn"
+                disabled={isAvatarLoading}
+                onClick={handleAvatarClick}
+                type="button"
+              >
+                {user.avatar_url
+                  ? t('profile.change_avatar_btn', { defaultValue: 'Сменить' })
+                  : t('profile.upload_avatar_btn', { defaultValue: 'Загрузить' })}
+              </button>
+              {user.avatar_url && (
+                <button
+                  className="profile-page__avatar-btn profile-page__avatar-btn--delete"
+                  disabled={isAvatarLoading}
+                  onClick={handleAvatarRemove}
+                  title={t('profile.remove_avatar_title', { defaultValue: 'Удалить аватарку' })}
+                  type="button"
+                >
+                  <TrashIcon />
+                  <span>{t('profile.remove_avatar_btn', { defaultValue: 'Удалить' })}</span>
+                </button>
+              )}
+            </div>
+
+            <span className="profile-page__avatar-hint">
+              {t('profile.avatar_size_hint', { defaultValue: 'PNG, JPG, WEBP или GIF до 5 МБ' })}
+            </span>
+            {avatarError && <p className="profile-page__error profile-page__avatar-error">{avatarError}</p>}
+          </div>
+
+          <div className="profile-page__identity">
+            <p>{t('profile.title')}</p>
+            <h1>{user.display_name}</h1>
+            <span>@{user.login}</span>
+          </div>
         </div>
 
         <form className="profile-page__form" onSubmit={handleSubmit}>

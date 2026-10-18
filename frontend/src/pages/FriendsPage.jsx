@@ -1,5 +1,7 @@
-﻿import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAvatarUrl } from '../api/client.js';
+import { UserIcon } from '../components/icons.jsx';
 import {
   acceptContactRequest,
   createContactRequest,
@@ -18,10 +20,20 @@ function EmptyState({ children }) {
 }
 
 function UserIdentity({ user }) {
+  const avatarSrc = getAvatarUrl(user.avatar_url);
   return (
     <div className="friends-page__identity">
-      <span>{user.display_name}</span>
-      <strong>@{user.login}</strong>
+      <div className="friends-page__avatar">
+        {avatarSrc ? (
+          <img alt="" className="friends-page__avatar-img" src={avatarSrc} />
+        ) : (
+          <UserIcon />
+        )}
+      </div>
+      <div className="friends-page__identity-text">
+        <span>{user.display_name}</span>
+        <strong>@{user.login}</strong>
+      </div>
     </div>
   );
 }

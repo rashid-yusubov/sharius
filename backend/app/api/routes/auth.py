@@ -1,6 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import mimetypes
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.database.db import get_db
 from app.schemas.auth import (
     AuthResponse,
@@ -49,6 +52,7 @@ def me(current_user=Depends(get_current_user)):
             "id": current_user.id,
             "login": current_user.login,
             "display_name": current_user.display_name,
+            "avatar_url": current_user.avatar_url,
             "created_at": current_user.created_at,
             "updated_at": current_user.updated_at,
         }
@@ -68,9 +72,81 @@ def update_profile(
             "id": user.id,
             "login": user.login,
             "display_name": user.display_name,
+            "avatar_url": user.avatar_url,
             "created_at": user.created_at,
             "updated_at": user.updated_at,
         }
+    )
+
+
+@profile_router.post("/avatar", response_model=ProfileResponse)
+def upload_avatar(
+    file: UploadFile = File(...),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    service = AuthService(db)
+    try:
+        user = service.save_avatar(current_user, file)
+    except ValueError as exc:
+        code = str(exc)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response(code)) from exc
+    return success_response(
+        {
+            "id": user.id,
+            "login": user.login,
+            "display_name": user.display_name,
+            "avatar_url": user.avatar_url,
+            "created_at": user.created_at,
+            "updated_at": user.updated_at,
+        }
+    )
+
+
+@profile_router.delete("/avatar", response_model=ProfileResponse)
+def delete_avatar(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    service = AuthService(db)
+    user = service.delete_avatar(current_user)
+    return success_response(
+        {
+            "id": user.id,
+            "login": user.login,
+            "display_name": user.display_name,
+            "avatar_url": user.avatar_url,
+            "created_at": user.created_at,
+            "updated_at": user.updated_at,
+        }
+    )
+
+
+@profile_router.get("/avatar/{filename}")
+def get_avatar(filename: str):
+    if not filename or "/" in filename or "\\" in filename or ".." in filename:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response("INVALID_FILENAME"))
+
+    avatars_dir = (settings.storage_dir / "avatars").resolve()
+    file_path = (avatars_dir / filename).resolve()
+
+    try:
+        file_path.relative_to(avatars_dir)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=error_response("FORBIDDEN"))
+
+    if not file_path.exists() or not file_path.is_file():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("FILE_NOT_FOUND"))
+
+    media_type, _ = mimetypes.guess_type(str(file_path))
+    if not media_type:
+        media_type = "application/octet-stream"
+
+    return FileResponse(
+        path=str(file_path),
+        media_type=media_type,
+        content_disposition_type="inline",
+        headers={"Cache-Control": "public, max-age=86400"},
     )
 
 

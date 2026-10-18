@@ -97,3 +97,16 @@ export async function request(path, options = {}) {
 }
 
 export const getApiUrl = (path) => `${resolveApiBaseUrl()}${path}`;
+
+export const getAvatarUrl = (path) => {
+  if (!path) return null;
+  if (
+    path.startsWith('http://') ||
+    path.startsWith('https://') ||
+    path.startsWith('blob:') ||
+    path.startsWith('data:')
+  ) {
+    return path;
+  }
+  return getApiUrl(path.startsWith('/') ? path : `/${path}`);
+};

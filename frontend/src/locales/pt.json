@@ -84,7 +84,20 @@
     "passwords_do_not_match": "As senhas não coincidem.",
     "new_password_same_as_current": "A nova senha deve ser diferente da senha atual.",
     "invalid_current_password": "Senha atual incorreta.",
-    "change_password_failed": "Falha ao alterar a senha."
+    "change_password_failed": "Falha ao alterar a senha.",
+    "change_avatar": "Alterar foto de perfil",
+    "change_avatar_btn": "Alterar",
+    "upload_avatar_btn": "Carregar",
+    "change_photo_short": "Alterar",
+    "remove_avatar_title": "Remover foto de perfil",
+    "remove_avatar_btn": "Remover",
+    "avatar_size_hint": "PNG, JPG, WEBP ou GIF até 5 MB",
+    "avatar_invalid_type": "Apenas arquivos de imagem (JPEG, PNG, WEBP, GIF) são permitidos.",
+    "avatar_too_large": "O tamanho do arquivo não deve exceder 5 MB.",
+    "avatar_upload_failed": "Falha ao carregar a foto de perfil.",
+    "avatar_remove_failed": "Falha ao remover a foto de perfil.",
+    "avatar_updated": "Foto de perfil atualizada com sucesso!",
+    "avatar_removed": "Foto de perfil removida."
   },
   "friends": {
     "request_sent": "Pedido de amizade enviado para {{name}}",

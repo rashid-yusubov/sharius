@@ -11,6 +11,7 @@ class UserSearchItem(BaseModel):
     id: str
     login: str
     display_name: str
+    avatar_url: str | None = None
 
 
 class UserSearchResponse(BaseModel):
@@ -44,6 +45,7 @@ class ContactItem(BaseModel):
     id: str
     login: str
     display_name: str
+    avatar_url: str | None = None
 
 
 class ContactListResponse(BaseModel):

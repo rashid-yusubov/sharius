@@ -27,6 +27,7 @@ class UserItem(BaseModel):
     id: str
     login: str
     display_name: str
+    avatar_url: str | None = None
     created_at: datetime
     updated_at: datetime
 

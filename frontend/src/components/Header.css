@@ -140,12 +140,21 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
   color: var(--color-accent);
 }
 
 .header__profile-avatar svg {
   width: 16px;
   height: 16px;
+}
+
+.header__profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .header__profile-name {

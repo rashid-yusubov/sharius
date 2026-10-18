@@ -109,6 +109,51 @@
 Требует:
 - `Authorization: Bearer <token>`
 
+#### `POST /profile/avatar`
+
+Загружает и устанавливает новую аватарку пользователя.
+
+Формат:
+- `multipart/form-data`
+- Поле `file`: изображение (JPEG, PNG, WEBP, GIF), размер до 5 МБ.
+
+Требует:
+- `Authorization: Bearer <token>`
+
+Ошибки:
+- `400 INVALID_IMAGE_TYPE`
+- `400 AVATAR_TOO_LARGE`
+
+#### `DELETE /profile/avatar`
+
+Удаляет текущую аватарку пользователя и очищает файл на сервере.
+
+Требует:
+- `Authorization: Bearer <token>`
+
+#### `GET /profile/avatar/{filename}`
+
+Публичный просмотр/скачивание файла аватарки.
+
+Заголовки:
+- `Cache-Control: public, max-age=86400`
+- `Content-Disposition: inline`
+
+#### `POST /profile/change-password`
+
+Смена пароля текущего пользователя.
+
+Тело:
+- `current_password`: текущий пароль
+- `new_password`: новый пароль (мин. 6 символов)
+
+Требует:
+- `Authorization: Bearer <token>`
+
+Ошибки:
+- `400 INVALID_CURRENT_PASSWORD`
+- `400 SAME_PASSWORD`
+
 ### Users
 
 #### `GET /users/search?query=...`

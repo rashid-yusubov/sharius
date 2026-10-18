@@ -1,11 +1,14 @@
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+import uuid
 
 import bcrypt
+from fastapi import UploadFile
 import jwt
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.models.models import User
+from app.models.models import User, utcnow
 
 
 class AuthService:
@@ -49,10 +52,76 @@ class AuthService:
 
     def update_profile(self, user: User, display_name: str) -> User:
         user.display_name = display_name.strip()
+        user.updated_at = utcnow()
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
         return user
+
+    def save_avatar(self, user: User, upload_file: UploadFile) -> User:
+        filename = (upload_file.filename or "avatar").lower()
+        extension = filename.rsplit(".", 1)[-1] if "." in filename else ""
+        allowed_extensions = {"jpg", "jpeg", "png", "webp", "gif"}
+
+        content_type = (upload_file.content_type or "").lower()
+        if not (content_type.startswith("image/") or extension in allowed_extensions):
+            raise ValueError("INVALID_IMAGE_TYPE")
+
+        if extension not in allowed_extensions:
+            mime_map = {
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp",
+                "image/gif": "gif",
+            }
+            extension = mime_map.get(content_type)
+            if not extension:
+                raise ValueError("INVALID_IMAGE_TYPE")
+
+        content = upload_file.file.read()
+        max_avatar_size = 5 * 1024 * 1024  # 5 MB
+        if len(content) > max_avatar_size:
+            raise ValueError("AVATAR_TOO_LARGE")
+
+        avatars_dir = settings.storage_dir / "avatars"
+        avatars_dir.mkdir(parents=True, exist_ok=True)
+
+        if user.avatar_url:
+            self._delete_avatar_file(user.avatar_url)
+
+        new_filename = f"{user.id}_{uuid.uuid4().hex[:8]}.{extension}"
+        storage_path = avatars_dir / new_filename
+        storage_path.write_bytes(content)
+
+        user.avatar_url = f"/profile/avatar/{new_filename}"
+        user.updated_at = utcnow()
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
+
+    def delete_avatar(self, user: User) -> User:
+        if user.avatar_url:
+            self._delete_avatar_file(user.avatar_url)
+            user.avatar_url = None
+            user.updated_at = utcnow()
+            self.db.add(user)
+            self.db.commit()
+            self.db.refresh(user)
+        return user
+
+    def _delete_avatar_file(self, avatar_url: str) -> None:
+        if not avatar_url or not avatar_url.startswith("/profile/avatar/"):
+            return
+        filename = avatar_url.replace("/profile/avatar/", "").strip()
+        if not filename or "/" in filename or "\\" in filename or ".." in filename:
+            return
+        target = settings.storage_dir / "avatars" / filename
+        try:
+            if target.exists() and target.is_file():
+                target.unlink()
+        except OSError:
+            pass
 
     def change_password(self, user: User, current_password: str, new_password: str) -> dict:
         if not self._verify_password(current_password, user.password_hash):

@@ -52,3 +52,21 @@ export function changePassword({ current_password, new_password, token }) {
   });
 }
 
+export function uploadAvatar({ file, token }) {
+  const formData = new FormData();
+  formData.append('file', file);
+  return request('/profile/avatar', {
+    method: 'POST',
+    headers: buildHeaders({ token }),
+    body: formData,
+  });
+}
+
+export function deleteAvatar({ token }) {
+  return request('/profile/avatar', {
+    method: 'DELETE',
+    headers: buildHeaders({ token }),
+  });
+}
+
+
