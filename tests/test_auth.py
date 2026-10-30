@@ -1,3 +1,13 @@
+def _get_error_code(response) -> str | None:
+    data = response.json()
+    if isinstance(data, dict):
+        if "detail" in data and isinstance(data["detail"], dict):
+            return data["detail"].get("error", {}).get("code")
+        if "error" in data and isinstance(data["error"], dict):
+            return data["error"].get("code")
+    return None
+
+
 def test_register_and_login_success(client):
     # Register
     reg_res = client.post(
@@ -33,7 +43,7 @@ def test_register_duplicate_login_fails(client):
         json={"login": "alice", "password": "otherpassword", "display_name": "Alice Two"},
     )
     assert res.status_code == 400
-    assert res.json()["error"]["code"] == "LOGIN_ALREADY_EXISTS"
+    assert _get_error_code(res) == "LOGIN_ALREADY_EXISTS"
 
 
 def test_login_invalid_credentials(client):
@@ -46,7 +56,7 @@ def test_login_invalid_credentials(client):
         json={"login": "bob", "password": "wrongpassword"},
     )
     assert res.status_code == 401
-    assert res.json()["error"]["code"] == "INVALID_CREDENTIALS"
+    assert _get_error_code(res) == "INVALID_CREDENTIALS"
 
 
 def test_get_me_profile(client):
@@ -96,7 +106,7 @@ def test_change_password(client):
         json={"current_password": "wrongpassword", "new_password": "newpassword123"},
     )
     assert fail_res.status_code == 400
-    assert fail_res.json()["error"]["code"] == "INVALID_CURRENT_PASSWORD"
+    assert _get_error_code(fail_res) == "INVALID_CURRENT_PASSWORD"
 
     # Success change password
     ok_res = client.post(
