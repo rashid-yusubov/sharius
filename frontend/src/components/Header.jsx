@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getAvatarUrl } from '../api/client.js';
 import Logo from './Logo.jsx';
@@ -8,9 +8,16 @@ import LanguageSwitcher from './LanguageSwitcher.jsx';
 import { ChevronDownIcon, LogoutIcon, SettingsIcon, UserIcon, UsersIcon } from './icons.jsx';
 import './Header.css';
 
-function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
+function Header({
+  authUser,
+  onLogout,
+  onOpenAuth,
+  onOpenFriends,
+  onOpenSettings,
+  onThemeToggle,
+  theme,
+}) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [avatarFailed, setAvatarFailed] = useState(false);
   const menuRef = useRef(null);
@@ -33,12 +40,12 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
 
   const handleFriendsClick = () => {
     setIsMenuOpen(false);
-    navigate('/friends');
+    onOpenFriends?.();
   };
 
   const handleSettingsClick = () => {
     setIsMenuOpen(false);
-    navigate('/profile');
+    onOpenSettings?.();
   };
 
   const handleLogoutClick = () => {

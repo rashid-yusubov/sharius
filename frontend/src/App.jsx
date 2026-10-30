@@ -24,9 +24,8 @@ import AuthModal from './components/AuthModal.jsx';
 import FilePreviewModal from './components/FilePreviewModal.jsx';
 import Header from './components/Header.jsx';
 import ToastHost from './components/ToastHost.jsx';
-import FriendsPage from './pages/FriendsPage.jsx';
+import UserSettingsModal from './components/UserSettingsModal.jsx';
 import HomePage from './pages/HomePage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
 import './styles/app.css';
 
 const createAccessCode = () => {
@@ -100,6 +99,7 @@ function App() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isDeleteSessionConfirming, setIsDeleteSessionConfirming] = useState(false);
   const [authModalState, setAuthModalState] = useState({ isOpen: false, mode: 'login' });
+  const [userModalState, setUserModalState] = useState({ isOpen: false, tab: 'settings' });
   const [previewState, setPreviewState] = useState({ isOpen: false, fileIndex: 0 });
   const [timerTick, setTimerTick] = useState(0);
   const fileInputRef = useRef(null);
@@ -120,6 +120,26 @@ function App() {
 
   const handleCloseAuth = useCallback(() => {
     setAuthModalState((current) => ({ ...current, isOpen: false }));
+  }, []);
+
+  const handleOpenSettings = useCallback(() => {
+    if (!auth?.token) {
+      handleOpenAuth('login');
+      return;
+    }
+    setUserModalState({ isOpen: true, tab: 'settings' });
+  }, [auth?.token, handleOpenAuth]);
+
+  const handleOpenFriends = useCallback(() => {
+    if (!auth?.token) {
+      handleOpenAuth('login');
+      return;
+    }
+    setUserModalState({ isOpen: true, tab: 'friends' });
+  }, [auth?.token, handleOpenAuth]);
+
+  const handleCloseUserModal = useCallback(() => {
+    setUserModalState((current) => ({ ...current, isOpen: false }));
   }, []);
 
   const handlePreviewFile = useCallback((file, index) => {
@@ -156,8 +176,22 @@ function App() {
     } else if (location.pathname === '/sign-in') {
       handleOpenAuth('register');
       navigate('/', { replace: true });
+    } else if (location.pathname === '/friends') {
+      if (auth?.token) {
+        setUserModalState({ isOpen: true, tab: 'friends' });
+      } else {
+        handleOpenAuth('login');
+      }
+      navigate('/', { replace: true });
+    } else if (location.pathname === '/profile') {
+      if (auth?.token) {
+        setUserModalState({ isOpen: true, tab: 'settings' });
+      } else {
+        handleOpenAuth('login');
+      }
+      navigate('/', { replace: true });
     }
-  }, [location.pathname, navigate, handleOpenAuth]);
+  }, [location.pathname, navigate, handleOpenAuth, auth?.token]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -427,7 +461,9 @@ function App() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
     setAuth(null);
+    setUserModalState({ isOpen: false, tab: 'settings' });
     notify(t('app.logged_out', { defaultValue: 'Logged out' }));
   };
 
@@ -844,6 +880,8 @@ function App() {
           authUser={auth?.user || null}
           onLogout={handleLogout}
           onOpenAuth={handleOpenAuth}
+          onOpenFriends={handleOpenFriends}
+          onOpenSettings={handleOpenSettings}
           onThemeToggle={handleThemeToggle}
           theme={theme}
         />
@@ -852,41 +890,8 @@ function App() {
           <Route element={homePageElement} path="/s/:sessionCode" />
           <Route element={<Navigate replace to="/" />} path="/login" />
           <Route element={<Navigate replace to="/" />} path="/sign-in" />
-          <Route
-            element={
-              auth?.token ? (
-                <FriendsPage
-                  onError={handleApiError}
-                  onNotify={notify}
-                  onShareContact={handleShareContact}
-                  token={auth.token}
-                />
-              ) : (
-                <Navigate replace to="/" />
-              )
-            }
-            path="/friends"
-          />
-          <Route
-            element={
-              auth?.token ? (
-                <ProfilePage
-                  onAvatarDelete={handleAvatarDelete}
-                  onAvatarUpload={handleAvatarUpload}
-                  onChangePassword={handleChangePassword}
-                  onError={handleApiError}
-                  onLogout={handleLogout}
-                  onNotify={notify}
-                  onProfileUpdate={handleProfileUpdate}
-                  token={auth.token}
-                  user={auth.user}
-                />
-              ) : (
-                <Navigate replace to="/" />
-              )
-            }
-            path="/profile"
-          />
+          <Route element={<Navigate replace to="/" />} path="/friends" />
+          <Route element={<Navigate replace to="/" />} path="/profile" />
         </Routes>
       </div>
       <AuthModal
@@ -895,6 +900,21 @@ function App() {
         onClose={handleCloseAuth}
         onLogin={handleLogin}
         onRegister={handleRegister}
+      />
+      <UserSettingsModal
+        authUser={auth?.user || null}
+        initialTab={userModalState.tab}
+        isOpen={userModalState.isOpen}
+        onAvatarDelete={handleAvatarDelete}
+        onAvatarUpload={handleAvatarUpload}
+        onChangePassword={handleChangePassword}
+        onClose={handleCloseUserModal}
+        onError={handleApiError}
+        onLogout={handleLogout}
+        onNotify={notify}
+        onProfileUpdate={handleProfileUpdate}
+        onShareContact={handleShareContact}
+        token={auth?.token || ''}
       />
       <FilePreviewModal
         currentIndex={previewState.fileIndex}
