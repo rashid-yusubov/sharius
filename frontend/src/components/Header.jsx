@@ -5,7 +5,7 @@ import { getAvatarUrl } from '../api/client.js';
 import Logo from './Logo.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import LanguageSwitcher from './LanguageSwitcher.jsx';
-import { ChevronDownIcon, LogoutIcon, SettingsIcon, UserIcon } from './icons.jsx';
+import { ChevronDownIcon, LogoutIcon, SettingsIcon, UserIcon, UsersIcon } from './icons.jsx';
 import './Header.css';
 
 function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
@@ -30,6 +30,11 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleFriendsClick = () => {
+    setIsMenuOpen(false);
+    navigate('/friends');
+  };
 
   const handleSettingsClick = () => {
     setIsMenuOpen(false);
@@ -84,6 +89,15 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
                 <div className="header__dropdown" role="menu">
                   <button
                     className="header__dropdown-item"
+                    onClick={handleFriendsClick}
+                    role="menuitem"
+                    type="button"
+                  >
+                    <UsersIcon />
+                    <span>{t('friends.title', { defaultValue: 'Друзья' })}</span>
+                  </button>
+                  <button
+                    className="header__dropdown-item"
                     onClick={handleSettingsClick}
                     role="menuitem"
                     type="button"
@@ -128,4 +142,3 @@ function Header({ authUser, onLogout, onOpenAuth, onThemeToggle, theme }) {
 }
 
 export default Header;
-

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAvatarUrl } from '../api/client.js';
 import { CameraIcon, TrashIcon, UserIcon } from '../components/icons.jsx';
-import FriendsPage from './FriendsPage.jsx';
 import './ProfilePage.css';
 
 function ProfilePage({
@@ -13,8 +12,6 @@ function ProfilePage({
   onLogout,
   onNotify,
   onProfileUpdate,
-  onShareContact,
-  token,
   user,
 }) {
   const { t } = useTranslation();
@@ -47,6 +44,14 @@ function ProfilePage({
     setAvatarError('');
   }, [user.avatar_url, user.updated_at]);
 
+  useEffect(() => {
+    return () => {
+      if (localPreviewUrl && localPreviewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(localPreviewUrl);
+      }
+    };
+  }, [localPreviewUrl]);
+
   const handleAvatarFile = async (file) => {
     if (!file) return;
     setAvatarError('');
@@ -70,6 +75,9 @@ function ProfilePage({
       return;
     }
 
+    if (localPreviewUrl && localPreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(localPreviewUrl);
+    }
     const objectUrl = URL.createObjectURL(file);
     setLocalPreviewUrl(objectUrl);
     setImgFailed(false);
@@ -122,6 +130,9 @@ function ProfilePage({
   const handleAvatarRemove = async () => {
     setAvatarError('');
     setIsAvatarLoading(true);
+    if (localPreviewUrl && localPreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(localPreviewUrl);
+    }
     setLocalPreviewUrl(null);
     try {
       if (onAvatarDelete) {
@@ -421,12 +432,8 @@ function ProfilePage({
           </div>
         </form>
       </section>
-
-      <FriendsPage onError={onError} onNotify={onNotify} onShareContact={onShareContact} token={token} />
     </div>
   );
 }
 
 export default ProfilePage;
-
-

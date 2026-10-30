@@ -238,14 +238,14 @@ function App() {
       .catch(() => {
         if (!isCancelled) {
           setAuth(null);
-          notify('Saved session expired. Please log in again.', 'warning');
+          notify(t('auth.session_expired', { defaultValue: 'Saved session expired. Please log in again.' }), 'warning');
         }
       });
 
     return () => {
       isCancelled = true;
     };
-  }, [auth?.token, notify]);
+  }, [auth?.token, notify, t]);
 
   useEffect(() => {
     const preventFileOpen = (event) => {
@@ -414,7 +414,7 @@ function App() {
       code: session.code,
       creatorToken: session.creator_token || null,
     });
-    notify(`Session ${session.code} created`);
+    notify(t('app.session_created', { code: session.code, defaultValue: `Session ${session.code} created` }));
 
     return {
       code: session.code,
@@ -428,24 +428,24 @@ function App() {
 
   const handleLogout = () => {
     setAuth(null);
-    notify('Logged out');
+    notify(t('app.logged_out', { defaultValue: 'Logged out' }));
   };
 
   const handleProfileUpdate = async ({ display_name }) => {
     if (!auth?.token) {
-      notify('Please log in to continue.', 'warning');
+      notify(t('auth.login_required', { defaultValue: 'Please log in to continue.' }), 'warning');
       handleOpenAuth('login');
       return;
     }
 
     const user = await updateProfile({ display_name, token: auth.token });
     setAuth((current) => (current ? { ...current, user } : current));
-    notify('Profile updated');
+    notify(t('app.profile_updated', { defaultValue: 'Profile updated' }));
   };
 
   const handleChangePassword = async ({ current_password, new_password }) => {
     if (!auth?.token) {
-      notify('Please log in to continue.', 'warning');
+      notify(t('auth.login_required', { defaultValue: 'Please log in to continue.' }), 'warning');
       handleOpenAuth('login');
       return;
     }
@@ -481,13 +481,11 @@ function App() {
     return updatedUser;
   };
 
-
-
   const handleLogin = async (credentials) => {
     try {
       const authPayload = await login(credentials);
       persistAuth(authPayload);
-      notify(`Logged in as ${authPayload.user.display_name}`);
+      notify(t('app.logged_in_as', { name: authPayload.user.display_name, defaultValue: `Logged in as ${authPayload.user.display_name}` }));
     } catch (error) {
       throw new Error(getErrorMessage(error));
     }
@@ -497,7 +495,7 @@ function App() {
     try {
       const authPayload = await register(credentials);
       persistAuth(authPayload);
-      notify(`Account created for ${authPayload.user.display_name}`);
+      notify(t('app.account_created_for', { name: authPayload.user.display_name, defaultValue: `Account created for ${authPayload.user.display_name}` }));
     } catch (error) {
       throw new Error(getErrorMessage(error));
     }
@@ -509,7 +507,7 @@ function App() {
 
   const handleShareContact = async (contact) => {
     if (!auth?.token) {
-      notify('Please log in to continue.', 'warning');
+      notify(t('auth.login_required', { defaultValue: 'Please log in to continue.' }), 'warning');
       handleOpenAuth('login');
       return;
     }
@@ -522,7 +520,7 @@ function App() {
         token: auth.token,
       });
       syncSessionState(session);
-      notify(`Session ${session.code} created for ${contact.display_name}`);
+      notify(t('app.session_created_for', { code: session.code, name: contact.display_name, defaultValue: `Session ${session.code} created for ${contact.display_name}` }));
       navigate('/');
     } catch (error) {
       notify(getErrorMessage(error), 'warning');
@@ -537,28 +535,28 @@ function App() {
     clearSessionAccess();
     setSessionExpiresAt('');
     setIsDeleteSessionConfirming(false);
-    notify('Quick access code generated');
+    notify(t('app.code_generated', { defaultValue: 'Quick access code generated' }));
   };
 
   const handleQrOpen = () => {
     if (!code.trim()) {
       setCode(createAccessCode());
       setLastSyncedMessage('');
-      notify('Code generated for QR');
+      notify(t('app.code_generated_for_qr', { defaultValue: 'Code generated for QR' }));
     }
     setIsQrOpen(true);
-    notify('QR code opened');
+    notify(t('app.qr_opened', { defaultValue: 'QR code opened' }));
   };
 
   const handleQrClose = () => {
     setIsQrOpen(false);
-    notify('QR code closed');
+    notify(t('app.qr_closed', { defaultValue: 'QR code closed' }));
   };
 
   const handleClear = () => {
     if (code.trim() && sessionAccess?.creatorToken && !isDeleteSessionConfirming) {
       setIsDeleteSessionConfirming(true);
-      notify('Press delete again to remove this session from the server.', 'warning');
+      notify(t('app.press_delete', { defaultValue: 'Press delete again to remove this session from the server.' }), 'warning');
       return;
     }
 
@@ -572,7 +570,7 @@ function App() {
     setAttachedFiles([]);
     setSessionExpiresAt('');
     setIsDeleteSessionConfirming(false);
-    notify('Text and files cleared');
+    notify(t('app.cleared', { defaultValue: 'Text and files cleared' }));
   };
 
   const handleDeleteCurrentSession = async () => {
@@ -585,7 +583,7 @@ function App() {
       setSessionExpiresAt('');
       clearSessionAccess();
       setIsDeleteSessionConfirming(false);
-      notify('Text and files cleared');
+      notify(t('app.cleared', { defaultValue: 'Text and files cleared' }));
       return;
     }
 
@@ -600,7 +598,7 @@ function App() {
       setSessionExpiresAt('');
       clearSessionAccess();
       setIsDeleteSessionConfirming(false);
-      notify(`Session ${normalizedCode} deleted`);
+      notify(t('app.session_deleted', { code: normalizedCode, defaultValue: `Session ${normalizedCode} deleted` }));
     } catch (error) {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         setCode('');
@@ -641,29 +639,29 @@ function App() {
     }
 
     if (!navigator.clipboard?.readText) {
-      notify('Clipboard is not available', 'warning');
+      notify(t('app.clipboard_unavailable', { defaultValue: 'Clipboard is not available' }), 'warning');
       return;
     }
     try {
       const clipboardText = await navigator.clipboard.readText();
       if (clipboardText) {
         setMessage((current) => (current ? `${current}\n${clipboardText}` : clipboardText));
-        notify('Text pasted from clipboard');
+        notify(t('app.text_pasted', { defaultValue: 'Text pasted from clipboard' }));
       } else {
-        notify('Clipboard is empty', 'warning');
+        notify(t('app.clipboard_empty', { defaultValue: 'Clipboard is empty' }), 'warning');
       }
     } catch {
-      notify('Could not read from clipboard', 'warning');
+      notify(t('app.clipboard_read_failed', { defaultValue: 'Could not read from clipboard' }), 'warning');
     }
   };
 
   const handleCopy = async () => {
     if (!navigator.clipboard?.writeText) {
-      notify('Clipboard is not available', 'warning');
+      notify(t('app.clipboard_unavailable', { defaultValue: 'Clipboard is not available' }), 'warning');
       return;
     }
     await navigator.clipboard.writeText(message);
-    notify(message ? 'Text copied to clipboard' : 'Nothing to copy', message ? 'default' : 'warning');
+    notify(message ? t('app.text_copied', { defaultValue: 'Text copied to clipboard' }) : t('app.nothing_to_copy', { defaultValue: 'Nothing to copy' }), message ? 'default' : 'warning');
   };
 
   const handleFileClick = () => {
@@ -687,7 +685,7 @@ function App() {
         syncSessionState(latestSession);
       }
 
-      notify(`${files.length} file${files.length > 1 ? 's' : ''} uploaded`);
+      notify(t('app.files_uploaded', { count: files.length, defaultValue: `${files.length} file(s) uploaded` }));
     } catch (error) {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         clearSessionAccess();
@@ -708,7 +706,7 @@ function App() {
     const file = attachedFiles[fileIndex];
     if (!file?.id || !code.trim()) {
       setAttachedFiles((current) => current.filter((_, index) => index !== fileIndex));
-      notify('File removed');
+      notify(t('app.file_removed', { defaultValue: 'File removed' }));
       return;
     }
 
@@ -717,7 +715,7 @@ function App() {
     try {
       await deleteSessionFile(code.trim(), file.id, getSessionCredentials());
       setAttachedFiles((current) => current.filter((_, index) => index !== fileIndex));
-      notify('File removed');
+      notify(t('app.file_removed', { defaultValue: 'File removed' }));
     } catch (error) {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         clearSessionAccess();
@@ -730,7 +728,7 @@ function App() {
 
   const handleDownloadFile = (file) => {
     if (!file?.id || !code.trim()) {
-      notify('File is not ready for download yet', 'warning');
+      notify(t('app.file_not_ready', { defaultValue: 'File is not ready for download yet' }), 'warning');
       return;
     }
 
@@ -741,7 +739,7 @@ function App() {
   const handleUpdate = async () => {
     const normalizedCode = code.trim().toUpperCase();
     if (!normalizedCode) {
-      notify('Enter a session code first', 'warning');
+      notify(t('app.enter_code_first', { defaultValue: 'Enter a session code first' }), 'warning');
       return;
     }
 
@@ -750,7 +748,7 @@ function App() {
     try {
       const session = await getSession(normalizedCode);
       syncSessionState(session);
-      notify(`Session ${session.code} synced`);
+      notify(t('app.session_synced', { code: session.code, defaultValue: `Session ${session.code} synced` }));
     } catch (error) {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         clearSessionAccess();
@@ -771,7 +769,7 @@ function App() {
         ...getSessionCredentials(editableSession),
       });
       syncSessionState(session);
-      notify(`Text synced to ${session.code}`);
+      notify(t('app.text_synced', { code: session.code, defaultValue: `Text synced to ${session.code}` }));
     } catch (error) {
       if (error?.code === 'SESSION_NOT_FOUND' || error?.code === 'SESSION_EXPIRED') {
         clearSessionAccess();
@@ -880,7 +878,6 @@ function App() {
                   onLogout={handleLogout}
                   onNotify={notify}
                   onProfileUpdate={handleProfileUpdate}
-                  onShareContact={handleShareContact}
                   token={auth.token}
                   user={auth.user}
                 />
@@ -914,4 +911,3 @@ function App() {
 }
 
 export default App;
-

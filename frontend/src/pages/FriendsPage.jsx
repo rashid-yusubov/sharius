@@ -103,7 +103,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 
     try {
       await createContactRequest(user.id, token);
-      onNotify(`Friend request sent to ${user.display_name}`);
+      onNotify(t('friends.request_sent', { name: user.display_name, defaultValue: `Friend request sent to ${user.display_name}` }));
       setSearchResults((current) => current.filter((item) => item.id !== user.id));
     } catch (error) {
       onError(error);
@@ -117,7 +117,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 
     try {
       await acceptContactRequest(request.id, token);
-      onNotify(`${request.from_user.display_name} added to friends`);
+      onNotify(t('friends.added_to_friends', { name: request.from_user.display_name, defaultValue: `${request.from_user.display_name} added to friends` }));
       await loadFriendsData();
     } catch (error) {
       onError(error);
@@ -132,7 +132,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
     try {
       await rejectContactRequest(request.id, token);
       setIncomingRequests((current) => current.filter((item) => item.id !== request.id));
-      onNotify(`Request from ${request.from_user.display_name} declined`);
+      onNotify(t('friends.request_declined', { name: request.from_user.display_name, defaultValue: `Request from ${request.from_user.display_name} declined` }));
     } catch (error) {
       onError(error);
     } finally {
@@ -155,7 +155,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
       await deleteContact(contact.id, token);
       setContacts((current) => current.filter((item) => item.id !== contact.id));
       setContactPendingDeleteId('');
-      onNotify(`${contact.display_name} removed from friends`);
+      onNotify(t('friends.removed_from_friends', { name: contact.display_name, defaultValue: `${contact.display_name} removed from friends` }));
     } catch (error) {
       onError(error);
     } finally {
@@ -185,7 +185,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
           <h1>{t('friends.title')}</h1>
         </div>
         <button className="friends-page__refresh" disabled={isLoading} onClick={loadFriendsData} type="button">
-          Refresh
+          {t('friends.refresh', { defaultValue: 'Refresh' })}
         </button>
       </div>
 
@@ -193,7 +193,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
         <section className="friends-page__panel friends-page__panel--wide">
           <div className="friends-page__section-head">
             <h2>{t('friends.add_friend_title')}</h2>
-            <span>{isSearching ? 'Searching...' : `${filteredSearchResults.length} found`}</span>
+            <span>{isSearching ? t('friends.searching', { defaultValue: 'Searching...' }) : t('friends.found', { count: filteredSearchResults.length, defaultValue: `${filteredSearchResults.length} found` })}</span>
           </div>
           <input
             className="friends-page__search"
@@ -217,7 +217,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                   onClick={() => handleCreateRequest(user)}
                   type="button"
                 >
-                  Add
+                  {t('friends.add_btn', { defaultValue: 'Add' })}
                 </button>
               </article>
             ))}
@@ -243,7 +243,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                     onClick={() => handleAcceptRequest(request)}
                     type="button"
                   >
-                    Accept
+                    {t('friends.accept_btn', { defaultValue: 'Accept' })}
                   </button>
                   <button
                     className="friends-page__button"
@@ -251,7 +251,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                     onClick={() => handleRejectRequest(request)}
                     type="button"
                   >
-                    Decline
+                    {t('friends.decline_btn', { defaultValue: 'Decline' })}
                   </button>
                 </div>
               </article>
@@ -284,7 +284,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                         onClick={() => handleConfirmDeleteContact(contact)}
                         type="button"
                       >
-                        Remove
+                        {t('friends.remove_btn', { defaultValue: 'Remove' })}
                       </button>
                       <button
                         className="friends-page__button"
@@ -292,7 +292,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                         onClick={handleCancelDeleteContact}
                         type="button"
                       >
-                        Cancel
+                        {t('friends.cancel_btn', { defaultValue: 'Cancel' })}
                       </button>
                     </div>
                   </div>
@@ -304,7 +304,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                       onClick={() => handleShareContact(contact)}
                       type="button"
                     >
-                      Share
+                      {t('friends.share_btn', { defaultValue: 'Share' })}
                     </button>
                     <button
                       className="friends-page__button"
@@ -312,7 +312,7 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
                       onClick={() => handleRequestDeleteContact(contact)}
                       type="button"
                     >
-                      Remove
+                      {t('friends.remove_btn', { defaultValue: 'Remove' })}
                     </button>
                   </div>
                 )}
@@ -326,4 +326,3 @@ function FriendsPage({ onError, onNotify, onShareContact, token }) {
 }
 
 export default FriendsPage;
-
