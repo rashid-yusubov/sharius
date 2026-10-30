@@ -1,7 +1,7 @@
 import mimetypes
 from pathlib import Path
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -149,10 +149,6 @@ def _find_avatar_file(filename: str) -> Path | None:
 
             if target.exists() and target.is_file():
                 return target
-
-            matches = [f for f in resolved_cdir.glob(f"{clean_filename}*") if f.is_file()]
-            if matches:
-                return matches[0]
         except Exception:
             continue
 
@@ -199,6 +195,7 @@ def get_avatar(filename: str):
         headers={
             "Cache-Control": "public, max-age=86400, stale-while-revalidate=86400",
             "Content-Type": media_type,
+            "X-Content-Type-Options": "nosniff",
         },
     )
 
@@ -216,4 +213,3 @@ def change_password(
         code = str(exc)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response(code)) from exc
     return success_response(result)
-

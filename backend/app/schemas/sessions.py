@@ -33,7 +33,7 @@ class SessionTextItem(BaseModel):
 class SessionPayload(BaseModel):
     id: str
     code: str
-    creator_token: str
+    creator_token: str | None = None
     is_active: bool
     created_at: datetime
     updated_at: datetime

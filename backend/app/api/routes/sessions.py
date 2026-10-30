@@ -28,14 +28,21 @@ def create_session(
 
 
 @router.get("/{code}", response_model=SessionResponse)
-def get_session(code: str, db: Session = Depends(get_db)):
+def get_session(
+    code: str,
+    x_creator_token: str | None = Header(default=None, alias="X-Creator-Token"),
+    current_user=Depends(get_optional_current_user),
+    db: Session = Depends(get_db),
+):
     service = SessionService(db)
     session = service.get_session_by_code(code)
     if not session:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("SESSION_NOT_FOUND"))
     if service.is_expired(session):
         raise HTTPException(status_code=status.HTTP_410_GONE, detail=error_response("SESSION_EXPIRED"))
-    return success_response(service.serialize_session(session))
+    current_user_id = current_user.id if current_user else None
+    is_creator = service.is_creator(session, current_user_id=current_user_id, creator_token=x_creator_token)
+    return success_response(service.serialize_session(session, include_creator_token=is_creator))
 
 
 @router.put("/{code}/text", response_model=SessionResponse)
@@ -56,7 +63,8 @@ def update_session_text(
     if not service.can_edit_session(session, current_user_id=current_user_id, creator_token=x_creator_token):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=error_response("FORBIDDEN"))
     service.update_text(session, payload.content)
-    return success_response(service.serialize_session(session))
+    is_creator = service.is_creator(session, current_user_id=current_user_id, creator_token=x_creator_token)
+    return success_response(service.serialize_session(session, include_creator_token=is_creator))
 
 
 @router.post("/{code}/files", response_model=SessionResponse, status_code=status.HTTP_201_CREATED)
@@ -81,7 +89,8 @@ def upload_session_file(
     except ValueError as exc:
         code = str(exc)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_response(code)) from exc
-    return success_response(service.serialize_session(session))
+    is_creator = service.is_creator(session, current_user_id=current_user_id, creator_token=x_creator_token)
+    return success_response(service.serialize_session(session, include_creator_token=is_creator))
 
 
 @router.get("/{code}/files/{file_id}")
@@ -97,11 +106,46 @@ def download_session_file(code: str, file_id: str, inline: bool = False, db: Ses
     if file_record is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_response("FILE_NOT_FOUND"))
 
+    dangerous_extensions = {"html", "htm", "xhtml", "svg", "xml", "js", "mjs", "php", "cgi", "sh", "bat"}
+    safe_inline_types = {
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+        "video/mp4",
+        "video/webm",
+        "video/ogg",
+        "audio/mpeg",
+        "audio/ogg",
+        "audio/wav",
+        "audio/aac",
+        "audio/flac",
+        "audio/mp4",
+        "application/pdf",
+        "text/plain",
+    }
+
+    media_type = file_record.mime_type
+    ext = file_record.extension.lower()
+
+    if ext in dangerous_extensions or media_type in {"text/html", "application/javascript", "image/svg+xml"}:
+        content_disposition = "attachment"
+        if ext != "svg":
+            media_type = "application/octet-stream"
+    else:
+        content_disposition = "inline" if (inline and media_type in safe_inline_types) else "attachment"
+
+    headers = {
+        "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'none'; sandbox",
+    }
+
     return FileResponse(
         path=file_record.storage_path,
-        media_type=file_record.mime_type,
+        media_type=media_type,
         filename=file_record.original_name,
-        content_disposition_type="inline" if inline else "attachment",
+        content_disposition_type=content_disposition,
+        headers=headers,
     )
 
 
@@ -146,7 +190,7 @@ def delete_session(
         raise HTTPException(status_code=status.HTTP_410_GONE, detail=error_response("SESSION_EXPIRED"))
 
     current_user_id = current_user.id if current_user else None
-    if not service.can_edit_session(session, current_user_id=current_user_id, creator_token=x_creator_token):
+    if not service.is_creator(session, current_user_id=current_user_id, creator_token=x_creator_token):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=error_response("FORBIDDEN"))
 
     service.delete_session(session)

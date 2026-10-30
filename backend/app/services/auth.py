@@ -78,20 +78,35 @@ class AuthService:
             if not extension:
                 raise ValueError("INVALID_IMAGE_TYPE")
 
-        content = upload_file.file.read()
-        max_avatar_size = 5 * 1024 * 1024  # 5 MB
-        if len(content) > max_avatar_size:
-            raise ValueError("AVATAR_TOO_LARGE")
-
         avatars_dir = settings.storage_dir / "avatars"
         avatars_dir.mkdir(parents=True, exist_ok=True)
 
-        if user.avatar_url:
-            self._delete_avatar_file(user.avatar_url)
-
         new_filename = f"{user.id}_{uuid.uuid4().hex[:8]}.{extension}"
         storage_path = avatars_dir / new_filename
-        storage_path.write_bytes(content)
+
+        total_bytes = 0
+        chunk_size = 512 * 1024  # 512 KB
+        max_avatar_size = 5 * 1024 * 1024  # 5 MB
+        try:
+            with storage_path.open("wb") as buffer:
+                while True:
+                    chunk = upload_file.file.read(chunk_size)
+                    if not chunk:
+                        break
+                    total_bytes += len(chunk)
+                    if total_bytes > max_avatar_size:
+                        raise ValueError("AVATAR_TOO_LARGE")
+                    buffer.write(chunk)
+        except Exception:
+            if storage_path.exists():
+                try:
+                    storage_path.unlink()
+                except OSError:
+                    pass
+            raise
+
+        if user.avatar_url:
+            self._delete_avatar_file(user.avatar_url)
 
         user.avatar_url = f"/profile/avatar/{new_filename}"
         user.updated_at = utcnow()

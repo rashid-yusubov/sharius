@@ -216,7 +216,7 @@ function FilePreviewModal({
 
           {category === 'pdf' && (
             <div className="file-preview-body__pdf-wrap">
-              <iframe src={previewUrl} title={fileName} className="file-preview-body__iframe" />
+              <iframe src={previewUrl} title={fileName} className="file-preview-body__iframe" sandbox="allow-scripts" />
             </div>
           )}
 
@@ -279,4 +279,3 @@ function FilePreviewModal({
 }
 
 export default FilePreviewModal;
-

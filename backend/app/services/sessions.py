@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import UploadFile
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -45,7 +46,7 @@ class SessionService:
         self.db.add(text)
         self.db.commit()
         self.db.refresh(session)
-        return self.serialize_session(session)
+        return self.serialize_session(session, include_creator_token=True)
 
     def get_session_by_code(self, code: str) -> SessionModel | None:
         normalized_code = self._normalize_code(code)
@@ -67,13 +68,28 @@ class SessionService:
         if not settings.is_file_extension_allowed(extension):
             raise ValueError("FILE_TYPE_NOT_ALLOWED")
 
-        content = upload_file.file.read()
-        if len(content) > settings.max_file_size_bytes:
-            raise ValueError("FILE_TOO_LARGE")
-
         stored_name = f"{uuid.uuid4()}.{extension}" if extension else f"{uuid.uuid4()}"
         storage_path = self.storage_dir / stored_name
-        storage_path.write_bytes(content)
+
+        total_bytes = 0
+        chunk_size = 1024 * 1024  # 1 MB chunk
+        try:
+            with storage_path.open("wb") as buffer:
+                while True:
+                    chunk = upload_file.file.read(chunk_size)
+                    if not chunk:
+                        break
+                    total_bytes += len(chunk)
+                    if total_bytes > settings.max_file_size_bytes:
+                        raise ValueError("FILE_TOO_LARGE")
+                    buffer.write(chunk)
+        except Exception:
+            if storage_path.exists():
+                try:
+                    storage_path.unlink()
+                except OSError:
+                    pass
+            raise
 
         record = SessionFile(
             session_id=session.id,
@@ -81,7 +97,7 @@ class SessionService:
             stored_name=stored_name,
             mime_type=(upload_file.content_type or "application/octet-stream")[:100],
             extension=extension,
-            size_bytes=len(content),
+            size_bytes=total_bytes,
             storage_path=str(storage_path),
         )
         session.files.append(record)
@@ -103,8 +119,11 @@ class SessionService:
             raise ValueError("FILE_NOT_FOUND")
 
         file_path = Path(record.storage_path)
-        if file_path.exists():
-            file_path.unlink()
+        try:
+            if file_path.exists():
+                file_path.unlink()
+        except OSError:
+            pass
 
         self.db.delete(record)
         session.updated_at = self._utcnow()
@@ -115,25 +134,40 @@ class SessionService:
     def delete_session(self, session: SessionModel) -> None:
         for record in session.files:
             file_path = Path(record.storage_path)
-            if file_path.exists():
-                file_path.unlink()
+            try:
+                if file_path.exists():
+                    file_path.unlink()
+            except OSError:
+                pass
 
         self.db.delete(session)
         self.db.commit()
 
     def cleanup_expired_sessions(self) -> int:
-        expired_sessions = self.db.query(SessionModel).all()
+        now = self._utcnow()
+        expired_sessions = (
+            self.db.query(SessionModel)
+            .filter(
+                or_(
+                    SessionModel.expires_at <= now,
+                    SessionModel.is_active.is_(False),
+                )
+            )
+            .all()
+        )
         deleted_count = 0
 
         for session in expired_sessions:
-            if self.is_expired(session):
-                for record in session.files:
-                    file_path = Path(record.storage_path)
+            for record in session.files:
+                file_path = Path(record.storage_path)
+                try:
                     if file_path.exists():
                         file_path.unlink()
+                except OSError:
+                    pass
 
-                self.db.delete(session)
-                deleted_count += 1
+            self.db.delete(session)
+            deleted_count += 1
 
         if deleted_count:
             self.db.commit()
@@ -143,7 +177,7 @@ class SessionService:
     def is_expired(self, session: SessionModel) -> bool:
         return self._as_naive_utc(session.expires_at) <= self._utcnow() or not session.is_active
 
-    def can_edit_session(
+    def is_creator(
         self,
         session: SessionModel,
         current_user_id: str | None = None,
@@ -154,6 +188,17 @@ class SessionService:
         if current_user_id and session.creator_user_id == current_user_id:
             return True
         return False
+
+    def can_edit_session(
+        self,
+        session: SessionModel,
+        current_user_id: str | None = None,
+        creator_token: str | None = None,
+    ) -> bool:
+        # In guest mode (no registered creator), any participant with the session code can collaborate (write text / add files)
+        if session.creator_user_id is None:
+            return True
+        return self.is_creator(session, current_user_id=current_user_id, creator_token=creator_token)
 
     def create_session_for_contact(
         self,
@@ -171,12 +216,12 @@ class SessionService:
             raise ValueError("CONTACT_NOT_FOUND")
         return self.create_session(custom_code=custom_code, creator_user_id=creator_user_id, content=content)
 
-    def serialize_session(self, session: SessionModel) -> dict:
+    def serialize_session(self, session: SessionModel, include_creator_token: bool = False) -> dict:
         return {
             "id": session.id,
             "code": session.code,
             "creator_user_id": session.creator_user_id,
-            "creator_token": session.creator_token,
+            "creator_token": session.creator_token if include_creator_token else None,
             "is_active": session.is_active,
             "created_at": session.created_at,
             "updated_at": session.updated_at,
@@ -212,7 +257,7 @@ class SessionService:
 
     @staticmethod
     def _utcnow() -> datetime:
-        return datetime.utcnow()
+        return datetime.now(timezone.utc).replace(tzinfo=None)
 
     @staticmethod
     def _as_naive_utc(value: datetime) -> datetime:

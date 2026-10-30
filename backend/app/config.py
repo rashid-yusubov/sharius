@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "Sharius Backend API"
-    database_url: str
+    database_url: str = "postgresql+psycopg://project_user:project_password@db:5432/project_db"
     session_ttl_minutes: int = 15
     session_cleanup_interval_seconds: int = 30
     jwt_secret: str = "change-me-for-production"
@@ -36,7 +36,15 @@ class Settings(BaseSettings):
 
     def get_cors_origins(self) -> tuple[str, ...]:
         """Parse comma-separated CORS origins string into tuple"""
-        return tuple(origin.strip() for origin in self.cors_origins.split(","))
+        return tuple(origin.strip() for origin in self.cors_origins.split(",") if origin.strip())
+
+    @property
+    def is_jwt_secret_insecure(self) -> bool:
+        return self.jwt_secret in (
+            "change-me-for-production",
+            "dev-secret-key-change-in-production",
+            "dev-sharius-secret",
+        )
 
 
 settings = Settings()
