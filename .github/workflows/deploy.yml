@@ -58,7 +58,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trigger Portainer Webhook
-        if: env.PORTAINER_WEBHOOK_URL != ''
+        if: ${{ secrets.PORTAINER_WEBHOOK_URL != '' }}
         env:
           PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
         run: |
@@ -67,9 +67,7 @@ jobs:
           echo "Portainer redeployment successfully triggered!"
 
       - name: Notice if Portainer Webhook is not configured
-        if: env.PORTAINER_WEBHOOK_URL == ''
-        env:
-          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+        if: ${{ secrets.PORTAINER_WEBHOOK_URL == '' }}
         run: |
           echo "::notice ::PORTAINER_WEBHOOK_URL is not set in GitHub Secrets. Images were published to GHCR, but Portainer was not triggered automatically."
 
