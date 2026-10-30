@@ -5,15 +5,15 @@ services:
     image: postgres:16
     container_name: project_postgres
     environment:
-      POSTGRES_DB: project_db
-      POSTGRES_USER: project_user
-      POSTGRES_PASSWORD: project_password
+      POSTGRES_DB: ${DB_NAME:-project_db}
+      POSTGRES_USER: ${DB_USER:-project_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-project_password}
     ports:
-      - "7432:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U project_user -d project_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-project_user} -d ${DB_NAME:-project_db}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -24,14 +24,16 @@ services:
       dockerfile: Dockerfile
     container_name: sharius_backend
     env_file:
-      - ./backend/.env
+      - path: .env
+        required: false
     environment:
-      DATABASE_URL: postgresql+psycopg://project_user:project_password@db:5432/project_db
+      DATABASE_URL: postgresql+psycopg://${DB_USER:-project_user}:${DB_PASSWORD:-project_password}@db:5432/${DB_NAME:-project_db}
+      PORT: 8000
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-9000}:8000"
     volumes:
       - ./backend/app:/app/app
       - ./backend/storage:/app/storage
@@ -42,12 +44,13 @@ services:
       dockerfile: Dockerfile
     container_name: sharius_frontend
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT:-5173}:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules # Чтобы использовать node_modules внутри контейнера
     environment:
-      - CHOKIDAR_USEPOLLING=true # Иногда полезно для Windows (WSL2/Docker Desktop) для горячей перезагрузки
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:9000}
+      - CHOKIDAR_USEPOLLING=true # Полезно для Windows (WSL2/Docker Desktop) для горячей перезагрузки
       - VITE_WATCH_USE_POLLING=true
 
 volumes:
