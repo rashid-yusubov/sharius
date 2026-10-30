@@ -77,11 +77,13 @@ try:
     else:
         print(f"Notice: Alembic output: {res.stderr or res.stdout}. Ensuring tables via Base.metadata...")
         Base.metadata.create_all(engine)
-        print("✓ Tables verified/created successfully!")
+        subprocess.run(["alembic", "stamp", "head"], capture_output=True, text=True)
+        print("✓ Tables verified/created and Alembic revision stamped successfully!")
 except Exception as e:
     print(f"Notice: {e}. Fallback to Base.metadata.create_all...")
     Base.metadata.create_all(engine)
-    print("✓ Tables created successfully!")
+    subprocess.run(["alembic", "stamp", "head"], capture_output=True, text=True)
+    print("✓ Tables created and Alembic revision stamped successfully!")
 
 # Ensure new columns exist even if running against older non-migrated DBs
 try:
@@ -100,4 +102,3 @@ else
     echo "Running in development mode (with reload)..."
     exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --reload
 fi
-

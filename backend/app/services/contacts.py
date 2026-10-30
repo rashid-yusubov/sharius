@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
@@ -46,17 +44,37 @@ class ContactService:
         if existing_contact is not None:
             raise ValueError("CONTACT_REQUEST_ALREADY_EXISTS")
 
-        pending_request = (
+        # If target user already sent a pending request to us, auto-accept it!
+        reverse_pending = (
             self.db.query(ContactRequest)
             .filter(
-                ContactRequest.from_user_id == from_user_id,
-                ContactRequest.to_user_id == to_user_id,
+                ContactRequest.from_user_id == to_user_id,
+                ContactRequest.to_user_id == from_user_id,
                 ContactRequest.status == ContactRequestStatus.pending,
             )
             .first()
         )
-        if pending_request is not None:
-            raise ValueError("CONTACT_REQUEST_ALREADY_EXISTS")
+        if reverse_pending is not None:
+            return self.resolve_request(reverse_pending.id, from_user_id, accepted=True)
+
+        existing_request = (
+            self.db.query(ContactRequest)
+            .filter(
+                ContactRequest.from_user_id == from_user_id,
+                ContactRequest.to_user_id == to_user_id,
+            )
+            .first()
+        )
+        if existing_request is not None:
+            if existing_request.status == ContactRequestStatus.pending:
+                raise ValueError("CONTACT_REQUEST_ALREADY_EXISTS")
+            # Reactivate previously resolved request to avoid duplicate constraint violations
+            existing_request.status = ContactRequestStatus.pending
+            existing_request.created_at = utcnow()
+            existing_request.resolved_at = None
+            self.db.commit()
+            self.db.refresh(existing_request)
+            return {"request_id": existing_request.id, "status": existing_request.status.value}
 
         request = ContactRequest(
             from_user_id=from_user_id,
@@ -150,6 +168,20 @@ class ContactService:
             self.db.delete(first)
         if second is not None:
             self.db.delete(second)
+
+        # Clear any contact request history between the two users
+        requests = (
+            self.db.query(ContactRequest)
+            .filter(
+                or_(
+                    (ContactRequest.from_user_id == current_user_id) & (ContactRequest.to_user_id == other_user_id),
+                    (ContactRequest.from_user_id == other_user_id) & (ContactRequest.to_user_id == current_user_id),
+                )
+            )
+            .all()
+        )
+        for req in requests:
+            self.db.delete(req)
 
         self.db.commit()
         return {"status": "deleted"}
