@@ -12,7 +12,8 @@ const languages = [
   { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' }
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' }
 ];
 
 function LanguageSwitcher() {
