@@ -257,10 +257,22 @@ class SessionService:
 
     @staticmethod
     def _utcnow() -> datetime:
+        """Naive UTC datetime used for in-process comparisons and DB filters.
+
+        Kept naive so it works identically against both PostgreSQL (which
+        returns aware datetimes from TIMESTAMPTZ columns) via _as_naive_utc,
+        and SQLite (which returns naive datetimes from the test database).
+        """
         return datetime.now(timezone.utc).replace(tzinfo=None)
 
     @staticmethod
     def _as_naive_utc(value: datetime) -> datetime:
+        """Normalise a datetime to naive UTC.
+
+        PostgreSQL / psycopg3 returns timezone-aware datetimes for TIMESTAMPTZ
+        columns; SQLite returns naive ones. Stripping tzinfo before comparison
+        keeps the logic consistent across both backends.
+        """
         if value.tzinfo is None:
             return value
         return value.astimezone(timezone.utc).replace(tzinfo=None)

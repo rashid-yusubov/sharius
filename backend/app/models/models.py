@@ -19,7 +19,14 @@ from app.database.db import Base
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    """Return the current UTC time as a timezone-aware datetime.
+
+    All DateTime(timezone=True) columns use this as their default/onupdate.
+    PostgreSQL stores these as TIMESTAMPTZ; psycopg3 reads them back as
+    aware datetimes. SessionService._as_naive_utc() normalises values when
+    comparing against naive datetimes (e.g. from the SQLite test database).
+    """
+    return datetime.now(timezone.utc)
 
 
 class ContactRequestStatus(str, enum.Enum):
