@@ -1,0 +1,61 @@
+version: 2
+
+updates:
+  # GitHub Actions — keep workflow action versions up to date
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - ci
+
+  # Python backend — weekly patch/minor bumps
+  - package-ecosystem: pip
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - backend
+    # Group all non-breaking updates into a single PR to reduce noise
+    groups:
+      python-dependencies:
+        patterns:
+          - '*'
+
+  # Node / npm frontend — weekly patch/minor bumps
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - frontend
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
+
+  # Docker base images in backend Dockerfile
+  - package-ecosystem: docker
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - docker
+
+  # Docker base images in frontend Dockerfiles
+  - package-ecosystem: docker
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - docker
