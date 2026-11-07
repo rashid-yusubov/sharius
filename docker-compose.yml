@@ -17,6 +17,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - sharius_network
 
   backend:
     build:
@@ -37,6 +39,8 @@ services:
     volumes:
       - ./backend/app:/app/app
       - ./backend/storage:/app/storage
+    networks:
+      - sharius_network
 
   frontend:
     build:
@@ -47,11 +51,20 @@ services:
       - "${FRONTEND_PORT:-5173}:5173"
     volumes:
       - ./frontend:/app
-      - /app/node_modules # Чтобы использовать node_modules внутри контейнера
+      - /app/node_modules
     environment:
+      # Tells the Vite dev-server proxy where to forward API requests.
+      # Uses the Docker Compose service name so it resolves inside the network.
+      - BACKEND_URL=http://backend:8000
       - VITE_API_URL=${VITE_API_URL:-http://localhost:9000}
-      - CHOKIDAR_USEPOLLING=true # Полезно для Windows (WSL2/Docker Desktop) для горячей перезагрузки
+      - CHOKIDAR_USEPOLLING=true
       - VITE_WATCH_USE_POLLING=true
+    networks:
+      - sharius_network
 
 volumes:
   postgres_data:
+
+networks:
+  sharius_network:
+    name: sharius_network_dev
