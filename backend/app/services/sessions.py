@@ -108,10 +108,12 @@ class SessionService:
         self.db.refresh(session)
 
     def get_session_file(self, session: SessionModel, file_id: str) -> SessionFile | None:
-        for item in session.files:
-            if item.id == file_id:
-                return item
-        return None
+        # Direct indexed lookup instead of iterating session.files in Python.
+        return (
+            self.db.query(SessionFile)
+            .filter(SessionFile.session_id == session.id, SessionFile.id == file_id)
+            .first()
+        )
 
     def delete_file(self, session: SessionModel, file_id: str) -> None:
         record = self.get_session_file(session, file_id)
