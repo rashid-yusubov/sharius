@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress runs on the same branch when a new push arrives
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Backend unit tests
+  # ─────────────────────────────────────────────
+  backend-test:
+    name: Backend — Unit Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run pytest
+        env:
+          # Explicit PYTHONPATH so pytest resolves "from app.*" imports
+          # without relying on the sys.path hack in conftest.py
+          PYTHONPATH: ${{ github.workspace }}/backend
+        run: |
+          pytest tests/ \
+            --tb=short \
+            --strict-markers \
+            -q
+
+  # ─────────────────────────────────────────────
+  # Job 2: Frontend production build
+  # ─────────────────────────────────────────────
+  frontend-build:
+    name: Frontend — Production Build (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build for production
+        working-directory: frontend
+        run: npm run build
+
+  # ─────────────────────────────────────────────
+  # Job 3: Docker image build validation
+  # Runs only on main (push or PR) to avoid wasting
+  # GHA minutes on feature branches
+  # ─────────────────────────────────────────────
+  docker-build:
+    name: Docker — ${{ matrix.service }} Image Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: Backend
+            context: ./backend
+            dockerfile: ./backend/Dockerfile
+            tag: sharius-backend:ci
+          - service: Frontend
+            context: ./frontend
+            dockerfile: ./frontend/Dockerfile.prod
+            tag: sharius-frontend:ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.service }} image (no push)
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: false
+          tags: ${{ matrix.tag }}
+          build-args: |
+            BUILD_DATE=${{ github.run_id }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,127 @@
+name: CD
+
+on:
+  # Trigger only after CI passes on the main branch.
+  # This guarantees: tests → build → deploy, never the other way around.
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+  # Allow manual re-deploy without a code push (e.g. rollback, env fix)
+  workflow_dispatch:
+
+# Only one deployment can run at a time.
+# If a new one is triggered while another is running, the new one waits.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Guard: skip the whole CD if CI failed.
+  # Only relevant for workflow_run triggers;
+  # workflow_dispatch always proceeds.
+  # ─────────────────────────────────────────────
+  guard:
+    name: Guard — CI passed on main
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: CI status
+        run: |
+          echo "CI check passed. Proceeding with deployment."
+          echo "Triggered by: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "CI run: ${{ github.event.workflow_run.html_url }}"
+            echo "Commit: ${{ github.event.workflow_run.head_sha }}"
+          fi
+
+  # ─────────────────────────────────────────────
+  # Job 1: Build and push Docker images to GHCR
+  # ─────────────────────────────────────────────
+  publish:
+    name: Publish — ${{ matrix.service }} → GHCR
+    runs-on: ubuntu-latest
+    needs: guard
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - service: Backend
+            context: ./backend
+            dockerfile: ./backend/Dockerfile
+            image_suffix: backend
+          - service: Frontend
+            context: ./frontend
+            dockerfile: ./frontend/Dockerfile.prod
+            image_suffix: frontend
+
+    steps:
+      - name: Checkout repository
+        # Check out the exact commit that passed CI (not just HEAD)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Set lower-case repository name
+        run: echo "REPO_LOWER=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.service }} image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ghcr.io/${{ env.REPO_LOWER }}-${{ matrix.image_suffix }}:latest
+            ghcr.io/${{ env.REPO_LOWER }}-${{ matrix.image_suffix }}:${{ github.event.workflow_run.head_sha || github.sha }}
+          build-args: |
+            BUILD_DATE=${{ github.run_id }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─────────────────────────────────────────────
+  # Job 2: Trigger Portainer to redeploy
+  # Runs only after BOTH images are successfully pushed
+  # ─────────────────────────────────────────────
+  deploy:
+    name: Deploy — Trigger Portainer Webhook
+    runs-on: ubuntu-latest
+    needs: publish
+
+    steps:
+      - name: Trigger Portainer Webhook
+        env:
+          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+        run: |
+          if [ -z "${PORTAINER_WEBHOOK_URL}" ]; then
+            echo "::notice ::PORTAINER_WEBHOOK_URL is not configured in GitHub Secrets."
+            echo "::notice ::Images were pushed to GHCR but Portainer was not triggered."
+            echo "::notice ::Add PORTAINER_WEBHOOK_URL to repository secrets to enable automatic deployment."
+            exit 0
+          fi
+          echo "Triggering Portainer redeployment..."
+          curl -fsS \
+            --retry 3 \
+            --retry-delay 5 \
+            --max-time 30 \
+            -X POST "${PORTAINER_WEBHOOK_URL}"
+          echo "✓ Portainer redeployment triggered successfully"
