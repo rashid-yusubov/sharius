@@ -6,6 +6,8 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
+# BUILD_DATE changes on every CI run → busts cache for COPY . . and beyond
+ARG BUILD_DATE
 COPY . .
 RUN npm run build
 
