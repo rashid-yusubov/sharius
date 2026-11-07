@@ -103,6 +103,11 @@ class SessionFile(Base):
 class ContactRequest(Base):
     __tablename__ = "contact_requests"
     __table_args__ = (
+        # Intentional design: the constraint is on (from, to, STATUS), not just
+        # (from, to). This allows a user to send a new friend request after a
+        # previous one was rejected — only one PENDING request per pair is
+        # enforced. If you want to block re-requests entirely, change the
+        # constraint to UniqueConstraint("from_user_id", "to_user_id").
         UniqueConstraint("from_user_id", "to_user_id", "status", name="uq_contact_requests_pair_status"),
     )
 
