@@ -1,0 +1,14 @@
+# Development and test dependencies.
+# Install with: pip install -r requirements-dev.txt
+-r requirements.txt
+
+annotated-doc==0.0.4
+astmonkey==0.3.6
+debugpy==1.8.14
+httpx==0.28.1
+iniconfig==2.1.0
+MutPy==0.6.1
+pluggy==1.6.0
+pydot==4.0.1
+pyparsing==3.2.5
+pytest==8.4.2
