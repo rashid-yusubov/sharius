@@ -140,5 +140,10 @@
     "remote_changes_available": "Sesión actualizada en otro dispositivo.",
     "connected_to_session": "Conectado a la sesión {{code}}",
     "session_code_applied": "Código de sesión {{code}} aplicado"
+  },
+  "theme": {
+    "system": "Tema del sistema",
+    "light": "Tema claro",
+    "dark": "Tema oscuro"
   }
 }

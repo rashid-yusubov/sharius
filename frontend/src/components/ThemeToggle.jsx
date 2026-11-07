@@ -1,18 +1,42 @@
-import { MoonIcon, SunIcon } from './icons.jsx';
+import { useTranslation } from 'react-i18next';
+import { MonitorIcon, MoonIcon, SunIcon } from './icons.jsx';
 import './ThemeToggle.css';
 
 function ThemeToggle({ onToggle, theme }) {
-  const isDark = theme === 'dark';
+  const { t } = useTranslation();
+
+  const getThemeDetails = () => {
+    switch (theme) {
+      case 'system':
+        return {
+          title: t('theme.system', 'System theme'),
+          icon: <MonitorIcon />,
+        };
+      case 'light':
+        return {
+          title: t('theme.light', 'Light theme'),
+          icon: <SunIcon />,
+        };
+      case 'dark':
+      default:
+        return {
+          title: t('theme.dark', 'Dark theme'),
+          icon: <MoonIcon />,
+        };
+    }
+  };
+
+  const { title, icon } = getThemeDetails();
 
   return (
     <button
-      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      aria-label={title}
       className="theme-toggle"
       onClick={onToggle}
-      title={isDark ? 'Light theme' : 'Dark theme'}
+      title={title}
       type="button"
     >
-      {isDark ? <SunIcon /> : <MoonIcon />}
+      {icon}
     </button>
   );
 }

@@ -140,5 +140,10 @@
     "remote_changes_available": "Sitzung auf einem anderen Gerät aktualisiert.",
     "connected_to_session": "Verbunden mit Sitzung {{code}}",
     "session_code_applied": "Sitzungscode {{code}} angewendet"
+  },
+  "theme": {
+    "system": "System-Design",
+    "light": "Helles Design",
+    "dark": "Dunkles Design"
   }
 }

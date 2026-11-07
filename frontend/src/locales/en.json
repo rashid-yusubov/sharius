@@ -163,5 +163,10 @@
     "file_not_ready": "File is not ready for download yet",
     "session_synced": "Session {{code}} synced",
     "enter_code_first": "Enter a session code first"
+  },
+  "theme": {
+    "system": "System theme",
+    "light": "Light theme",
+    "dark": "Dark theme"
   }
 }

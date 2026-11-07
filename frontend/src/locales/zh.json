@@ -140,5 +140,10 @@
     "remote_changes_available": "其他设备上更新了此会话。",
     "connected_to_session": "已连接到会话 {{code}}",
     "session_code_applied": "已应用会话代码 {{code}}"
+  },
+  "theme": {
+    "system": "系统主题",
+    "light": "浅色主题",
+    "dark": "深色主题"
   }
 }

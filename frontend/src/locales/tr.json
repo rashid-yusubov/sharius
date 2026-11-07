@@ -140,6 +140,10 @@
     "remote_changes_available": "Oturum başka bir cihazda güncellendi.",
     "connected_to_session": "{{code}} oturumuna bağlanıldı",
     "session_code_applied": "{{code}} oturum kodu uygulandı"
+  },
+  "theme": {
+    "system": "Sistem teması",
+    "light": "Açık tema",
+    "dark": "Koyu tema"
   }
 }
-

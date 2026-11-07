@@ -163,5 +163,10 @@
     "file_not_ready": "파일 다운로드 준비가 아직 되지 않았습니다",
     "session_synced": "{{code}} 세션이 동기화되었습니다",
     "enter_code_first": "먼저 세션 코드를 입력하세요"
+  },
+  "theme": {
+    "system": "시스템 테마",
+    "light": "라이트 테마",
+    "dark": "다크 테마"
   }
 }

@@ -92,7 +92,7 @@ function App() {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [isQrOpen, setIsQrOpen] = useState(false);
   const [sessionExpiresAt, setSessionExpiresAt] = useState(() => loadStoredSession()?.expiresAt || '');
-  const [theme, setTheme] = useState(() => localStorage.getItem('sharius-theme') || 'dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('sharius-theme') || 'system');
   const [toasts, setToasts] = useState([]);
   const [auth, setAuth] = useState(() => loadStoredAuth());
   const [sessionAccess, setSessionAccess] = useState(() => loadStoredSession());
@@ -224,8 +224,33 @@ function App() {
   }, [location.pathname, location.search, navigate, notify, t]);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    const applyTheme = () => {
+      let resolvedTheme = theme;
+      if (theme === 'system') {
+        resolvedTheme =
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+      }
+      document.documentElement.dataset.theme = resolvedTheme;
+      document.documentElement.dataset.themeMode = theme;
+    };
+
+    applyTheme();
     localStorage.setItem('sharius-theme', theme);
+
+    if (theme === 'system' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => applyTheme();
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(handleChange);
+        return () => mediaQuery.removeListener(handleChange);
+      }
+    }
+
   }, [theme]);
 
   useEffect(() => {
@@ -300,7 +325,22 @@ function App() {
   }, []);
 
   const handleThemeToggle = () => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+    setTheme((current) => {
+      const isSystemDark =
+        typeof window !== 'undefined' && window.matchMedia
+          ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          : false;
+
+      if (current === 'system') {
+        return isSystemDark ? 'light' : 'dark';
+      }
+
+      if (isSystemDark) {
+        return current === 'light' ? 'dark' : 'system';
+      }
+
+      return current === 'dark' ? 'light' : 'system';
+    });
   };
 
   const clearSessionAccess = () => {
