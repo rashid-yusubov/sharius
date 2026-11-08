@@ -1,19 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TranslateIcon } from './icons.jsx';
+import { FlagIcon } from './FlagIcon.jsx';
 import './LanguageSwitcher.css';
 
 const languages = [
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
-  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' },
-  { code: 'ko', name: '한국어', flag: '🇰🇷' }
+  { code: 'ru', name: 'Русский' },
+  { code: 'en', name: 'English' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'zh', name: '中文' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'it', name: 'Italiano' },
+  { code: 'pt', name: 'Português' },
+  { code: 'ko', name: '한국어' }
 ];
 
 function LanguageSwitcher() {
@@ -74,7 +75,7 @@ function LanguageSwitcher() {
               className={`lang-switcher__option ${currentLang.code === lang.code ? 'active' : ''}`}
               onClick={() => handleSelect(lang)}
             >
-              <span className="lang-switcher__flag">{lang.flag}</span>
+              <FlagIcon code={lang.code} width={20} height={14} />
               <span className="lang-switcher__name">{lang.name}</span>
             </button>
           ))}

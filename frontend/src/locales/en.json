@@ -60,6 +60,7 @@
     "already_have_account": "Already have an account?"
   },
   "profile": {
+    "account_tab": "Account",
     "name_empty_error": "Name cannot be empty.",
     "update_failed": "Failed to update profile.",
     "title": "Profile",
@@ -97,7 +98,12 @@
     "avatar_upload_failed": "Failed to upload avatar.",
     "avatar_remove_failed": "Failed to remove avatar.",
     "avatar_updated": "Avatar updated successfully!",
-    "avatar_removed": "Avatar removed."
+    "avatar_removed": "Avatar removed.",
+    "language_subtitle": "Localization",
+    "language_heading": "Interface Language",
+    "language_desc": "Choose the primary display language for the application",
+    "language_changed": "Language changed: {{name}}",
+    "change_avatar_tooltip": "Click or drop image to change (PNG, JPG up to 5 MB)"
   },
   "friends": {
     "request_sent": "Friend request sent to {{name}}",

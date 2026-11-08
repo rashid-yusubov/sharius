@@ -60,6 +60,7 @@
     "already_have_account": "Уже есть аккаунт?"
   },
   "profile": {
+    "account_tab": "Аккаунт",
     "name_empty_error": "Имя не может быть пустым.",
     "update_failed": "Ошибка обновления профиля.",
     "title": "Профиль",
@@ -97,7 +98,12 @@
     "avatar_upload_failed": "Не удалось загрузить аватарку.",
     "avatar_remove_failed": "Не удалось удалить аватарку.",
     "avatar_updated": "Аватарка успешно обновлена!",
-    "avatar_removed": "Аватарка удалена."
+    "avatar_removed": "Аватарка удалена.",
+    "language_subtitle": "Локализация",
+    "language_heading": "Язык интерфейса",
+    "language_desc": "Выберите язык для отображения кнопок и текстов в приложении",
+    "language_changed": "Язык изменён: {{name}}",
+    "change_avatar_tooltip": "Нажмите или перетащите изображение для смены (PNG, JPG до 5 МБ)"
   },
   "friends": {
     "request_sent": "Запрос отправлен {{name}}",

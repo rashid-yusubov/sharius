@@ -954,6 +954,8 @@ function App() {
         onNotify={notify}
         onProfileUpdate={handleProfileUpdate}
         onShareContact={handleShareContact}
+        onThemeChange={setTheme}
+        theme={theme}
         token={auth?.token || ''}
       />
       <FilePreviewModal
