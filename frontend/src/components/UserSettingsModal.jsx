@@ -526,6 +526,14 @@ function UserSettingsModal({
             <h2 className="user-modal__sidebar-title" id="user-modal-title">
               {t('header.settings', { defaultValue: 'Настройки' })}
             </h2>
+            <button
+              aria-label={t('friends.cancel_btn', { defaultValue: 'Закрыть' })}
+              className="user-modal__close user-modal__close--mobile"
+              onClick={onClose}
+              type="button"
+            >
+              <CloseIcon />
+            </button>
           </div>
 
           <nav className="user-modal__sidebar-nav" role="tablist">
